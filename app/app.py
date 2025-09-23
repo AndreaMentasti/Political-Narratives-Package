@@ -19,6 +19,16 @@ DEFAULT_LOCAL_MODEL = "llama3.2:3b"   # also try "qwen2.5:3b"
 CHUNK_SIZE = 1200
 CHUNK_OVERLAP = 200
 
+# Speed-friendly defaults
+FIXED_TEMPERATURE = 0.1        # lower randomness; not about speed, just stability
+OLLAMA_KWARGS = {
+    "num_predict": 256,        # hard cap on output tokens (biggest speed win)
+    "num_ctx": 2048,           # context window; keep modest
+    "top_k": 30,
+    "top_p": 0.9,
+}
+OPENAI_MAX_TOKENS = 500        # keep OpenAI outputs short too
+
 st.set_page_config(page_title="Political Narratives — Local Q&A & Playground", layout="wide")
 st.title("Political Narratives — Local Q&A (RAG) + Prompt Playground")
 
@@ -30,9 +40,6 @@ with st.sidebar:
         ["Local (Ollama)", "OpenAI (bring your own key)"],
         index=0,
         key="provider_select",
-    )
-    temperature = st.slider(
-        "Temperature", 0.0, 1.0, 0.2, 0.05, key="temperature_slider_sidebar"
     )
 
     local_model = DEFAULT_LOCAL_MODEL
@@ -46,7 +53,7 @@ with st.sidebar:
             index=0,
             key="ollama_model_select",
         )
-        st.caption("Tip: keep it low for factual answers.")
+        st.caption("Tip: smallest models reply fastest.")
     else:
         user_key = st.text_input(
             "OpenAI API key",
@@ -55,7 +62,20 @@ with st.sidebar:
             key="openai_key_input",
         )
 
+# ─────────────────────────────────────────────────────────────────────────────
+
+@st.cache_resource(show_spinner=False)
+def warmup_local_model(model_name: str):
+    try:
+        _ = ChatOllama(model=model_name, temperature=0.0).invoke("hi")
+    except Exception:
+        pass
+
+if provider.startswith("Local"):
+    warmup_local_model(local_model)
+
 # ── Helpers ─────────────────────────────────────────────────────────────────
+
 ASSISTANT_SYSTEM = (
     "You are a helpful research assistant and project coach for applying the Political Narratives framework, especially the drama triangle character recognition "
     "to political narratives. Prefer using retrieved context from the user's paper/repo when it is relevant. "
@@ -78,15 +98,26 @@ def load_pdf(path: str):
         st.warning(f"Could not read PDF '{path}': {e}")
     return docs
 
-def get_llm(provider: str, temperature: float, user_key: str | None, local_model: str):
+def get_llm(provider: str, user_key: str | None, local_model: str):
     """
-    Return an LLM handle based on provider selection.
-    - OpenAI path activates only if a key is provided.
-    - Otherwise we fall back to local Ollama.
+    Return an LLM based on provider.
+    - OpenAI path activates only if a key is provided (short outputs).
+    - Otherwise use local Ollama with speed-friendly kwargs.
     """
     if provider.startswith("OpenAI") and user_key:
-        return ChatOpenAI(model="gpt-4o-mini", temperature=temperature, api_key=user_key)
-    return ChatOllama(model=local_model, temperature=temperature)
+        return ChatOpenAI(
+            model="gpt-4o-mini",
+            temperature=FIXED_TEMPERATURE,
+            max_tokens=OPENAI_MAX_TOKENS,
+            api_key=user_key,
+        )
+
+    # Default: local, free (limit output length for speed)
+    return ChatOllama(
+        model=local_model,
+        temperature=FIXED_TEMPERATURE,
+        model_kwargs=OLLAMA_KWARGS,
+    )
 
 def load_files(patterns):
     paths, docs = [], []
@@ -158,7 +189,7 @@ with tab1:
     if vs is None:
         st.info("No documents indexed. Add a text-based PDF under data/ (any name) or a README.md, then Rerun.")
     else:
-        llm = get_llm(provider, temperature, user_key, local_model)
+        llm = get_llm(provider, user_key, local_model)
         st.caption("Ask questions about the paper/repo. Uses retrieved context when available; otherwise answers from general knowledge.")
         q = st.text_input("Your question", key="qa_question_input")
 
@@ -177,11 +208,11 @@ with tab1:
 
                 # 3) always-helpful prompt (fallback allowed)
                 user_prompt = (
-                    "Answer the user's question. If the provided context is insufficient, "
-                    "answer from general knowledge and explicitly preface with: 'Based on general knowledge'. "
-                    "Use any relevant context if present.\n\n"
-                    f"Question:\n{q}\n\nContext (may be partial or irrelevant):\n{ctx}"
-                )
+    "Answer the user's question. If the provided context is insufficient, "
+    "answer from general knowledge and explicitly preface with: 'Based on general knowledge'. "
+    "Use any relevant context if present. Keep the answer under ~200 words unless the user asks otherwise.\n\n"
+    f"Question:\n{q}\n\nContext (may be partial or irrelevant):\n{ctx}"
+)
 
                 # 4) call the model directly
                 resp = llm.invoke([
@@ -223,7 +254,7 @@ with tab2:
     run = st.button("Run", type="primary", key="run_playground_btn")
 
     if run and user_text.strip():
-        llm = get_llm(provider, temperature, user_key, local_model)
+        llm = get_llm(provider, user_key, local_model)
         with st.spinner("Generating..."):
             resp = llm.invoke([
                 {"role": "system", "content": system_prompt},
