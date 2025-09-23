@@ -5,3 +5,5 @@ tiktoken
 langchain>=0.2.0
 langchain-community
 sentence-transformers
+langchain-openai
+openai
