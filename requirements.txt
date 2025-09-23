@@ -1,0 +1,7 @@
+streamlit
+pypdf
+faiss-cpu
+tiktoken
+langchain>=0.2.0
+langchain-community
+sentence-transformers
