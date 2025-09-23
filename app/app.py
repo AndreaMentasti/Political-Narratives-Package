@@ -12,7 +12,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.chat_models import ChatOllama
 from langchain.chains import RetrievalQA
 
-MODEL_NAME = "llama3.2:3b-instruct"   # or "qwen2.5:3b-instruct"
+MODEL_NAME = "llama3.2:3b"   # or "qwen2.5:3b-instruct"
 CHUNK_SIZE = 1200
 CHUNK_OVERLAP = 200
 
