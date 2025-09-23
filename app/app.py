@@ -15,36 +15,47 @@ from langchain.chains import RetrievalQA
 # OPTIONAL: OpenAI chat if user brings a key
 from langchain_openai import ChatOpenAI
 
-MODEL_NAME = "llama3.2:3b"   # or "qwen2.5:3b-instruct"
+DEFAULT_LOCAL_MODEL = "llama3.2:3b"   # also try "qwen2.5:3b"
 CHUNK_SIZE = 1200
 CHUNK_OVERLAP = 200
 
 st.set_page_config(page_title="Political Narratives — Local Q&A & Playground", layout="wide")
 st.title("Political Narratives — Local Q&A (RAG) + Prompt Playground")
 
+# ── Sidebar (single block, unique keys) ──────────────────────────────────────
 with st.sidebar:
     st.subheader("Model settings")
     provider = st.selectbox(
         "Provider",
         ["Local (Ollama)", "OpenAI (bring your own key)"],
-        index=0
+        index=0,
+        key="provider_select",
     )
-    temperature = st.slider("Temperature", 0.0, 1.0, 0.2, 0.05)
+    temperature = st.slider(
+        "Temperature", 0.0, 1.0, 0.2, 0.05, key="temperature_slider_sidebar"
+    )
 
+    local_model = DEFAULT_LOCAL_MODEL
     user_key = None
-    if provider.startswith("OpenAI"):
+
+    if provider.startswith("Local"):
+        st.markdown("### Local model (Ollama)")
+        local_model = st.selectbox(
+            "Ollama model",
+            [DEFAULT_LOCAL_MODEL, "qwen2.5:3b", "llama3.2:3b"],
+            index=0,
+            key="ollama_model_select",
+        )
+        st.caption("Tip: keep it low for factual answers.")
+    else:
         user_key = st.text_input(
             "OpenAI API key",
             type="password",
-            help="Used only in your session. Leave empty to stay local."
+            help="Used only in your session. Leave empty to stay local.",
+            key="openai_key_input",
         )
 
-with st.sidebar:
-    st.markdown("### Local model (Ollama)")
-    model_choice = st.selectbox("Ollama model", [MODEL_NAME, "qwen2.5:3b", "llama3.2:3b"], index=0)
-    temperature = st.slider("Temperature", 0.0, 1.0, 0.2, 0.05)
-    st.caption("Tip: keep it low for factual answers.")
-
+# ── Helpers ─────────────────────────────────────────────────────────────────
 def load_pdf(path: str):
     docs = []
     if not os.path.exists(path):
@@ -58,26 +69,25 @@ def load_pdf(path: str):
         st.warning(f"Could not read PDF '{path}': {e}")
     return docs
 
-def get_llm(provider: str, temperature: float, user_key: str | None):
+def get_llm(provider: str, temperature: float, user_key: str | None, local_model: str):
     """
     Return an LLM handle based on provider selection.
     - OpenAI path activates only if a key is provided.
     - Otherwise we fall back to local Ollama.
     """
     if provider.startswith("OpenAI") and user_key:
-        # Cheaper, capable model; you can switch to "gpt-4o" if desired
         return ChatOpenAI(model="gpt-4o-mini", temperature=temperature, api_key=user_key)
-    # Default: local, free
-    return ChatOllama(model=MODEL_NAME, temperature=temperature)
+    return ChatOllama(model=local_model, temperature=temperature)
 
 def load_files(patterns):
-    paths = []
+    paths, docs = [], []
     for p in patterns:
         paths.extend(glob.glob(p, recursive=True))
-    docs = []
     for path in paths:
-        if os.path.isdir(path): continue
-        if not path.endswith((".md", ".py", ".txt", ".yml", ".yaml", ".json")): continue
+        if os.path.isdir(path): 
+            continue
+        if not path.endswith((".md", ".py", ".txt", ".yml", ".yaml", ".json")):
+            continue
         try:
             with open(path, "r", encoding="utf-8", errors="ignore") as f:
                 text = f.read()
@@ -91,13 +101,14 @@ def build_vectorstore():
     splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
     all_docs = []
 
-    # 1) Paper
-    for d in load_pdf("data/paper.pdf"):
-        for chunk in splitter.split_text(d.page_content):
-            all_docs.append(Document(page_content=chunk, metadata=d.metadata))
+    # 1) Papers: index ALL PDFs in data/
+    for pdf_path in glob.glob("data/*.pdf"):
+        for d in load_pdf(pdf_path):
+            for chunk in splitter.split_text(d.page_content):
+                all_docs.append(Document(page_content=chunk, metadata=d.metadata))
 
     # 2) Repo docs (optional)
-    repo_docs = load_files(["README.md", "examples/**/*.md", "*.md"])
+    repo_docs = load_files(["README.md", "examples/**/*.md", "*.md", "scripts/**/*.py"])
     for d in repo_docs:
         for chunk in splitter.split_text(d.page_content):
             all_docs.append(Document(page_content=chunk, metadata=d.metadata))
@@ -110,23 +121,25 @@ def build_vectorstore():
 
 vs = build_vectorstore()
 
-tab1, tab2 = st.tabs(["Ask about the paper/repo (Local RAG)", "Prompt playground"])
+# ── UI Tabs ─────────────────────────────────────────────────────────────────
+tab1, tab2 = st.tabs(["Ask about the paper/repo (Local or OpenAI)", "Prompt playground"])
 
+# ---------------- TAB 1: RAG Q&A ----------------
 with tab1:
     if vs is None:
-        st.info("No documents indexed. Add a text-based PDF at data/paper.pdf or a README.md, then Rerun.")
+        st.info("No documents indexed. Add a text-based PDF under data/ (any name) or a README.md, then Rerun.")
     else:
-        llm = get_llm(provider, temperature, user_key)
+        llm = get_llm(provider, temperature, user_key, local_model)
         qa = RetrievalQA.from_chain_type(
             llm=llm,
             retriever=vs.as_retriever(search_kwargs={"k": 4}),
             chain_type="stuff",
             return_source_documents=True,
         )
-        st.caption("Ask questions about the paper or this repository. Runs fully locally with Ollama.")
-        q = st.text_input("Your question")
+        st.caption("Ask questions about the paper/repo. Local by default; switches to OpenAI if you paste a key.")
+        q = st.text_input("Your question", key="qa_question_input")
         if q:
-            with st.spinner("Thinking locally..."):
+            with st.spinner("Thinking..."):
                 out = qa({"query": q})
             st.write(out["result"])
             if out.get("source_documents"):
@@ -136,8 +149,9 @@ with tab1:
                     page = d.metadata.get("page", None)
                     st.code(f"{src}" + (f" (p.{page})" if page else ""))
 
+# ---------------- TAB 2: Prompt playground ----------------
 with tab2:
-    st.caption("Try prompts locally with Ollama. Choose a preset or write your own.")
+    st.caption("Try prompts locally with Ollama, or switch to OpenAI via the sidebar.")
     presets = {
         "Drama Triangle annotator (concise JSON)": (
             "You are an annotator using Drama Triangle roles: Victim, Rescuer, Persecutor. "
@@ -152,14 +166,14 @@ with tab2:
         ),
     }
 
-    preset_name = st.selectbox("Preset", list(presets.keys()))
-    system_prompt = st.text_area("System / Instruction", presets[preset_name], height=150)
-    user_text = st.text_area("User text (your data or example)", height=150, placeholder="Paste a paragraph or dialogue here...")
-    run = st.button("Run locally", type="primary")
+    preset_name = st.selectbox("Preset", list(presets.keys()), key="preset_select")
+    system_prompt = st.text_area("System / Instruction", presets[preset_name], height=150, key="sys_prompt_area")
+    user_text = st.text_area("User text (your data or example)", height=150, placeholder="Paste a paragraph or dialogue here...", key="user_text_area")
+    run = st.button("Run", type="primary", key="run_playground_btn")
 
     if run and user_text.strip():
-        llm = get_llm(provider, temperature, user_key)
-        with st.spinner("Generating locally..."):
+        llm = get_llm(provider, temperature, user_key, local_model)
+        with st.spinner("Generating..."):
             resp = llm.invoke([
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_text},
