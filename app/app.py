@@ -138,96 +138,163 @@ def load_files(patterns):
     return docs
 
 @st.cache_resource(show_spinner=True)
-def build_vectorstore():
-    splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
-    all_docs = []
+@st.cache_resource(show_spinner=True)
+def build_vectorstores():
+    stores = {
+        "sections_political": build_corpus_vectorstore("sections_political", ["data/sections/political_narratives.*"]),
+        "sections_analysis":  build_corpus_vectorstore("sections_analysis",  ["data/sections/analysis.*"]),
+        "faq":                build_corpus_vectorstore("faq",                ["data/faq/*.*"]),
+        "guide":              build_corpus_vectorstore("guide",              ["data/guides/*.*"]),
+    }
+    # Drop empty ones
+    return {k: v for k, v in stores.items() if v is not None}
 
-    # 1) Papers: index ALL PDFs in data/
-    for pdf_path in glob.glob("data/*.pdf"):
-        for d in load_pdf(pdf_path):
-            for chunk in splitter.split_text(d.page_content):
-                all_docs.append(Document(page_content=chunk, metadata=d.metadata))
+stores = build_vectorstores()
+total_chunks = sum(vs.index.ntotal for vs in stores.values()) if stores else 0
+st.sidebar.write("Docs in index:", total_chunks)
 
-    # 2) Repo docs (optional)
-    repo_docs = load_files(["README.md", "examples/**/*.md", "*.md", "scripts/**/*.py"])
-    for d in repo_docs:
-        for chunk in splitter.split_text(d.page_content):
-            all_docs.append(Document(page_content=chunk, metadata=d.metadata))
-
-    if not all_docs:
-        return None
-
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    return FAISS.from_documents(all_docs, embeddings)
-
-vs = build_vectorstore()
-st.sidebar.write("Docs in index:", vs.index.ntotal if vs else 0)
-
-def retrieve_with_scores(vs, query: str, k: int = 6):
-    """
-    Returns [(doc, score), ...]. For FAISS L2 distance, LOWER is better.
-    If vs is None, returns [].
-    """
-    if vs is None:
-        return []
+def retrieve_top(vs, q: str, k: int = 6):
     try:
-        return vs.similarity_search_with_score(query, k=k)
+        return vs.similarity_search_with_score(q, k=k)
     except Exception:
-        docs = vs.similarity_search(query, k=k)
+        docs = vs.similarity_search(q, k=k)
         return [(d, 0.0) for d in docs]
 
-def context_is_thin(results, min_chars: int = 400):
-    if not results:
-        return True
-    merged = "".join(d.page_content for d, _ in results)
-    return len(merged.strip()) < min_chars
+def best_corpus_for_question(stores: dict, q: str):
+    """
+    Returns (corpus_name, results_list) where results_list = [(doc, score), ...].
+    Heuristic routing:
+      1) Try FAQ. If strong enough, use it.
+      2) Try each section; keep the best.
+      3) Try guide.
+      4) If nothing substantial, return (None, []) to trigger general knowledge fallback.
+    """
+    if not stores:
+        return None, []
+
+    MIN_CHARS = 300
+    candidates = []
+
+    # 1) FAQ
+    if "faq" in stores:
+        faq_res = retrieve_top(stores["faq"], q, k=6)
+        candidates.append(("faq", faq_res))
+
+    # 2) Sections
+    for name in ("sections_political", "sections_analysis"):
+        if name in stores:
+            res = retrieve_top(stores[name], q, k=6)
+            candidates.append((name, res))
+
+    # 3) Guide
+    if "guide" in stores:
+        guide_res = retrieve_top(stores["guide"], q, k=6)
+        candidates.append(("guide", guide_res))
+
+    def merged_len(res): return len("".join(d.page_content for d, _ in res).strip())
+    candidates.sort(key=lambda t: merged_len(t[1]), reverse=True)
+
+    if not candidates:
+        return None, []
+    best_name, best_res = candidates[0]
+    if merged_len(best_res) < MIN_CHARS:
+        return None, []
+    return best_name, best_res
+
+def load_text_file(path: str):
+    try:
+        with open(path, "r", encoding="utf-8", errors="ignore") as f:
+            txt = f.read()
+        return [Document(page_content=txt, metadata={"source": os.path.basename(path)})]
+    except Exception as e:
+        st.warning(f"Could not read text file '{path}': {e}")
+        return []
+
+def load_any(path: str):
+    if path.lower().endswith((".md", ".txt")):
+        return load_text_file(path)
+    elif path.lower().endswith(".pdf"):
+        return load_pdf(path)
+    return []
+
+def build_corpus_vectorstore(name: str, glob_patterns: list[str]):
+    splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
+    docs = []
+    paths = []
+    for p in glob_patterns:
+        paths.extend(glob.glob(p, recursive=True))
+    for path in paths:
+        if os.path.isdir(path):
+            continue
+        for d in load_any(path):
+            # Tag every chunk with the corpus name
+            for chunk in splitter.split_text(d.page_content or ""):
+                docs.append(Document(page_content=chunk, metadata={**d.metadata, "corpus": name}))
+    if not docs:
+        return None
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    return FAISS.from_documents(docs, embeddings)
 
 # ── UI Tabs ─────────────────────────────────────────────────────────────────
 tab1, tab2 = st.tabs(["Ask about the paper/repo (Local or OpenAI)", "Prompt playground"])
 
 # ---------------- TAB 1: Always-helpful Q&A (simple UI) ----------------
+# ---------------- TAB 1: Always-helpful Q&A with routing + memory ----------------
 with tab1:
-    if vs is None:
-        st.info("No documents indexed. Add a text-based PDF under data/ (any name) or a README.md, then Rerun.")
+    if not stores:
+        st.info("No documents indexed. Add files under data/sections, data/faq, data/guides, then Rerun.")
     else:
+        if "chat" not in st.session_state:
+            st.session_state.chat = []  # [{"role":"user"/"assistant","content": "..."}]
+
         llm = get_llm(provider, user_key, local_model)
-        st.caption("Ask questions about the paper/repo. Uses retrieved context when available; otherwise answers from general knowledge.")
+        st.caption("Ask anything. The assistant uses sections/FAQ/guide when helpful; otherwise answers from general knowledge.")
         q = st.text_input("Your question", key="qa_question_input")
 
-        # fixed settings (simple UI)
-        top_k = 6
-        min_context_chars = 400
+        colA, colB = st.columns([1,1])
+        with colA:
+            clear = st.button("Clear chat")
+        with colB:
+            show_sources = st.checkbox("Show sources when available", value=True)
+
+        if clear:
+            st.session_state.chat = []
 
         if q:
+            # ROUTE to best corpus
+            corpus, results = best_corpus_for_question(stores, q)
+            ctx = "\n\n".join(d.page_content for d, _ in results) if results else ""
+
+            # MEMORY: include last few turns for context (kept short for speed)
+            history = st.session_state.chat[-6:]
+
+            # PROMPT: always helpful; fallback allowed
+            user_prompt = (
+                "Answer the user's question. If the provided context is insufficient, "
+                "answer from general knowledge and preface with: 'Based on general knowledge'. "
+                "Use any relevant context if present. Keep the answer ~120 words unless asked otherwise.\n\n"
+                f"Question:\n{q}\n\n"
+                f"Context from corpus '{corpus}' (may be partial or irrelevant):\n{ctx}"
+            )
+
+            msgs = [{"role": "system", "content": ASSISTANT_SYSTEM}]
+            msgs.extend(history)
+            msgs.append({"role": "user", "content": user_prompt})
+
             with st.spinner("Thinking..."):
-                # 1) retrieve context
-                results = retrieve_with_scores(vs, q, k=top_k)
-                thin = context_is_thin(results, min_chars=min_context_chars)
+                resp = llm.invoke(msgs)
 
-                # 2) build context window (may be empty/thin)
-                ctx = "\n\n".join(d.page_content for d, _ in results)
+            # Update memory
+            st.session_state.chat.append({"role": "user", "content": q})
+            st.session_state.chat.append({"role": "assistant", "content": resp.content})
 
-                # 3) always-helpful prompt (fallback allowed)
-                user_prompt = (
-    "Answer the user's question. If the provided context is insufficient, "
-    "answer from general knowledge and explicitly preface with: 'Based on general knowledge'. "
-    "Use any relevant context if present. Keep the answer under ~200 words unless the user asks otherwise.\n\n"
-    f"Question:\n{q}\n\nContext (may be partial or irrelevant):\n{ctx}"
-)
-
-                # 4) call the model directly
-                resp = llm.invoke([
-                    {"role": "system", "content": ASSISTANT_SYSTEM},
-                    {"role": "user", "content": user_prompt},
-                ])
-
-            # 5) render answer
+            # Render answer
             st.write(resp.content)
 
-            # 6) show sources only if context isn't thin
-            if results and not thin:
-                st.markdown("**Sources:**")
-                for d, _score in results:
+            # Sources (if we actually used a corpus)
+            if show_sources and results:
+                st.markdown(f"**Sources (corpus: {corpus})**")
+                for d, _ in results:
                     src = d.metadata.get("source", "unknown")
                     page = d.metadata.get("page", None)
                     st.code(f"{src}" + (f" (p.{page})" if page else ""))
