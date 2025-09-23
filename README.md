@@ -16,3 +16,6 @@ If you want higher-quality guidance:
 1. Choose **Provider → OpenAI (bring your own key)** in the sidebar.
 2. Paste your **OpenAI API key**.
 3. The app will use `gpt-4o-mini` for chat while keeping embeddings local (no extra cost there).
+
+
+python -m streamlit run app.py
