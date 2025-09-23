@@ -19,7 +19,7 @@ If you want higher-quality guidance:
 
 ## Try the App
 
-👉 [Launch the Political Narratives App]([https://andreamentasti-political-narratives-package.streamlit.app](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/))
+👉 [Launch the Political Narratives App](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/)
 
 You can:
 - Ask questions about the paper/repo (locally indexed).
