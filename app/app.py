@@ -153,7 +153,7 @@ def context_is_thin(results, min_chars: int = 400):
 # ── UI Tabs ─────────────────────────────────────────────────────────────────
 tab1, tab2 = st.tabs(["Ask about the paper/repo (Local or OpenAI)", "Prompt playground"])
 
-# ---------------- TAB 1: Always-helpful Q&A ----------------
+# ---------------- TAB 1: Always-helpful Q&A (simple UI) ----------------
 with tab1:
     if vs is None:
         st.info("No documents indexed. Add a text-based PDF under data/ (any name) or a README.md, then Rerun.")
@@ -161,20 +161,21 @@ with tab1:
         llm = get_llm(provider, temperature, user_key, local_model)
         st.caption("Ask questions about the paper/repo. Uses retrieved context when available; otherwise answers from general knowledge.")
         q = st.text_input("Your question", key="qa_question_input")
-        k = st.slider("Top-k passages", 2, 10, 6, 1, key="qa_topk_slider")
-        min_ctx = st.slider("Min context size (chars) before citing", 0, 2000, 400, 50, key="qa_minctx_slider")
-        show_ctx = st.checkbox("Show retrieved context (debug)", value=False, key="qa_show_ctx")
+
+        # fixed settings (simple UI)
+        top_k = 6
+        min_context_chars = 400
 
         if q:
             with st.spinner("Thinking..."):
                 # 1) retrieve context
-                results = retrieve_with_scores(vs, q, k=k)
-                thin = context_is_thin(results, min_chars=min_ctx)
+                results = retrieve_with_scores(vs, q, k=top_k)
+                thin = context_is_thin(results, min_chars=min_context_chars)
 
                 # 2) build context window (may be empty/thin)
                 ctx = "\n\n".join(d.page_content for d, _ in results)
 
-                # 3) always-helpful user prompt (fallback allowed)
+                # 3) always-helpful prompt (fallback allowed)
                 user_prompt = (
                     "Answer the user's question. If the provided context is insufficient, "
                     "answer from general knowledge and explicitly preface with: 'Based on general knowledge'. "
@@ -182,7 +183,7 @@ with tab1:
                     f"Question:\n{q}\n\nContext (may be partial or irrelevant):\n{ctx}"
                 )
 
-                # 4) call the model directly (not RetrievalQA) for full control
+                # 4) call the model directly
                 resp = llm.invoke([
                     {"role": "system", "content": ASSISTANT_SYSTEM},
                     {"role": "user", "content": user_prompt},
@@ -190,15 +191,6 @@ with tab1:
 
             # 5) render answer
             st.write(resp.content)
-
-            # Optional: show retrieved context for transparency
-            if show_ctx and results:
-                with st.expander("Retrieved context"):
-                    for i, (d, score) in enumerate(results, start=1):
-                        src = d.metadata.get("source", "unknown")
-                        page = d.metadata.get("page", None)
-                        st.markdown(f"**Passage {i}** — {src}" + (f" (p.{page})" if page else ""))
-                        st.write(d.page_content)
 
             # 6) show sources only if context isn't thin
             if results and not thin:
