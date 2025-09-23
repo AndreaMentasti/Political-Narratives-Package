@@ -56,6 +56,15 @@ with st.sidebar:
         )
 
 # ── Helpers ─────────────────────────────────────────────────────────────────
+ASSISTANT_SYSTEM = (
+    "You are a helpful research assistant and project coach for applying the Political Narratives framework, especially the drama triangle character recognition "
+    "to political narratives. Prefer using retrieved context from the user's paper/repo when it is relevant. "
+    "If the context is missing, sparse, or not directly relevant, answer from general knowledge and common sense, and be a guide to the user. Be concise and concrete: "
+    "1) ask up to 2 clarifying questions if the query is broad or ambiguous; "
+    "2) propose a short, step-by-step plan if the user wants to ‘do’ something; "
+    "3) when appropriate, give a tiny example (≤5 lines)."
+)
+
 def load_pdf(path: str):
     docs = []
     if not os.path.exists(path):
@@ -122,30 +131,79 @@ def build_vectorstore():
 vs = build_vectorstore()
 st.sidebar.write("Docs in index:", vs.index.ntotal if vs else 0)
 
+def retrieve_with_scores(vs, query: str, k: int = 6):
+    """
+    Returns [(doc, score), ...]. For FAISS L2 distance, LOWER is better.
+    If vs is None, returns [].
+    """
+    if vs is None:
+        return []
+    try:
+        return vs.similarity_search_with_score(query, k=k)
+    except Exception:
+        docs = vs.similarity_search(query, k=k)
+        return [(d, 0.0) for d in docs]
+
+def context_is_thin(results, min_chars: int = 400):
+    if not results:
+        return True
+    merged = "".join(d.page_content for d, _ in results)
+    return len(merged.strip()) < min_chars
+
 # ── UI Tabs ─────────────────────────────────────────────────────────────────
 tab1, tab2 = st.tabs(["Ask about the paper/repo (Local or OpenAI)", "Prompt playground"])
 
-# ---------------- TAB 1: RAG Q&A ----------------
+# ---------------- TAB 1: Always-helpful Q&A ----------------
 with tab1:
     if vs is None:
         st.info("No documents indexed. Add a text-based PDF under data/ (any name) or a README.md, then Rerun.")
     else:
         llm = get_llm(provider, temperature, user_key, local_model)
-        qa = RetrievalQA.from_chain_type(
-            llm=llm,
-            retriever=vs.as_retriever(search_kwargs={"k": 4}),
-            chain_type="stuff",
-            return_source_documents=True,
-        )
-        st.caption("Ask questions about the paper/repo. Local by default; switches to OpenAI if you paste a key.")
+        st.caption("Ask questions about the paper/repo. Uses retrieved context when available; otherwise answers from general knowledge.")
         q = st.text_input("Your question", key="qa_question_input")
+        k = st.slider("Top-k passages", 2, 10, 6, 1, key="qa_topk_slider")
+        min_ctx = st.slider("Min context size (chars) before citing", 0, 2000, 400, 50, key="qa_minctx_slider")
+        show_ctx = st.checkbox("Show retrieved context (debug)", value=False, key="qa_show_ctx")
+
         if q:
             with st.spinner("Thinking..."):
-                out = qa({"query": q})
-            st.write(out["result"])
-            if out.get("source_documents"):
+                # 1) retrieve context
+                results = retrieve_with_scores(vs, q, k=k)
+                thin = context_is_thin(results, min_chars=min_ctx)
+
+                # 2) build context window (may be empty/thin)
+                ctx = "\n\n".join(d.page_content for d, _ in results)
+
+                # 3) always-helpful user prompt (fallback allowed)
+                user_prompt = (
+                    "Answer the user's question. If the provided context is insufficient, "
+                    "answer from general knowledge and explicitly preface with: 'Based on general knowledge'. "
+                    "Use any relevant context if present.\n\n"
+                    f"Question:\n{q}\n\nContext (may be partial or irrelevant):\n{ctx}"
+                )
+
+                # 4) call the model directly (not RetrievalQA) for full control
+                resp = llm.invoke([
+                    {"role": "system", "content": ASSISTANT_SYSTEM},
+                    {"role": "user", "content": user_prompt},
+                ])
+
+            # 5) render answer
+            st.write(resp.content)
+
+            # Optional: show retrieved context for transparency
+            if show_ctx and results:
+                with st.expander("Retrieved context"):
+                    for i, (d, score) in enumerate(results, start=1):
+                        src = d.metadata.get("source", "unknown")
+                        page = d.metadata.get("page", None)
+                        st.markdown(f"**Passage {i}** — {src}" + (f" (p.{page})" if page else ""))
+                        st.write(d.page_content)
+
+            # 6) show sources only if context isn't thin
+            if results and not thin:
                 st.markdown("**Sources:**")
-                for d in out["source_documents"]:
+                for d, _score in results:
                     src = d.metadata.get("source", "unknown")
                     page = d.metadata.get("page", None)
                     st.code(f"{src}" + (f" (p.{page})" if page else ""))
