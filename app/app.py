@@ -10,17 +10,17 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 
 # LOCAL chat via Ollama (no API)
 from langchain_community.chat_models import ChatOllama
-from langchain.chains import RetrievalQA
 
 # OPTIONAL: OpenAI chat if user brings a key
 from langchain_openai import ChatOpenAI
 
-DEFAULT_LOCAL_MODEL = "llama3.2:3b"   # also try "qwen2.5:3b"
+# ---------------- Constants ----------------
+DEFAULT_LOCAL_MODEL = "llama3.2:3b"   # try "qwen2.5:3b" if you want faster local replies
 CHUNK_SIZE = 1200
 CHUNK_OVERLAP = 200
 
 # Speed-friendly defaults
-FIXED_TEMPERATURE = 0.1        # lower randomness; not about speed, just stability
+FIXED_TEMPERATURE = 0.1        # stability (not speed)
 OLLAMA_KWARGS = {
     "num_predict": 256,        # hard cap on output tokens (biggest speed win)
     "num_ctx": 2048,           # context window; keep modest
@@ -29,18 +29,30 @@ OLLAMA_KWARGS = {
 }
 OPENAI_MAX_TOKENS = 500        # keep OpenAI outputs short too
 
-ALLOW_LOCAL = bool(os.environ.get("ALLOW_LOCAL", "")) or bool(st.secrets.get("ALLOW_LOCAL", False)) ##
+# ---- Safe ALLOW_LOCAL detection (no secrets.toml -> no crash) ----
+def _read_allow_local_from_secrets() -> bool:
+    try:
+        return bool(st.secrets.get("ALLOW_LOCAL", False))
+    except Exception:
+        # No secrets defined locally, that's fine
+        return False
 
+_env_flag = os.environ.get("ALLOW_LOCAL", "").strip()
+_secret_flag = _read_allow_local_from_secrets()
+# Default to True locally (when nothing set) so you can use Ollama during dev
+ALLOW_LOCAL = True if (_env_flag == "" and _secret_flag is False) else bool(_env_flag or _secret_flag)
+
+# ---------------- UI Header ----------------
 st.set_page_config(page_title="Political Narratives — Local Q&A & Playground", layout="wide")
 st.title("Political Narratives — Local Q&A (RAG) + Prompt Playground")
 
-# ── Sidebar (single block, unique keys) ──────────────────────────────────────
+# ---------------- Sidebar ----------------
 with st.sidebar:
     st.subheader("Model settings")
 
     # Show only OpenAI online (default). Locally, show both providers.
     provider_options = ["OpenAI (bring your own key)"] if not ALLOW_LOCAL else ["Local (Ollama)", "OpenAI (bring your own key)"]
-    default_index = 0  # OpenAI first when hosted; Local first if you set ALLOW_LOCAL locally
+    default_index = 0
     provider = st.selectbox("Provider", provider_options, index=default_index, key="provider_select")
 
     local_model = DEFAULT_LOCAL_MODEL
@@ -63,8 +75,7 @@ with st.sidebar:
             key="openai_key_input",
         )
 
-# ─────────────────────────────────────────────────────────────────────────────
-
+# --------------- Warmup (optional) ---------------
 @st.cache_resource(show_spinner=False)
 def warmup_local_model(model_name: str):
     try:
@@ -75,12 +86,12 @@ def warmup_local_model(model_name: str):
 if provider.startswith("Local"):
     warmup_local_model(local_model)
 
-# ── Helpers ─────────────────────────────────────────────────────────────────
-
+# ---------------- Helpers ----------------
 ASSISTANT_SYSTEM = (
-    "You are a helpful research assistant and project coach for applying the Political Narratives framework, especially the drama triangle character recognition "
-    "to political narratives. Prefer using retrieved context from the user's paper/repo when it is relevant. "
-    "If the context is missing, sparse, or not directly relevant, answer from general knowledge and common sense, and be a guide to the user. Be concise and concrete: "
+    "You are a helpful research assistant and project coach for applying the Political Narratives framework, "
+    "especially Drama Triangle character recognition, to political narratives. Prefer using retrieved context from "
+    "the user's paper/repo when it is relevant. If the context is missing, sparse, or not directly relevant, answer "
+    "from general knowledge and common sense, and be a guide to the user. Be concise and concrete: "
     "1) ask up to 2 clarifying questions if the query is broad or ambiguous; "
     "2) propose a short, step-by-step plan if the user wants to ‘do’ something; "
     "3) when appropriate, give a tiny example (≤5 lines)."
@@ -99,45 +110,40 @@ def load_pdf(path: str):
         st.warning(f"Could not read PDF '{path}': {e}")
     return docs
 
-def get_llm(provider: str, user_key: str | None, local_model: str):
-    """
-    Return an LLM based on provider.
-    - OpenAI path activates only if a key is provided (short outputs).
-    - Otherwise use local Ollama with speed-friendly kwargs.
-    """
-    if provider.startswith("OpenAI") and user_key:
-        return ChatOpenAI(
-            model="gpt-4o-mini",
-            temperature=FIXED_TEMPERATURE,
-            max_tokens=OPENAI_MAX_TOKENS,
-            api_key=user_key,
-        )
+def load_text_file(path: str):
+    try:
+        with open(path, "r", encoding="utf-8", errors="ignore") as f:
+            txt = f.read()
+        return [Document(page_content=txt, metadata={"source": os.path.basename(path)})]
+    except Exception as e:
+        st.warning(f"Could not read text file '{path}': {e}")
+        return []
 
-    # Default: local, free (limit output length for speed)
-    return ChatOllama(
-        model=local_model,
-        temperature=FIXED_TEMPERATURE,
-        model_kwargs=OLLAMA_KWARGS,
-    )
+def load_any(path: str):
+    if path.lower().endswith((".md", ".txt")):
+        return load_text_file(path)
+    elif path.lower().endswith(".pdf"):
+        return load_pdf(path)
+    return []
 
-def load_files(patterns):
-    paths, docs = [], []
-    for p in patterns:
+def build_corpus_vectorstore(name: str, glob_patterns: list[str]):
+    splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
+    docs = []
+    paths = []
+    for p in glob_patterns:
         paths.extend(glob.glob(p, recursive=True))
     for path in paths:
-        if os.path.isdir(path): 
+        if os.path.isdir(path):
             continue
-        if not path.endswith((".md", ".py", ".txt", ".yml", ".yaml", ".json")):
-            continue
-        try:
-            with open(path, "r", encoding="utf-8", errors="ignore") as f:
-                text = f.read()
-            docs.append(Document(page_content=text, metadata={"source": os.path.relpath(path)}))
-        except Exception as e:
-            st.warning(f"Could not read {path}: {e}")
-    return docs
+        for d in load_any(path):
+            # Tag every chunk with the corpus name
+            for chunk in splitter.split_text(d.page_content or ""):
+                docs.append(Document(page_content=chunk, metadata={**d.metadata, "corpus": name}))
+    if not docs:
+        return None
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    return FAISS.from_documents(docs, embeddings)
 
-@st.cache_resource(show_spinner=True)
 @st.cache_resource(show_spinner=True)
 def build_vectorstores():
     stores = {
@@ -163,8 +169,8 @@ def retrieve_top(vs, q: str, k: int = 6):
 def best_corpus_for_question(stores: dict, q: str):
     """
     Returns (corpus_name, results_list) where results_list = [(doc, score), ...].
-    Heuristic routing:
-      1) Try FAQ. If strong enough, use it.
+    Routing heuristic:
+      1) Try FAQ.
       2) Try each section; keep the best.
       3) Try guide.
       4) If nothing substantial, return (None, []) to trigger general knowledge fallback.
@@ -201,44 +207,29 @@ def best_corpus_for_question(stores: dict, q: str):
         return None, []
     return best_name, best_res
 
-def load_text_file(path: str):
-    try:
-        with open(path, "r", encoding="utf-8", errors="ignore") as f:
-            txt = f.read()
-        return [Document(page_content=txt, metadata={"source": os.path.basename(path)})]
-    except Exception as e:
-        st.warning(f"Could not read text file '{path}': {e}")
-        return []
+def get_llm(provider: str, user_key: str | None, local_model: str):
+    """
+    Return an LLM based on provider.
+    - OpenAI path activates only if a key is provided (short outputs).
+    - Otherwise use local Ollama with speed-friendly kwargs.
+    """
+    if provider.startswith("OpenAI") and user_key:
+        return ChatOpenAI(
+            model="gpt-4o-mini",
+            temperature=FIXED_TEMPERATURE,
+            max_tokens=OPENAI_MAX_TOKENS,
+            api_key=user_key,
+        )
+    # Default: local, free (limit output length for speed)
+    return ChatOllama(
+        model=local_model,
+        temperature=FIXED_TEMPERATURE,
+        model_kwargs=OLLAMA_KWARGS,
+    )
 
-def load_any(path: str):
-    if path.lower().endswith((".md", ".txt")):
-        return load_text_file(path)
-    elif path.lower().endswith(".pdf"):
-        return load_pdf(path)
-    return []
-
-def build_corpus_vectorstore(name: str, glob_patterns: list[str]):
-    splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
-    docs = []
-    paths = []
-    for p in glob_patterns:
-        paths.extend(glob.glob(p, recursive=True))
-    for path in paths:
-        if os.path.isdir(path):
-            continue
-        for d in load_any(path):
-            # Tag every chunk with the corpus name
-            for chunk in splitter.split_text(d.page_content or ""):
-                docs.append(Document(page_content=chunk, metadata={**d.metadata, "corpus": name}))
-    if not docs:
-        return None
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    return FAISS.from_documents(docs, embeddings)
-
-# ── UI Tabs ─────────────────────────────────────────────────────────────────
+# ---------------- UI Tabs ----------------
 tab1, tab2 = st.tabs(["Ask about the paper/repo (Local or OpenAI)", "Prompt playground"])
 
-# ---------------- TAB 1: Always-helpful Q&A (simple UI) ----------------
 # ---------------- TAB 1: Always-helpful Q&A with routing + memory ----------------
 with tab1:
     if not stores:
