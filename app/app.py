@@ -242,11 +242,7 @@ with tab1:
         st.caption("Ask anything. The assistant uses sections/FAQ/guide when helpful; otherwise answers from general knowledge.")
         q = st.text_input("Your question", key="qa_question_input")
 
-        colA, colB = st.columns([1,1])
-        with colA:
-            clear = st.button("Clear chat")
-        with colB:
-            show_sources = st.checkbox("Show sources when available", value=True)
+        clear = st.button("Clear chat")
 
         if clear:
             st.session_state.chat = []
@@ -256,7 +252,7 @@ with tab1:
             corpus, results = best_corpus_for_question(stores, q)
             ctx = "\n\n".join(d.page_content for d, _ in results) if results else ""
 
-            # MEMORY: include last few turns for context (kept short for speed)
+            # MEMORY: include last few turns for context
             history = st.session_state.chat[-6:]
 
             # PROMPT: always helpful; fallback allowed
@@ -281,14 +277,6 @@ with tab1:
 
             # Render answer
             st.write(resp.content)
-
-            # Sources (if we actually used a corpus)
-            if show_sources and results:
-                st.markdown(f"**Sources (corpus: {corpus})**")
-                for d, _ in results:
-                    src = d.metadata.get("source", "unknown")
-                    page = d.metadata.get("page", None)
-                    st.code(f"{src}" + (f" (p.{page})" if page else ""))
 
 # ---------------- TAB 2: Prompt playground ----------------
 with tab2:
