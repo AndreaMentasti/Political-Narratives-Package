@@ -18,4 +18,4 @@ If you want higher-quality guidance:
 3. The app will use `gpt-4o-mini` for chat while keeping embeddings local (no extra cost there).
 
 
-python -m streamlit run app.py
+python -m streamlit run app/app.py
