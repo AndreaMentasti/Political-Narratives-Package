@@ -120,6 +120,7 @@ def build_vectorstore():
     return FAISS.from_documents(all_docs, embeddings)
 
 vs = build_vectorstore()
+st.sidebar.write("Docs in index:", vs.index.ntotal if vs else 0)
 
 # ── UI Tabs ─────────────────────────────────────────────────────────────────
 tab1, tab2 = st.tabs(["Ask about the paper/repo (Local or OpenAI)", "Prompt playground"])
