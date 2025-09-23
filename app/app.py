@@ -29,18 +29,19 @@ OLLAMA_KWARGS = {
 }
 OPENAI_MAX_TOKENS = 500        # keep OpenAI outputs short too
 
+ALLOW_LOCAL = bool(os.environ.get("ALLOW_LOCAL", "")) or bool(st.secrets.get("ALLOW_LOCAL", False)) ##
+
 st.set_page_config(page_title="Political Narratives — Local Q&A & Playground", layout="wide")
 st.title("Political Narratives — Local Q&A (RAG) + Prompt Playground")
 
 # ── Sidebar (single block, unique keys) ──────────────────────────────────────
 with st.sidebar:
     st.subheader("Model settings")
-    provider = st.selectbox(
-        "Provider",
-        ["Local (Ollama)", "OpenAI (bring your own key)"],
-        index=0,
-        key="provider_select",
-    )
+
+    # Show only OpenAI online (default). Locally, show both providers.
+    provider_options = ["OpenAI (bring your own key)"] if not ALLOW_LOCAL else ["Local (Ollama)", "OpenAI (bring your own key)"]
+    default_index = 0  # OpenAI first when hosted; Local first if you set ALLOW_LOCAL locally
+    provider = st.selectbox("Provider", provider_options, index=default_index, key="provider_select")
 
     local_model = DEFAULT_LOCAL_MODEL
     user_key = None
@@ -58,7 +59,7 @@ with st.sidebar:
         user_key = st.text_input(
             "OpenAI API key",
             type="password",
-            help="Used only in your session. Leave empty to stay local.",
+            help="Paste your key (starts with sk- or sk-proj-). Used only in your session.",
             key="openai_key_input",
         )
 
