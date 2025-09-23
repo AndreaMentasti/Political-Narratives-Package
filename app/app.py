@@ -21,7 +21,7 @@ st.title("Political Narratives — Local Q&A (RAG) + Prompt Playground")
 
 with st.sidebar:
     st.markdown("### Local model (Ollama)")
-    model_choice = st.selectbox("Ollama model", [MODEL_NAME, "qwen2.5:3b-instruct", "llama3.2:3b-instruct"], index=0)
+    model_choice = st.selectbox("Ollama model", [MODEL_NAME, "qwen2.5:3b", "llama3.2:3b"], index=0)
     temperature = st.slider("Temperature", 0.0, 1.0, 0.2, 0.05)
     st.caption("Tip: keep it low for factual answers.")
 
