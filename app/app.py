@@ -12,12 +12,32 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.chat_models import ChatOllama
 from langchain.chains import RetrievalQA
 
+# OPTIONAL: OpenAI chat if user brings a key
+from langchain_openai import ChatOpenAI
+
 MODEL_NAME = "llama3.2:3b"   # or "qwen2.5:3b-instruct"
 CHUNK_SIZE = 1200
 CHUNK_OVERLAP = 200
 
 st.set_page_config(page_title="Political Narratives — Local Q&A & Playground", layout="wide")
 st.title("Political Narratives — Local Q&A (RAG) + Prompt Playground")
+
+with st.sidebar:
+    st.subheader("Model settings")
+    provider = st.selectbox(
+        "Provider",
+        ["Local (Ollama)", "OpenAI (bring your own key)"],
+        index=0
+    )
+    temperature = st.slider("Temperature", 0.0, 1.0, 0.2, 0.05)
+
+    user_key = None
+    if provider.startswith("OpenAI"):
+        user_key = st.text_input(
+            "OpenAI API key",
+            type="password",
+            help="Used only in your session. Leave empty to stay local."
+        )
 
 with st.sidebar:
     st.markdown("### Local model (Ollama)")
@@ -37,6 +57,18 @@ def load_pdf(path: str):
     except Exception as e:
         st.warning(f"Could not read PDF '{path}': {e}")
     return docs
+
+def get_llm(provider: str, temperature: float, user_key: str | None):
+    """
+    Return an LLM handle based on provider selection.
+    - OpenAI path activates only if a key is provided.
+    - Otherwise we fall back to local Ollama.
+    """
+    if provider.startswith("OpenAI") and user_key:
+        # Cheaper, capable model; you can switch to "gpt-4o" if desired
+        return ChatOpenAI(model="gpt-4o-mini", temperature=temperature, api_key=user_key)
+    # Default: local, free
+    return ChatOllama(model=MODEL_NAME, temperature=temperature)
 
 def load_files(patterns):
     paths = []
@@ -84,7 +116,7 @@ with tab1:
     if vs is None:
         st.info("No documents indexed. Add a text-based PDF at data/paper.pdf or a README.md, then Rerun.")
     else:
-        llm = ChatOllama(model=model_choice, temperature=temperature)
+        llm = get_llm(provider, temperature, user_key)
         qa = RetrievalQA.from_chain_type(
             llm=llm,
             retriever=vs.as_retriever(search_kwargs={"k": 4}),
@@ -126,7 +158,7 @@ with tab2:
     run = st.button("Run locally", type="primary")
 
     if run and user_text.strip():
-        llm = ChatOllama(model=model_choice, temperature=temperature)
+        llm = get_llm(provider, temperature, user_key)
         with st.spinner("Generating locally..."):
             resp = llm.invoke([
                 {"role": "system", "content": system_prompt},
