@@ -4,6 +4,12 @@ from pypdf import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
 from langchain_community.vectorstores import FAISS
+import os
+import streamlit as st
+from pypdf import PdfReader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.docstore.document import Document
+from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_openai import ChatOpenAI
 from langchain.chains import RetrievalQA
@@ -22,9 +28,9 @@ PAPER_PATH = "data/paper.pdf"
 
 FIXED_TEMPERATURE = 0.1
 OPENAI_MAX_TOKENS = 400
-DEFAULT_LOCAL_MODEL = "llama3.2:3b"  # or "qwen2.5:3b" for speed
+DEFAULT_LOCAL_MODEL = "llama3.2:3b"
 
-# --- robust truthy parsing (so "false"/"0" don't evaluate to True) ---
+# --- robust truthy parsing ---
 def _truthy(x) -> bool:
     if isinstance(x, bool):
         return x
@@ -34,7 +40,6 @@ def _truthy(x) -> bool:
     return s in ("1", "true", "yes", "on")
 
 def _get_secret(name, default=None):
-    # Safely read st.secrets without raising when no secrets file exists
     try:
         return st.secrets.get(name, default)
     except Exception:
@@ -43,8 +48,8 @@ def _get_secret(name, default=None):
 ALLOW_LOCAL = _truthy(os.environ.get("ALLOW_LOCAL")) or _truthy(_get_secret("ALLOW_LOCAL"))
 
 # ---------------- UI Header ----------------
-st.set_page_config(page_title="Political Narratives — Paper Q&A & Playground", layout="wide")
-st.title("Political Narratives — Paper Q&A + Prompt Playground")
+st.set_page_config(page_title="Political Narratives — Paper Q&A", layout="wide")
+st.title("Political Narratives — Paper Q&A")
 
 # ---------------- Sidebar ----------------
 with st.sidebar:
@@ -58,7 +63,6 @@ with st.sidebar:
             key="provider_select",
         )
     else:
-        # Online default: OpenAI only
         provider = "OpenAI (bring your own key)"
         st.caption("This app uses OpenAI when you paste your API key.")
 
@@ -118,11 +122,6 @@ vs = build_vectorstore()
 st.sidebar.write("Docs in index:", vs.index.ntotal if vs else 0)
 
 def get_llm(provider: str, user_key: str | None, local_model: str):
-    """
-    Returns an LLM handle.
-    - Online (default): OpenAI (requires key).
-    - Local Ollama only if ALLOW_LOCAL is true.
-    """
     if provider.startswith("OpenAI") or not ALLOW_LOCAL:
         if not user_key:
             st.warning("Paste your OpenAI API key in the sidebar to ask questions.")
@@ -132,23 +131,15 @@ def get_llm(provider: str, user_key: str | None, local_model: str):
             max_tokens=OPENAI_MAX_TOKENS,
             api_key=user_key,
         )
-
-    # Local (only if allowed)
     if ChatOllama is None:
         st.error("Ollama not available in this environment.")
         st.stop()
     return ChatOllama(
         model=local_model,
         temperature=FIXED_TEMPERATURE,
-        model_kwargs={
-            "num_predict": 256,  # shorter answers = faster
-            "num_ctx": 2048,
-            "top_k": 30,
-            "top_p": 0.9,
-        },
+        model_kwargs={"num_predict": 256, "num_ctx": 2048, "top_k": 30, "top_p": 0.9},
     )
 
-# Strict-to-paper prompt: refuse info that isn't supported by retrieved context
 STRICT_QA_PROMPT = PromptTemplate(
     input_variables=["context", "question"],
     template=(
@@ -160,73 +151,32 @@ STRICT_QA_PROMPT = PromptTemplate(
     ),
 )
 
-# ---------------- UI Tabs ----------------
-tab1, tab2 = st.tabs(["Ask about the paper (strict)", "Prompt playground"])
+# ---------------- Q&A Interface ----------------
+if vs is None:
+    st.info("No documents indexed. Add your paper at data/paper.pdf and rerun.")
+else:
+    llm = get_llm(provider, user_key, DEFAULT_LOCAL_MODEL)
 
-# ---------------- TAB 1: Paper-only, strict Q&A ----------------
-with tab1:
-    if vs is None:
-        st.info("No documents indexed. Add your paper at data/paper.pdf and rerun.")
-    else:
-        llm = get_llm(provider, user_key, DEFAULT_LOCAL_MODEL)
+    if provider.startswith("OpenAI") and not user_key:
+        st.stop()
 
-        # Require key when using OpenAI (online default)
-        if provider.startswith("OpenAI") and not user_key:
-            st.stop()
-
-        retriever = vs.as_retriever(search_kwargs={"k": 4})
-        qa = RetrievalQA.from_chain_type(
-            llm=llm,
-            retriever=retriever,
-            chain_type="stuff",
-            chain_type_kwargs={"prompt": STRICT_QA_PROMPT},
-            return_source_documents=False,
-        )
-
-        st.caption("Ask questions strictly about the paper. The assistant will answer only from the PDF.")
-        q = st.text_input("Your question", key="qa_question_input")
-
-        if q:
-            with st.spinner("Thinking..."):
-                out = qa({"query": q})
-            st.write(out["result"])
-
-# ---------------- TAB 2: Prompt playground ----------------
-with tab2:
-    st.caption(
-        "Try prompts with OpenAI (default). "
-        + ("You can also use local Ollama if enabled on your machine." if ALLOW_LOCAL else "")
+    retriever = vs.as_retriever(search_kwargs={"k": 4})
+    qa = RetrievalQA.from_chain_type(
+        llm=llm,
+        retriever=retriever,
+        chain_type="stuff",
+        chain_type_kwargs={"prompt": STRICT_QA_PROMPT},
+        return_source_documents=False,
     )
-    presets = {
-        "Drama Triangle annotator (concise JSON)": (
-            "You are an annotator using Drama Triangle roles: Victim, Rescuer, Persecutor. "
-            "Be concise. First give a one-sentence explanation; then output a JSON object with this schema only: "
-            "{ 'spans': [ { 'text': <substring>, 'role': 'victim|rescuer|persecutor', 'start': int, 'end': int } ] }."
-        ),
-        "Explain the framework (teacher style)": (
-            "Explain the Drama Triangle framework clearly for a beginner in 5 bullet points, each <= 15 words."
-        ),
-        "Critique & improvements": (
-            "Given the text, critique the analysis using Drama Triangle concepts; suggest 3 concrete improvements."
-        ),
-    }
 
-    preset_name = st.selectbox("Preset", list(presets.keys()), key="preset_select")
-    system_prompt = st.text_area("System / Instruction", presets[preset_name], height=150, key="sys_prompt_area")
-    user_text = st.text_area("User text (your data or example)", height=150, placeholder="Paste a paragraph or dialogue here...", key="user_text_area")
-    run = st.button("Run", type="primary", key="run_playground_btn")
+    st.caption("Ask questions strictly about the paper. The assistant will answer only from the PDF.")
+    q = st.text_input("Your question", key="qa_question_input")
 
-    if run and user_text.strip():
-        llm = get_llm(provider, user_key, DEFAULT_LOCAL_MODEL)
-        if provider.startswith("OpenAI") and not user_key:
-            st.warning("Paste your OpenAI API key in the sidebar to run the playground.")
-        else:
-            with st.spinner("Generating..."):
-                resp = llm.invoke([
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_text},
-                ])
-            st.write(resp.content)
+    if q:
+        with st.spinner("Thinking..."):
+            out = qa({"query": q})
+        st.write(out["result"])
+
 
 
 
