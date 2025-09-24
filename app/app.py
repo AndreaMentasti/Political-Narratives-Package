@@ -200,7 +200,7 @@ def render_step(step: int):
         question_card(
     "Define a clear topic",
     how_to=[
-        "A well-defined topic is a prerequisite for fruitful narrative analysis. "
+        "A well-defined topic is a prerequisite for fruitful analysis of **political narratives**. "
         "The clearer the topic, the more straightforward the identification of relevant characters "
         "and the exploration of the research question. Topic choice should weigh the research question, "
         "data availability, and available resources, while balancing specificity vs. generalizability. "
@@ -212,10 +212,12 @@ def render_step(step: int):
         "the scientific reality and predictability of climate change."
     ],
     ask_yourself=[
-        "Is the topic expressed in 1–2 sentences?",
-        "Did I specify geography, time window, and mediums?",
-        "Which narrative lens (responsibility, risk, justice, solutions) am I foregrounding?",
-        "What are my inclusion/exclusion rules and initial keywords/entities?"
+        "Does the topic generate enough political narratives/ debate around itself?",
+        "Is it likely to think that there enough characters that can be identified in the narratives?",
+        "Which data sources are more informative? Do I have access to them?",
+        "If sources are available, can I obtain the other metadata needed for the analysis?",
+        "Is the research question interesting for the scientific community?",
+        "Are there actors that might be armed by my analysis?"
     ],
     key_prefix="s1_scope"
 )
