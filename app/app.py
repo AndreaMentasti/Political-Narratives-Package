@@ -122,15 +122,22 @@ vs = build_vectorstore()
 st.sidebar.write("Docs in index:", vs.index.ntotal if vs else 0)
 
 def get_llm(provider: str, user_key: str | None, local_model: str):
-    if provider.startswith("OpenAI") or not ALLOW_LOCAL:
+    """
+    Returns an LLM handle:
+    - OpenAI path only if a key is provided.
+    - Otherwise warns and stops execution gracefully.
+    """
+    if provider.startswith("OpenAI"):
         if not user_key:
             st.warning("Paste your OpenAI API key in the sidebar to ask questions.")
+            st.stop()   # <- prevents the crash
         return ChatOpenAI(
             model="gpt-4o-mini",
             temperature=FIXED_TEMPERATURE,
             max_tokens=OPENAI_MAX_TOKENS,
             api_key=user_key,
         )
+
     if ChatOllama is None:
         st.error("Ollama not available in this environment.")
         st.stop()
