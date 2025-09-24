@@ -199,7 +199,6 @@ def output_card(title: str, bullets: list[str] | None = None, body_md: str | Non
         if body_md:
             st.markdown(body_md)
 
-
 def render_step(step: int):
     """
     Content for each of the 5 steps from your paper:
@@ -211,55 +210,56 @@ def render_step(step: int):
     """
     # --- STEP 1 ---
     if step == 1:
-    st.subheader("Step 1 — Select and define the topic")
-    st.caption("A precise topic definition anchors character selection and downstream analysis.")
+        st.subheader("Step 1 — Select and define the topic")
+        st.caption("A precise topic definition anchors character selection and downstream analysis.")
 
-    # 1) GUIDE
-    question_card(
-        "Define a clear topic",
-        how_to=[
-            "A well-defined topic is a prerequisite for fruitful narrative analysis. "
-            "The clearer the topic, the more straightforward the identification of relevant characters "
-            "and the exploration of the research question. Topic choice should weigh the research question, "
-            "data availability, and available resources, while balancing specificity vs. generalizability. "
-            "Over-narrow topics risk too few characters or narratives; over-broad topics make it difficult to "
-            "restrict analysis to a manageable set. Make explicit what is in and what is out."
-        ],
-        ask_yourself=[
-            "Does this topic surface enough distinct political narratives and public debate to analyze?",
-            "Is it likely there are enough identifiable characters (actors/organizations) within those narratives?",
-            "Which data sources are most informative for this topic, and do I have reliable access to them?",
-            "If those sources are available, can I obtain the essential metadata (dates, outlets, geography, language) needed for analysis?",
-            "Is the research question compelling and relevant to the scientific community (and/or practitioners)?",
-            "Could any actors or communities be harmed by this analysis, and how will I mitigate that risk?",
-            "Is the topic sufficiently specific to be analyzable, without being so narrow that it lacks variation?"
-        ],
-        key_prefix="s1_scope"
-    )
+        # 1) GUIDE
+        question_card(
+            "Define a clear topic",
+            how_to=[
+                "A well-defined topic is a prerequisite for fruitful narrative analysis. "
+                "The clearer the topic, the more straightforward the identification of relevant characters "
+                "and the exploration of the research question. Topic choice should weigh the research question, "
+                "data availability, and available resources, while balancing specificity vs. generalizability. "
+                "Over-narrow topics risk too few characters or narratives; over-broad topics make it difficult to "
+                "restrict analysis to a manageable set. Make explicit what is in and what is out."
+            ],
+            ask_yourself=[
+                "Does this topic surface enough distinct political narratives and public debate to analyze?",
+                "Is it likely there are enough identifiable characters (actors/organizations) within those narratives?",
+                "Which data sources are most informative for this topic, and do I have reliable access to them?",
+                "If those sources are available, can I obtain the essential metadata (dates, outlets, geography, language) needed for analysis?",
+                "Is the research question compelling and relevant to the scientific community (and/or practitioners)?",
+                "Could any actors or communities be harmed by this analysis, and how will I mitigate that risk?",
+                "Is the topic sufficiently specific to be analyzable, without being so narrow that it lacks variation?"
+            ],
+            key_prefix="s1_scope"
+        )
 
-    # 2) EXAMPLE
-    example_card(
-        "Focusing on policy narratives within climate change",
-        (
-            "In *Gehring & Grigoletto (2025)* we analyze the **political economy of climate change**. "
-            "From the literature we identify two dominant discussions—**scientific evidence** and **policy responses**—and, "
-            "given our focus on political economy, we restrict attention to **policy narratives**, explicitly excluding "
-            "debates on the scientific reality and predictability of climate change."
-        ),
-        key_prefix="s1_example"
-    )
+        # 2) EXAMPLE
+        example_card(
+            "Focusing on policy narratives within climate change",
+            (
+                "In *Gehring & Grigoletto (2025)* we analyze the **political economy of climate change**. "
+                "From the literature we identify two dominant discussions—**scientific evidence** and **policy responses**—and, "
+                "given our focus on political economy, we restrict attention to **policy narratives**, explicitly excluding "
+                "debates on the scientific reality and predictability of climate change."
+            ),
+            key_prefix="s1_example"
+        )
 
-    # 3) OUTPUT
-    output_card(
-        "What you should have before Step 2",
-        bullets=[
-            "A **1–2 sentence** topic statement (domain + population + medium + lens + time/geo).",
-            "**Inclusion/exclusion rules** (keywords, venues, languages).",
-            "Initial **seed keywords/entities**.",
-            "A brief **rationale** for timeliness and relevance."
-        ],
-        key_prefix="s1_output"
-    )
+        # 3) OUTPUT
+        output_card(
+            "What you should have before Step 2",
+            bullets=[
+                "A **1–2 sentence** topic statement (domain + population + medium + lens + time/geo).",
+                "**Inclusion/exclusion rules** (keywords, venues, languages).",
+                "Initial **seed keywords/entities**.",
+                "A brief **rationale** for timeliness and relevance."
+            ],
+            key_prefix="s1_output"
+        )
+
         st.text_area("Annotations for Step 1 (optional)", key="notes_s1",
                      value=st.session_state["guide"]["notes"][1], height=120)
         st.session_state["guide"]["notes"][1] = st.session_state["notes_s1"]
@@ -268,30 +268,45 @@ def render_step(step: int):
     if step == 2:
         st.subheader("Step 2 — Identify the source and extract data")
         st.caption("Choose sources (e.g., newspapers, social media, transcribed TV/radio/YouTube, surveys).")
+
+        # 1) GUIDE
         question_card(
-            "Source selection",
+            "Source selection & pre-processing",
             how_to=[
-                "List candidate sources and justify their relevance.",
-                "Decide access path (APIs, archives, scraping, existing corpora)."
+                "List candidate sources and justify relevance; decide access (APIs, archives, scraping, existing corpora).",
+                "Plan pre-processing: language filtering, deduplication, parsing, and metadata normalization."
             ],
             ask_yourself=[
-                "Do my sources cover the populations/mediums defined in Step 1?",
-                "Is coverage balanced across time and outlets?"
+                "Do sources match the Step-1 scope (geo/time/venue)?",
+                "Is coverage balanced across time and outlets?",
+                "Which formats will I parse (PDF/HTML/TXT) and how?",
+                "Which metadata will I retain (date, outlet, author, section, geography, language)?"
             ],
             key_prefix="s2_sources"
         )
-        question_card(
-            "Pre-processing plan",
-            how_to=[
-                "Language filtering, deduplication, optional geo-filtering.",
-                "Document parsing and metadata normalization."
-            ],
-            ask_yourself=[
-                "How will I de-duplicate and filter language?",
-                "What metadata (date, outlet, geo) will I retain?"
-            ],
-            key_prefix="s2_preproc"
+
+        # 2) EXAMPLE
+        example_card(
+            "National broadsheets + business dailies (2019–2024)",
+            (
+                "Define outlets list (e.g., *La Repubblica*, *Corriere*, *Il Sole 24 Ore*), retrieve articles containing "
+                "seed terms (e.g., *“just transition”, “decarbonization”*), filter to Italian language, deduplicate wire copies, "
+                "and retain metadata: **date**, **outlet**, **section**, **author** (if available)."
+            ),
+            key_prefix="s2_example"
         )
+
+        # 3) OUTPUT
+        output_card(
+            "What you should have before Step 3",
+            bullets=[
+                "A **documented source list** with access method.",
+                "A **pre-processing plan** (filters, de-duplication).",
+                "A **sample corpus** (pilot pull) with required metadata fields.",
+            ],
+            key_prefix="s2_output"
+        )
+
         st.text_area("Annotations for Step 2 (optional)", key="notes_s2",
                      value=st.session_state["guide"]["notes"][2], height=120)
         st.session_state["guide"]["notes"][2] = st.session_state["notes_s2"]
@@ -300,32 +315,47 @@ def render_step(step: int):
     if step == 3:
         st.subheader("Step 3 — Identify relevant characters")
         st.caption("Map the topic into human and instrument actors with agency and claims.")
+
+        # 1) GUIDE
         question_card(
-            "Character buckets & exemplars",
+            "Character buckets, exemplars, claims, and proxies",
             how_to=[
-                "Aim for 4–6 buckets (government, industry, NGOs, experts, citizens).",
-                "List named exemplars per bucket (ministries, firms, unions, NGOs)."
+                "Define 4–6 buckets (government, industry, NGOs, experts, citizens, international bodies).",
+                "List named exemplars per bucket; note typical claims; record missing/silenced voices.",
+                "Plan detection proxies (entity lists, NER tags, acronyms, role titles)."
             ],
             ask_yourself=[
                 "Which buckets matter most and why?",
-                "Who are 2–5 named exemplars per bucket?"
+                "Do I have at least 2–5 exemplars per bucket?",
+                "What claims are typical for each bucket?",
+                "Which actors are missing or under-quoted—and how will I surface them?",
+                "Which proxies will I use to detect actors in text?"
             ],
-            key_prefix="s3_buckets"
+            key_prefix="s3_chars"
         )
-        question_card(
-            "Claims, omissions, and proxies",
-            how_to=[
-                "Write 1–2 typical claims per bucket.",
-                "Note missing/silenced voices and how to surface them.",
-                "Plan proxies to detect actors (NER lists, regex, acronyms, roles)."
-            ],
-            ask_yourself=[
-                "What are the usual claims each bucket makes?",
-                "Who is missing but should be visible?",
-                "What proxies will I use to detect these actors in text?"
-            ],
-            key_prefix="s3_claims"
+
+        # 2) EXAMPLE
+        example_card(
+            "Buckets and exemplars for just transition in Italy",
+            (
+                "**Government:** Ministry of Environment; **Industry:** ENEL, Confindustria; "
+                "**Labor:** CGIL, CISL; **NGOs:** Legambiente; **Experts:** university economists; **Citizens:** local committees. "
+                "Claims include **competitiveness**, **phased timelines**, **worker protection**, **environmental justice**."
+            ),
+            key_prefix="s3_example"
         )
+
+        # 3) OUTPUT
+        output_card(
+            "What you should have before Step 4",
+            bullets=[
+                "A **character schema** (buckets + named exemplars).",
+                "A list of **typical claims** per bucket and **omissions** to watch for.",
+                "A **proxy list** for detection (entity lexicons, regex/NER patterns)."
+            ],
+            key_prefix="s3_output"
+        )
+
         st.text_area("Annotations for Step 3 (optional)", key="notes_s3",
                      value=st.session_state["guide"]["notes"][3], height=120)
         st.session_state["guide"]["notes"][3] = st.session_state["notes_s3"]
@@ -334,30 +364,50 @@ def render_step(step: int):
     if step == 4:
         st.subheader("Step 4 — Prepare the prompt(s)")
         st.caption("Specify the mapping from raw text to (M, R) with a simple, consistent schema.")
+
+        # 1) GUIDE
         question_card(
-            "Task & input unit",
+            "Task, input unit, schema, and guardrails",
             how_to=[
-                "Choose ONE main task: classify / extract / summarize / compare / generate.",
-                "Pick the text unit: headline/lead/paragraph/full article (speed vs. context)."
+                "Choose ONE main task (classify/extract/summarize/compare/generate) and a text unit (headline/lead/paragraph/article).",
+                "Define a JSON schema (keys, allowed labels, brief rationale) and guardrails (cite spans, no external knowledge, be concise).",
+                "Add 2–4 worked examples (cover easy + tricky)."
             ],
             ask_yourself=[
                 "Is the task singular and clear?",
-                "Is the text unit appropriate for the task?"
-            ],
-            key_prefix="s4_task"
-        )
-        question_card(
-            "Output schema & constraints",
-            how_to=[
-                "Define a JSON schema (keys, allowed labels, rationale).",
-                "Add guardrails: cite spans, no external knowledge, be concise."
-            ],
-            ask_yourself=[
+                "Is the unit appropriate for context vs. speed?",
                 "Is the schema unambiguous and machine-readable?",
-                "Do I include 2–4 worked examples (few-shots), including tricky cases?"
+                "Do I include few-shots, including edge cases?"
             ],
-            key_prefix="s4_schema"
+            key_prefix="s4_prompt"
         )
+
+        # 2) EXAMPLE
+        example_card(
+            "Frame classification with actor extraction (JSON)",
+            (
+                "```json\n"
+                "{\n"
+                '  "frame": "responsibility|justice|solutions",\n'
+                '  "actors": ["..."],\n'
+                '  "rationale": "<1-2 sentences citing spans>"\n'
+                "}\n"
+                "```\n"
+                "_Guardrails_: Use only provided text; cite quoted spans; keep rationale ≤ 2 sentences."
+            ),
+            key_prefix="s4_example"
+        )
+
+        # 3) OUTPUT
+        output_card(
+            "What you should have before Step 5",
+            bullets=[
+                "A finalized **prompt spec**: task, input unit, schema, guardrails.",
+                "A set of **few-shot examples** (good and near-miss)."
+            ],
+            key_prefix="s4_output"
+        )
+
         st.text_area("Annotations for Step 4 (optional)", key="notes_s4",
                      value=st.session_state["guide"]["notes"][4], height=120)
         st.session_state["guide"]["notes"][4] = st.session_state["notes_s4"]
@@ -366,30 +416,46 @@ def render_step(step: int):
     if step == 5:
         st.subheader("Step 5 — Obtain predictions and assemble outputs")
         st.caption("Run annotation, parse JSON, and build tidy outputs (stage flags, presence, role dummies).")
+
+        # 1) GUIDE
         question_card(
-            "Annotation & storage",
+            "Annotation runs, storage, QC, and assembly",
             how_to=[
-                "Decide batch size, retries, and timeouts.",
-                "Store JSONL/CSV with: doc_id, span_id, label, rationale, annotator, timestamp."
-            ],
-            ask_yourself=[
-                "What pilot size and QC checks will I run first?",
-                "Where do parsed outputs live and how will I version them?"
-            ],
-            key_prefix="s5_annot"
-        )
-        question_card(
-            "Quality checks & assembly",
-            how_to=[
-                "Compute agreement/self-consistency; add gold examples.",
+                "Decide batch size, retries/timeouts; store JSONL/CSV with doc_id, span_id, label, rationale, annotator, timestamp.",
+                "Run a small pilot; compute agreement/self-consistency; add gold items; audit outputs.",
                 "Assemble tidy panel with stage-1 flags, presence m_i,k, and role dummies r_i,k."
             ],
             ask_yourself=[
-                "What metrics signal acceptable quality?",
-                "How do I visualize or audit the outputs?"
+                "What pilot size and QC checks will I run first?",
+                "Where do parsed outputs live and how will I version them?",
+                "Which metrics indicate acceptable quality, and how will I visualize/audit?"
             ],
-            key_prefix="s5_qc"
+            key_prefix="s5_outputs"
         )
+
+        # 2) EXAMPLE
+        example_card(
+            "Files produced and QC pass",
+            (
+                "- `annotations.jsonl` (one record per unit)\n"
+                "- `parsed.csv` (schema-conformant table)\n"
+                "- `qc_report.md` (agreement/self-consistency + sample audits)\n"
+                "- `changelog.md` (prompt/schema revisions)\n"
+            ),
+            key_prefix="s5_example"
+        )
+
+        # 3) OUTPUT
+        output_card(
+            "What you should have at the end",
+            bullets=[
+                "A **clean annotations file** (JSONL/CSV) matching your schema.",
+                "A **QC summary** (agreement or stability checks, audits).",
+                "A **tidy analysis table** (flags, presence, role dummies) ready for modeling/visualization."
+            ],
+            key_prefix="s5_output"
+        )
+
         st.text_area("Annotations for Step 5 (optional)", key="notes_s5",
                      value=st.session_state["guide"]["notes"][5], height=120)
         st.session_state["guide"]["notes"][5] = st.session_state["notes_s5"]
@@ -407,7 +473,7 @@ def render_guide_tab():
     )
     st.session_state["guide"]["current_step"] = step
 
-    # Mini progress in the sidebar
+    # Sidebar progress: a step turns green only when ALL its checkboxes are marked
     with st.sidebar:
         st.divider()
         st.markdown("## Guide progress")
@@ -435,7 +501,7 @@ tab_guide, tab_qa = st.tabs(["Guide (5-step pipeline)", "Paper Q&A"])
 with tab_guide:
     render_guide_tab()
 
-# Tab 2 — Q&A (your original flow, unchanged)
+# Tab 2 — Q&A (your original flow)
 with tab_qa:
     if vs is None:
         st.info("No documents indexed. Add your paper at data/paper.pdf and rerun.")
