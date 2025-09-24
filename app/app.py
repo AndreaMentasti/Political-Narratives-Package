@@ -184,6 +184,22 @@ def question_card(title: str, how_to: list[str], ask_yourself: list[str], key_pr
                 )
                 st.session_state["guide"]["done"][cb_key] = checked
 
+def example_card(title: str, example_md: str, key_prefix: str):
+    """A simple markdown example block (no checkboxes)."""
+    with st.container(border=True):
+        st.markdown(f"**Example — {title}**")
+        st.markdown(example_md)
+
+def output_card(title: str, bullets: list[str] | None = None, body_md: str | None = None, key_prefix: str = ""):
+    """Defines the expected output after the step (bulleted or markdown)."""
+    with st.container(border=True):
+        st.markdown(f"**Output — {title}**")
+        if bullets:
+            st.markdown("\n".join([f"- {b}" for b in bullets]))
+        if body_md:
+            st.markdown(body_md)
+
+
 def render_step(step: int):
     """
     Content for each of the 5 steps from your paper:
@@ -195,43 +211,55 @@ def render_step(step: int):
     """
     # --- STEP 1 ---
     if step == 1:
-        st.subheader("Step 1 — Select and define the topic")
-        st.caption("A precise topic definition anchors character selection and downstream analysis.")
-        question_card(
-    "Define a clear topic",
-    how_to=[
-        "A well-defined topic is a prerequisite for fruitful analysis of **political narratives**. "
-        "The clearer the topic, the more straightforward the identification of relevant characters "
-        "and the exploration of the research question. Topic choice should weigh the research question, "
-        "data availability, and available resources, while balancing specificity vs. generalizability. "
-        "Over-narrow topics risk too few characters or narratives; over-broad topics make it difficult to "
-        "restrict analysis to a manageable set. Make explicit what is in and what is out."
-    ],
-    ask_yourself=[
-    "Does this topic generate enough distinct political narratives and public debate to analyze?",
-    "Is the topic sufficiently specific to be analyzable, without being so narrow that it lacks variation?",
-    "Is it likely there are enough identifiable characters within those narratives?",
-    "Which data sources are most informative for this topic, and do I have reliable access to them?",
-    "If those sources are available, can I obtain the essential metadata (dates, outlets, geography, language) needed for analysis?",
-    "Is the research question compelling and relevant to the scientific community (and/or practitioners)?",
-    "Could any actors or communities be harmed by this analysis, and how will I mitigate that risk?",
-]
-,
-    key_prefix="s1_scope"
-)
+    st.subheader("Step 1 — Select and define the topic")
+    st.caption("A precise topic definition anchors character selection and downstream analysis.")
 
-        question_card(
-            "Why this topic now?",
-            how_to=[
-                "Connect to a decision, event, or policy window.",
-                "Name stakeholders who care about this analysis."
-            ],
-            ask_yourself=[
-                "Who will use the answer and for what?",
-                "What would make this analysis timely and useful?"
-            ],
-            key_prefix="s1_rationale"
-        )
+    # 1) GUIDE
+    question_card(
+        "Define a clear topic",
+        how_to=[
+            "A well-defined topic is a prerequisite for fruitful narrative analysis. "
+            "The clearer the topic, the more straightforward the identification of relevant characters "
+            "and the exploration of the research question. Topic choice should weigh the research question, "
+            "data availability, and available resources, while balancing specificity vs. generalizability. "
+            "Over-narrow topics risk too few characters or narratives; over-broad topics make it difficult to "
+            "restrict analysis to a manageable set. Make explicit what is in and what is out."
+        ],
+        ask_yourself=[
+            "Does this topic surface enough distinct political narratives and public debate to analyze?",
+            "Is it likely there are enough identifiable characters (actors/organizations) within those narratives?",
+            "Which data sources are most informative for this topic, and do I have reliable access to them?",
+            "If those sources are available, can I obtain the essential metadata (dates, outlets, geography, language) needed for analysis?",
+            "Is the research question compelling and relevant to the scientific community (and/or practitioners)?",
+            "Could any actors or communities be harmed by this analysis, and how will I mitigate that risk?",
+            "Is the topic sufficiently specific to be analyzable, without being so narrow that it lacks variation?"
+        ],
+        key_prefix="s1_scope"
+    )
+
+    # 2) EXAMPLE
+    example_card(
+        "Focusing on policy narratives within climate change",
+        (
+            "In *Gehring & Grigoletto (2025)* we analyze the **political economy of climate change**. "
+            "From the literature we identify two dominant discussions—**scientific evidence** and **policy responses**—and, "
+            "given our focus on political economy, we restrict attention to **policy narratives**, explicitly excluding "
+            "debates on the scientific reality and predictability of climate change."
+        ),
+        key_prefix="s1_example"
+    )
+
+    # 3) OUTPUT
+    output_card(
+        "What you should have before Step 2",
+        bullets=[
+            "A **1–2 sentence** topic statement (domain + population + medium + lens + time/geo).",
+            "**Inclusion/exclusion rules** (keywords, venues, languages).",
+            "Initial **seed keywords/entities**.",
+            "A brief **rationale** for timeliness and relevance."
+        ],
+        key_prefix="s1_output"
+    )
         st.text_area("Annotations for Step 1 (optional)", key="notes_s1",
                      value=st.session_state["guide"]["notes"][1], height=120)
         st.session_state["guide"]["notes"][1] = st.session_state["notes_s1"]
