@@ -1,4 +1,4 @@
-import os, glob
+import os
 import streamlit as st
 from pypdf import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -14,11 +14,12 @@ from langchain_community.chat_models import ChatOllama
 # OPTIONAL: OpenAI chat if user brings a key
 from langchain_openai import ChatOpenAI
 
-DEFAULT_LOCAL_MODEL = "llama3.2:3b"   # also try "qwen2.5:3b"
+# ---------------- Constants ----------------
+DEFAULT_LOCAL_MODEL = "llama3.2:3b"   # try "qwen2.5:3b" if you want faster local replies
 CHUNK_SIZE = 1200
 CHUNK_OVERLAP = 200
 
-# ---- Speed-friendly defaults ----
+# Speed-friendly defaults (helps Llama respond faster)
 FIXED_TEMPERATURE = 0.1
 OLLAMA_KWARGS = {
     "num_predict": 256,   # cap output tokens (major speed win). Try 128 for even faster.
@@ -26,12 +27,13 @@ OLLAMA_KWARGS = {
     "top_k": 30,
     "top_p": 0.9,
 }
-OPENAI_MAX_TOKENS = 400  # keep OpenAI short too
+OPENAI_MAX_TOKENS = 400  # keep OpenAI answers short too
 
-st.set_page_config(page_title="Political Narratives — Local Q&A & Playground", layout="wide")
-st.title("Political Narratives — Local Q&A (RAG) + Prompt Playground")
+# ---------------- UI Header ----------------
+st.set_page_config(page_title="Political Narratives — Paper Q&A & Playground", layout="wide")
+st.title("Political Narratives — Paper Q&A + Prompt Playground")
 
-# ── Sidebar (single block, unique keys) ──────────────────────────────────────
+# ---------------- Sidebar ----------------
 with st.sidebar:
     st.subheader("Model settings")
     provider = st.selectbox(
@@ -41,7 +43,7 @@ with st.sidebar:
         key="provider_select",
     )
 
-    # Removed the temperature slider (fixed low temp used instead)
+    # No temperature slider (fixed low temp used)
 
     local_model = DEFAULT_LOCAL_MODEL
     user_key = None
@@ -74,15 +76,12 @@ def warmup_local_model(model_name: str):
 if provider.startswith("Local"):
     warmup_local_model(local_model)
 
-# ── Helpers ─────────────────────────────────────────────────────────────────
+# ---------------- Helpers ----------------
 ASSISTANT_SYSTEM = (
     "You are a helpful research assistant and project coach for applying the Political Narratives framework, "
     "especially the drama triangle character recognition to political narratives. Prefer using retrieved context "
-    "from the user's paper/repo when it is relevant. If the context is missing, sparse, or not directly relevant, "
-    "answer from general knowledge and common sense, and be a guide to the user. Be concise and concrete: "
-    "1) ask up to 2 clarifying questions if the query is broad or ambiguous; "
-    "2) propose a short, step-by-step plan if the user wants to ‘do’ something; "
-    "3) when appropriate, give a tiny example taken from the paper if the question doesn't require specific examples (≤5 lines)."
+    "from the user's paper when it is relevant. If the context is missing, answer from general knowledge and common sense. "
+    "Be concise and concrete."
 )
 
 def load_pdf(path: str):
@@ -100,9 +99,9 @@ def load_pdf(path: str):
 
 def get_llm(provider: str, user_key: str | None, local_model: str):
     """
-    Return an LLM handle based on provider selection.
+    Return an LLM based on provider.
     - OpenAI path activates only if a key is provided (short outputs).
-    - Otherwise we fall back to local Ollama with speed-friendly kwargs.
+    - Otherwise use local Ollama with speed-friendly kwargs.
     """
     if provider.startswith("OpenAI") and user_key:
         return ChatOpenAI(
@@ -118,39 +117,18 @@ def get_llm(provider: str, user_key: str | None, local_model: str):
         model_kwargs=OLLAMA_KWARGS,
     )
 
-def load_files(patterns):
-    paths, docs = [], []
-    for p in patterns:
-        paths.extend(glob.glob(p, recursive=True))
-    for path in paths:
-        if os.path.isdir(path): 
-            continue
-        if not path.endswith((".md", ".py", ".txt", ".yml", ".yaml", ".json")):
-            continue
-        try:
-            with open(path, "r", encoding="utf-8", errors="ignore") as f:
-                text = f.read()
-            docs.append(Document(page_content=text, metadata={"source": os.path.relpath(path)}))
-        except Exception as e:
-            st.warning(f"Could not read {path}: {e}")
-    return docs
-
 @st.cache_resource(show_spinner=True)
 def build_vectorstore():
     splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
     all_docs = []
 
-    # 1) Papers: index ALL PDFs in data/
-    for pdf_path in glob.glob("data/*.pdf"):
-        for d in load_pdf(pdf_path):
+    paper_path = "data/paper.pdf"  # ONLY index this file
+    if os.path.exists(paper_path):
+        for d in load_pdf(paper_path):
             for chunk in splitter.split_text(d.page_content or ""):
                 all_docs.append(Document(page_content=chunk, metadata=d.metadata))
-
-    # 2) Repo docs (optional)
-    repo_docs = load_files(["README.md", "examples/**/*.md", "*.md", "scripts/**/*.py"])
-    for d in repo_docs:
-        for chunk in splitter.split_text(d.page_content):
-            all_docs.append(Document(page_content=chunk, metadata=d.metadata))
+    else:
+        st.warning("Paper not found at data/paper.pdf. Please add your PDF there.")
 
     if not all_docs:
         return None
@@ -163,8 +141,7 @@ st.sidebar.write("Docs in index:", vs.index.ntotal if vs else 0)
 
 def retrieve_with_scores(vs, query: str, k: int = 4):
     """
-    Returns [(doc, score), ...]. For FAISS L2 distance, LOWER is better.
-    If vs is None, returns [].
+    Returns [(doc, score), ...]. If vs is None, returns [].
     """
     if vs is None:
         return []
@@ -180,21 +157,21 @@ def context_is_thin(results, min_chars: int = 300):
     merged = "".join(d.page_content for d, _ in results)
     return len(merged.strip()) < min_chars
 
-# ── UI Tabs ─────────────────────────────────────────────────────────────────
-tab1, tab2 = st.tabs(["Ask about the paper/repo (Local or OpenAI)", "Prompt playground"])
+# ---------------- UI Tabs ----------------
+tab1, tab2 = st.tabs(["Ask about the paper (Local or OpenAI)", "Prompt playground"])
 
-# ---------------- TAB 1: Always-helpful Q&A (simple UI) ----------------
+# ---------------- TAB 1: Paper-only RAG Q&A ----------------
 with tab1:
     if vs is None:
-        st.info("No documents indexed. Add a text-based PDF under data/ (any name) or a README.md, then Rerun.")
+        st.info("No documents indexed. Add your paper at data/paper.pdf and rerun.")
     else:
         llm = get_llm(provider, user_key, local_model)
-        st.caption("Ask questions about the paper/repo. Uses retrieved context when available; otherwise answers from general knowledge.")
+        st.caption("Ask questions about the paper. Local by default; switches to OpenAI if you paste a key.")
         q = st.text_input("Your question", key="qa_question_input")
 
-        # fixed settings (simple UI)
-        top_k = 4                 # fewer passages = faster
-        min_context_chars = 300   # treat tiny context as thin
+        # fixed settings
+        top_k = 4                # fewer passages = faster
+        min_context_chars = 300  # treat tiny context as thin
 
         if q:
             with st.spinner("Thinking..."):
@@ -221,14 +198,6 @@ with tab1:
 
             # 5) render answer
             st.write(resp.content)
-
-            # 6) show sources only if context isn't thin
-            if results and not thin:
-                st.markdown("**Sources:**")
-                for d, _score in results:
-                    src = d.metadata.get("source", "unknown")
-                    page = d.metadata.get("page", None)
-                    st.code(f"{src}" + (f" (p.{page})" if page else ""))
 
 # ---------------- TAB 2: Prompt playground ----------------
 with tab2:
@@ -260,5 +229,6 @@ with tab2:
                 {"role": "user", "content": user_text},
             ])
         st.write(resp.content)
+
 
 
