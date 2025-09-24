@@ -82,7 +82,7 @@ ASSISTANT_SYSTEM = (
     "answer from general knowledge and common sense, and be a guide to the user. Be concise and concrete: "
     "1) ask up to 2 clarifying questions if the query is broad or ambiguous; "
     "2) propose a short, step-by-step plan if the user wants to ‘do’ something; "
-    "3) when appropriate, give a tiny example (≤5 lines)."
+    "3) when appropriate, give a tiny example taken from the paper if the question doesn't require specific examples (≤5 lines)."
 )
 
 def load_pdf(path: str):
