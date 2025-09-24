@@ -5,28 +5,42 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
-
-# Optional local chat via Ollama (only shown locally if ALLOW_LOCAL=1)
-from langchain_community.chat_models import ChatOllama
-
-# OpenAI chat (shown online + locally if user provides a key)
 from langchain_openai import ChatOpenAI
-
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
+
+# Optional local chat via Ollama (only if ALLOW_LOCAL is truthy)
+try:
+    from langchain_community.chat_models import ChatOllama
+except Exception:
+    ChatOllama = None  # not available / not needed online
 
 # ---------------- Constants ----------------
 CHUNK_SIZE = 1200
 CHUNK_OVERLAP = 200
 PAPER_PATH = "data/paper.pdf"
 
-# Fixed, safe defaults
 FIXED_TEMPERATURE = 0.1
 OPENAI_MAX_TOKENS = 400
-
-# Show Ollama only if explicitly allowed (e.g., local dev: set ALLOW_LOCAL=1)
-ALLOW_LOCAL = bool(os.environ.get("ALLOW_LOCAL", "")) or bool(st.secrets.get("ALLOW_LOCAL", False))
 DEFAULT_LOCAL_MODEL = "llama3.2:3b"  # or "qwen2.5:3b" for speed
+
+# --- robust truthy parsing (so "false"/"0" don't evaluate to True) ---
+def _truthy(x) -> bool:
+    if isinstance(x, bool):
+        return x
+    if x is None:
+        return False
+    s = str(x).strip().lower()
+    return s in ("1", "true", "yes", "on")
+
+def _get_secret(name, default=None):
+    # Safely read st.secrets without raising when no secrets file exists
+    try:
+        return st.secrets.get(name, default)
+    except Exception:
+        return default
+
+ALLOW_LOCAL = _truthy(os.environ.get("ALLOW_LOCAL")) or _truthy(_get_secret("ALLOW_LOCAL"))
 
 # ---------------- UI Header ----------------
 st.set_page_config(page_title="Political Narratives — Paper Q&A & Playground", layout="wide")
@@ -35,8 +49,18 @@ st.title("Political Narratives — Paper Q&A + Prompt Playground")
 # ---------------- Sidebar ----------------
 with st.sidebar:
     st.subheader("Model settings")
-    provider_options = ["OpenAI (bring your own key)"] if not ALLOW_LOCAL else ["OpenAI (bring your own key)", "Local (Ollama)"]
-    provider = st.selectbox("Provider", provider_options, index=0, key="provider_select")
+
+    if ALLOW_LOCAL:
+        provider = st.selectbox(
+            "Provider",
+            ["OpenAI (bring your own key)", "Local (Ollama)"],
+            index=0,
+            key="provider_select",
+        )
+    else:
+        # Online default: OpenAI only
+        provider = "OpenAI (bring your own key)"
+        st.caption("This app uses OpenAI when you paste your API key.")
 
     user_key = None
     local_model = DEFAULT_LOCAL_MODEL
@@ -48,8 +72,7 @@ with st.sidebar:
             help="Paste your key (starts with sk- or sk-proj-). Used only in your session.",
             key="openai_key_input",
         )
-    else:
-        # Only shown when ALLOW_LOCAL is true
+    elif ALLOW_LOCAL:
         local_model = st.selectbox(
             "Ollama model",
             [DEFAULT_LOCAL_MODEL, "qwen2.5:3b", "llama3.2:3b"],
@@ -96,11 +119,11 @@ st.sidebar.write("Docs in index:", vs.index.ntotal if vs else 0)
 
 def get_llm(provider: str, user_key: str | None, local_model: str):
     """
-    Returns an LLM handle:
-    - OpenAI path only if a key is provided (used online; allowed locally too).
-    - Local Ollama path only if ALLOW_LOCAL is True and provider is Local.
+    Returns an LLM handle.
+    - Online (default): OpenAI (requires key).
+    - Local Ollama only if ALLOW_LOCAL is true.
     """
-    if provider.startswith("OpenAI"):
+    if provider.startswith("OpenAI") or not ALLOW_LOCAL:
         if not user_key:
             st.warning("Paste your OpenAI API key in the sidebar to ask questions.")
         return ChatOpenAI(
@@ -109,7 +132,11 @@ def get_llm(provider: str, user_key: str | None, local_model: str):
             max_tokens=OPENAI_MAX_TOKENS,
             api_key=user_key,
         )
+
     # Local (only if allowed)
+    if ChatOllama is None:
+        st.error("Ollama not available in this environment.")
+        st.stop()
     return ChatOllama(
         model=local_model,
         temperature=FIXED_TEMPERATURE,
@@ -141,24 +168,23 @@ with tab1:
     if vs is None:
         st.info("No documents indexed. Add your paper at data/paper.pdf and rerun.")
     else:
-        llm = get_llm(provider, user_key, local_model)
+        llm = get_llm(provider, user_key, DEFAULT_LOCAL_MODEL)
 
-        # Build a RetrievalQA chain with our strict prompt
+        # Require key when using OpenAI (online default)
+        if provider.startswith("OpenAI") and not user_key:
+            st.stop()
+
         retriever = vs.as_retriever(search_kwargs={"k": 4})
         qa = RetrievalQA.from_chain_type(
             llm=llm,
             retriever=retriever,
             chain_type="stuff",
             chain_type_kwargs={"prompt": STRICT_QA_PROMPT},
-            return_source_documents=False,   # Hide sources (can set True if you want to show them)
+            return_source_documents=False,
         )
 
         st.caption("Ask questions strictly about the paper. The assistant will answer only from the PDF.")
         q = st.text_input("Your question", key="qa_question_input")
-
-        # Guard: on Streamlit Cloud (OpenAI only), require a key
-        if provider.startswith("OpenAI") and not user_key:
-            st.stop()
 
         if q:
             with st.spinner("Thinking..."):
@@ -167,7 +193,10 @@ with tab1:
 
 # ---------------- TAB 2: Prompt playground ----------------
 with tab2:
-    st.caption("Try prompts with OpenAI (or locally with Ollama if enabled on your machine).")
+    st.caption(
+        "Try prompts with OpenAI (default). "
+        + ("You can also use local Ollama if enabled on your machine." if ALLOW_LOCAL else "")
+    )
     presets = {
         "Drama Triangle annotator (concise JSON)": (
             "You are an annotator using Drama Triangle roles: Victim, Rescuer, Persecutor. "
@@ -188,12 +217,16 @@ with tab2:
     run = st.button("Run", type="primary", key="run_playground_btn")
 
     if run and user_text.strip():
-        llm = get_llm(provider, user_key, local_model)
-        with st.spinner("Generating..."):
-            resp = llm.invoke([
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_text},
-            ])
-        st.write(resp.content)
+        llm = get_llm(provider, user_key, DEFAULT_LOCAL_MODEL)
+        if provider.startswith("OpenAI") and not user_key:
+            st.warning("Paste your OpenAI API key in the sidebar to run the playground.")
+        else:
+            with st.spinner("Generating..."):
+                resp = llm.invoke([
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_text},
+                ])
+            st.write(resp.content)
+
 
 
