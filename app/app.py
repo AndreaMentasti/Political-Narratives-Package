@@ -20,6 +20,18 @@ DEFAULT_LOCAL_MODEL = "llama3.2:3b"   # also try "qwen2.5:3b"
 CHUNK_SIZE = 1200
 CHUNK_OVERLAP = 200
 
+# ---- Local/online toggle (OpenAI-only online) ----
+def _read_allow_local_from_secrets() -> bool:
+    try:
+        return bool(st.secrets.get("ALLOW_LOCAL", False))
+    except Exception:
+        return False
+
+_env_flag = os.environ.get("ALLOW_LOCAL", "").strip()  # "1" or "true" locally if you want
+_secret_flag = _read_allow_local_from_secrets()
+# Online default: False (OpenAI only). Locally you can set ALLOW_LOCAL=1 to enable Ollama.
+ALLOW_LOCAL = bool(_env_flag or _secret_flag)
+
 # ---------------- UI Header ----------------
 st.set_page_config(page_title="Political Narratives — Paper Q&A & Playground", layout="wide")
 st.title("Political Narratives — Paper Q&A + Prompt Playground")
@@ -27,20 +39,23 @@ st.title("Political Narratives — Paper Q&A + Prompt Playground")
 # ---------------- Sidebar ----------------
 with st.sidebar:
     st.subheader("Model settings")
+
+    provider_options = (["Local (Ollama)", "OpenAI (bring your own key)"]
+                        if ALLOW_LOCAL else
+                        ["OpenAI (bring your own key)"])
     provider = st.selectbox(
         "Provider",
-        ["Local (Ollama)", "OpenAI (bring your own key)"],
-        index=0,
+        provider_options,
+        index=(0 if not ALLOW_LOCAL else 0),  # if local allowed, default to Local; else OpenAI
         key="provider_select",
     )
-    temperature = st.slider(
-        "Temperature", 0.0, 1.0, 0.2, 0.05, key="temperature_slider_sidebar"
-    )
+
+    temperature = st.slider("Temperature", 0.0, 1.0, 0.2, 0.05, key="temperature_slider_sidebar")
 
     local_model = DEFAULT_LOCAL_MODEL
     user_key = None
 
-    if provider.startswith("Local"):
+    if ALLOW_LOCAL and provider.startswith("Local"):
         st.markdown("### Local model (Ollama)")
         local_model = st.selectbox(
             "Ollama model",
@@ -53,9 +68,11 @@ with st.sidebar:
         user_key = st.text_input(
             "OpenAI API key",
             type="password",
-            help="Used only in your session. Leave empty to stay local.",
+            help="Used only in your session.",
             key="openai_key_input",
         )
+        if not user_key:
+            st.info("Paste your OpenAI API key to ask questions or run the playground.")
 
 # ---------------- Helpers ----------------
 def load_pdf(path: str):
@@ -72,8 +89,14 @@ def load_pdf(path: str):
     return docs
 
 def get_llm(provider: str, temperature: float, user_key: str | None, local_model: str):
-    if provider.startswith("OpenAI") and user_key:
+    # OpenAI path
+    if provider.startswith("OpenAI") or not ALLOW_LOCAL:
+        # Require a key; show a friendly error if missing
+        if not user_key:
+            st.stop()  # stop execution until user pastes a key (sidebar shows the input)
         return ChatOpenAI(model="gpt-4o-mini", temperature=temperature, api_key=user_key)
+
+    # Local path (only reachable if ALLOW_LOCAL is True and provider == Local)
     return ChatOllama(model=local_model, temperature=temperature)
 
 @st.cache_resource(show_spinner=True)
