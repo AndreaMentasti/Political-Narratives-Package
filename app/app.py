@@ -205,20 +205,18 @@ def render_step(step: int):
         "and the exploration of the research question. Topic choice should weigh the research question, "
         "data availability, and available resources, while balancing specificity vs. generalizability. "
         "Over-narrow topics risk too few characters or narratives; over-broad topics make it difficult to "
-        "restrict analysis to a manageable set. Make explicit what is in and what is out.",
-        "Example: In Gehring & Grigoletto (2025) we analyze the political economy of climate change. "
-        "From the literature we identify two dominant discussions—scientific evidence and policy responses—and, "
-        "given our focus on political economy, we restrict attention to policy narratives, excluding debates on "
-        "the scientific reality and predictability of climate change."
+        "restrict analysis to a manageable set. Make explicit what is in and what is out."
     ],
     ask_yourself=[
-        "Does the topic generate enough political narratives/ debate around itself?",
-        "Is it likely to think that there enough characters that can be identified in the narratives?",
-        "Which data sources are more informative? Do I have access to them?",
-        "If sources are available, can I obtain the other metadata needed for the analysis?",
-        "Is the research question interesting for the scientific community?",
-        "Are there actors that might be armed by my analysis?"
-    ],
+    "Does this topic generate enough distinct political narratives and public debate to analyze?",
+    "Is the topic sufficiently specific to be analyzable, without being so narrow that it lacks variation?",
+    "Is it likely there are enough identifiable characters within those narratives?",
+    "Which data sources are most informative for this topic, and do I have reliable access to them?",
+    "If those sources are available, can I obtain the essential metadata (dates, outlets, geography, language) needed for analysis?",
+    "Is the research question compelling and relevant to the scientific community (and/or practitioners)?",
+    "Could any actors or communities be harmed by this analysis, and how will I mitigate that risk?",
+]
+,
     key_prefix="s1_scope"
 )
 
