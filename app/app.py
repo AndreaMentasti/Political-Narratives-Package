@@ -154,18 +154,18 @@ STRICT_QA_PROMPT = PromptTemplate(
 
 # ───────────────────────── Helpers (Guide tab) ─────────────────────────
 def _init_guide_state():
-    # notes: per-step free text
-    # done:  dict[str,bool] -> which checkboxes are ticked
-    # registry: dict[str,bool] -> all checkbox keys that exist (for denominator)
+    # notes: per-step free text; done: per-question checkbox flags
     st.session_state.setdefault("guide", {
         "current_step": 1,
         "notes": {1: "", 2: "", 3: "", 4: "", 5: ""},
-        "done": {},
-        "registry": {}
+        "done": {}  # keys like "s1_q1": True/False
     })
 
-
 def question_card(title: str, how_to: list[str], ask_yourself: list[str], key_prefix: str):
+    """
+    Renders a boxed 'card' with: title, guidance, reflective questions (each with an optional 'Done' checkbox).
+    All widget keys are namespaced via key_prefix to avoid duplication.
+    """
     with st.container(border=True):
         st.markdown(f"**{title}**")
         if how_to:
@@ -175,11 +175,7 @@ def question_card(title: str, how_to: list[str], ask_yourself: list[str], key_pr
             st.markdown("**Ask yourself**")
             for i, q in enumerate(ask_yourself, start=1):
                 cb_key = f"{key_prefix}_q{i}"
-                # register key for progress denominator
-                st.session_state["guide"]["registry"][cb_key] = True
-                # render checkbox and store value
-                checked = st.checkbox(q, key=cb_key,
-                                      value=st.session_state["guide"]["done"].get(cb_key, False))
+                checked = st.checkbox(q, key=cb_key, value=st.session_state["guide"]["done"].get(cb_key, False))
                 st.session_state["guide"]["done"][cb_key] = checked
 
 def render_step(step: int):
@@ -372,24 +368,14 @@ def render_guide_tab():
     with st.sidebar:
         st.divider()
         st.markdown("## Guide progress")
-
         done = st.session_state["guide"]["done"]
-        registry = st.session_state["guide"]["registry"]
-        total = len(registry) or 1
-        completed = sum(1 for k, v in done.items() if v and k in registry)
-        pct = completed / total
-
-        st.progress(pct, text=f"{completed} / {total} items completed")
-
-    # (optional) show per-step mini counts
-        def step_count(prefix):
-            keys = [k for k in registry if k.startswith(prefix)]
-            c = sum(1 for k in keys if done.get(k))
-            return c, len(keys)
-        s1 = step_count("s1_"); s2 = step_count("s2_"); s3 = step_count("s3_"); s4 = step_count("s4_"); s5 = step_count("s5_")
-        st.caption(f"Step 1: {s1[0]}/{s1[1]} • Step 2: {s2[0]}/{s2[1]} • Step 3: {s3[0]}/{s3[1]} • Step 4: {s4[0]}/{s4[1]} • Step 5: {s5[0]}/{s5[1]}")
-
-
+        def _tick(prefix): return "✅" if any(k.startswith(prefix) and done.get(k) for k in done) else "⬜️"
+        st.write(f"{_tick('s1_')} Step 1 — Topic")
+        st.write(f"{_tick('s2_')} Step 2 — Data")
+        st.write(f"{_tick('s3_')} Step 3 — Characters")
+        st.write(f"{_tick('s4_')} Step 4 — Prompts")
+        st.write(f"{_tick('s5_')} Step 5 — Outputs")
+        st.caption("Checks are optional; they just help you keep track.")
 
     render_step(step)
 
@@ -426,8 +412,3 @@ with tab_qa:
             with st.spinner("Thinking..."):
                 out = qa({"query": q})
             st.write(out["result"])
-
-
-
-
-
