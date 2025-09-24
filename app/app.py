@@ -154,18 +154,17 @@ STRICT_QA_PROMPT = PromptTemplate(
 
 # ───────────────────────── Helpers (Guide tab) ─────────────────────────
 def _init_guide_state():
-    # notes: per-step free text; done: per-question checkbox flags
+    # notes: per-step free text
+    # done:     which checkboxes are ticked
+    # registry: all checkbox keys that exist (for per-step totals)
     st.session_state.setdefault("guide", {
         "current_step": 1,
         "notes": {1: "", 2: "", 3: "", 4: "", 5: ""},
-        "done": {}  # keys like "s1_q1": True/False
+        "done": {},
+        "registry": {}  # e.g., {"s1_scope_q1": True, "s1_scope_q2": True, ...}
     })
 
 def question_card(title: str, how_to: list[str], ask_yourself: list[str], key_prefix: str):
-    """
-    Renders a boxed 'card' with: title, guidance, reflective questions (each with an optional 'Done' checkbox).
-    All widget keys are namespaced via key_prefix to avoid duplication.
-    """
     with st.container(border=True):
         st.markdown(f"**{title}**")
         if how_to:
@@ -175,7 +174,14 @@ def question_card(title: str, how_to: list[str], ask_yourself: list[str], key_pr
             st.markdown("**Ask yourself**")
             for i, q in enumerate(ask_yourself, start=1):
                 cb_key = f"{key_prefix}_q{i}"
-                checked = st.checkbox(q, key=cb_key, value=st.session_state["guide"]["done"].get(cb_key, False))
+                # Register for totals
+                st.session_state["guide"]["registry"][cb_key] = True
+                # Render and store value
+                checked = st.checkbox(
+                    q,
+                    key=cb_key,
+                    value=st.session_state["guide"]["done"].get(cb_key, False)
+                )
                 st.session_state["guide"]["done"][cb_key] = checked
 
 def render_step(step: int):
@@ -368,14 +374,20 @@ def render_guide_tab():
     with st.sidebar:
         st.divider()
         st.markdown("## Guide progress")
+
         done = st.session_state["guide"]["done"]
-        def _tick(prefix): return "✅" if any(k.startswith(prefix) and done.get(k) for k in done) else "⬜️"
-        st.write(f"{_tick('s1_')} Step 1 — Topic")
-        st.write(f"{_tick('s2_')} Step 2 — Data")
-        st.write(f"{_tick('s3_')} Step 3 — Characters")
-        st.write(f"{_tick('s4_')} Step 4 — Prompts")
-        st.write(f"{_tick('s5_')} Step 5 — Outputs")
-        st.caption("Checks are optional; they just help you keep track.")
+        registry = st.session_state["guide"]["registry"]
+
+        def _step_complete(prefix: str) -> bool:
+            keys = [k for k in registry.keys() if k.startswith(prefix)]
+            return len(keys) > 0 and all(done.get(k, False) for k in keys)
+
+        st.write(f"{'✅' if _step_complete('s1_') else '⬜️'} Step 1 — Topic")
+        st.write(f"{'✅' if _step_complete('s2_') else '⬜️'} Step 2 — Data")
+        st.write(f"{'✅' if _step_complete('s3_') else '⬜️'} Step 3 — Characters")
+        st.write(f"{'✅' if _step_complete('s4_') else '⬜️'} Step 4 — Prompts")
+        st.write(f"{'✅' if _step_complete('s5_') else '⬜️'} Step 5 — Outputs")
+        st.caption("A step turns green only when all its checkboxes are marked.")
 
     render_step(step)
 
