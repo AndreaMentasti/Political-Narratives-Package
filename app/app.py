@@ -198,10 +198,10 @@ def render_step(step: int):
         st.subheader("Step 1 — Select and define the topic")
         st.caption("A precise topic definition anchors character selection and downstream analysis.")
         question_card(
-            "Define scope & lens",
+            "Define a clear topic",
             how_to=[
-                "State domain + population + medium + lens.",
-                "Be specific enough to guide data collection and coding later."
+                "A well-defined topic is a prerequisite for fruitful narrative analysis. The clearer the topic, the more straightforward the identification of relevant characters and the exploration of the research question. Topic choice should weigh the research question, data availability, and available resources, while balancing specificity vs. generalizability. Over-narrow topics risk too few characters or narratives; over-broad topics make it difficult to restrict analysis to a manageable set. Make explicit what is in and what is out.,
+                "Example: In Gehring & Grigoletto (2025) we analyze the political economy of climate change. From the literature we identify two dominant discussions—scientific evidence and policy responses—and, given our focus on political economy, we restrict attention to policy narratives, excluding debates on the scientific reality and predictability of climate change."
             ],
             ask_yourself=[
                 "Is the topic expressed in 1–2 sentences?",
