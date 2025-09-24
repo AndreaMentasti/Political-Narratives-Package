@@ -143,8 +143,8 @@ def get_llm(provider: str, user_key: str | None, local_model: str):
 STRICT_QA_PROMPT = PromptTemplate(
     input_variables=["context", "question"],
     template=(
-        "You are a careful research assistant. Answer the user's question using ONLY the information in the provided paper excerpts.\n"
-        "If the excerpts do not contain the answer, say: \"I couldn't find that in the paper.\" Do not use outside knowledge.\n\n"
+        "You are a careful research assistant. Answer the user's question using mainly the information in the provided paper excerpts.\n"
+        "If the excerpts do not contain the answer, look carefully again, and then you can refer to external knowledge to give an answer.\n"
         "Excerpts from the paper:\n{context}\n\n"
         "Question: {question}\n\n"
         "Answer:"
