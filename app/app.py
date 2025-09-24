@@ -370,24 +370,25 @@ def render_guide_tab():
 
     # Mini progress in the sidebar
     with st.sidebar:
-    st.divider()
-    st.markdown("## Guide progress")
+        st.divider()
+        st.markdown("## Guide progress")
 
-    done = st.session_state["guide"]["done"]
-    registry = st.session_state["guide"]["registry"]
-    total = len(registry) or 1
-    completed = sum(1 for k, v in done.items() if v and k in registry)
-    pct = completed / total
+        done = st.session_state["guide"]["done"]
+        registry = st.session_state["guide"]["registry"]
+        total = len(registry) or 1
+        completed = sum(1 for k, v in done.items() if v and k in registry)
+        pct = completed / total
 
-    st.progress(pct, text=f"{completed} / {total} items completed")
+        st.progress(pct, text=f"{completed} / {total} items completed")
 
     # (optional) show per-step mini counts
-    def step_count(prefix):
-        keys = [k for k in registry if k.startswith(prefix)]
-        c = sum(1 for k in keys if done.get(k))
-        return c, len(keys)
-    s1 = step_count("s1_"); s2 = step_count("s2_"); s3 = step_count("s3_"); s4 = step_count("s4_"); s5 = step_count("s5_")
-    st.caption(f"Step 1: {s1[0]}/{s1[1]} • Step 2: {s2[0]}/{s2[1]} • Step 3: {s3[0]}/{s3[1]} • Step 4: {s4[0]}/{s4[1]} • Step 5: {s5[0]}/{s5[1]}")
+        def step_count(prefix):
+            keys = [k for k in registry if k.startswith(prefix)]
+            c = sum(1 for k in keys if done.get(k))
+            return c, len(keys)
+        s1 = step_count("s1_"); s2 = step_count("s2_"); s3 = step_count("s3_"); s4 = step_count("s4_"); s5 = step_count("s5_")
+        st.caption(f"Step 1: {s1[0]}/{s1[1]} • Step 2: {s2[0]}/{s2[1]} • Step 3: {s3[0]}/{s3[1]} • Step 4: {s4[0]}/{s4[1]} • Step 5: {s5[0]}/{s5[1]}")
+
 
 
     render_step(step)
