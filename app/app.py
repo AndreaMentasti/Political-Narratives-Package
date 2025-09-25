@@ -237,9 +237,9 @@ This definition accommodates fragments and non-sequential formulations
     )
     # Quick start to jump into Step 1
     if st.button("Start with Step 1 →", key="intro_start_btn"):
-        # Only update your own state; do NOT touch the widget key here
         st.session_state["guide"]["current_step"] = 1
         st.rerun()
+
 
 
 
@@ -509,17 +509,24 @@ def render_guide_tab():
     _init_guide_state()
     st.markdown("Use this walkthrough to plan your pipeline. Nothing is mandatory — mark items you’ve considered and jot notes.")
 
+    # Use index= instead of selection= for wider Streamlit compatibility
+    options = ["Intro", 1, 2, 3, 4, 5]
+    curr = st.session_state["guide"].get("current_step", "Intro")
+    idx = options.index(curr) if curr in options else 0
+
     selection = st.segmented_control(
         "Steps",
-        options=["Intro", 1, 2, 3, 4, 5],
-        selection=st.session_state["guide"]["current_step"],   # <-- your original line
+        options=options,
+        index=idx,  # <— replace selection=... with index=...
         format_func=lambda v: "Intro" if v == "Intro" else {
-            1:"1 • Topic", 2:"2 • Data", 3:"3 • Characters", 4:"4 • Prompts", 5:"5 • Outputs"}[v],
+            1: "1 • Topic", 2: "2 • Data", 3: "3 • Characters", 4: "4 • Prompts", 5: "5 • Outputs"
+        }[v],
         key="guide_step_selector",
     )
+    # sync our own state
     st.session_state["guide"]["current_step"] = selection
 
-    # Sidebar progress (unchanged)
+    # Sidebar progress
     with st.sidebar:
         st.divider()
         st.markdown("## Guide progress")
