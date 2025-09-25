@@ -235,9 +235,9 @@ This definition accommodates fragments and non-sequential formulations
     )
     # Quick start to jump into Step 1
     if st.button("Start with Step 1 →", key="intro_start_btn"):
-        st.session_state["guide"]["current_step"] = 1
-        st.session_state["guide_step_selector"] = 1
-        st.rerun()
+    # Only update your own state; do NOT touch the widget key here
+    st.session_state["guide"]["current_step"] = 1
+    st.rerun()
 
 
 def render_step(step: int):
@@ -503,13 +503,14 @@ def render_step(step: int):
 
 def render_guide_tab():
     _init_guide_state()
-    st.markdown("Use this guide to familiarize yourself with the concept of **political narratives** and to structure the research pipeline. Nothing here is mandatory — simply mark the items you have considered and jot down notes along the way")
+    st.markdown("Use this walkthrough to plan your pipeline. Nothing is mandatory — mark items you’ve considered and jot notes.")
 
     selection = st.segmented_control(
         "Steps",
         options=["Intro", 1, 2, 3, 4, 5],
+        selection=st.session_state["guide"]["current_step"],   # <-- bind to your state
         format_func=lambda v: "Intro" if v == "Intro" else {1:"1 • Topic", 2:"2 • Data", 3:"3 • Characters", 4:"4 • Prompts", 5:"5 • Outputs"}[v],
-        key="guide_step_selector"
+        key="guide_step_selector",
     )
     st.session_state["guide"]["current_step"] = selection
 
