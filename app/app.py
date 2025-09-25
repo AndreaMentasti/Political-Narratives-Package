@@ -294,31 +294,24 @@ def render_step(step: int):
         question_card(
             "Guide: source selection & data extraction ✅",
             how_to=[
-                "After selecting the topic, the next step is gathering data. Common sources include digitizes newspaper, social media, transcribed TV/radio/YouTube content, and open-ended survey responses.",
+                "After selecting the topic, the next step is gathering data. Common sources include digitized newspapers, social media, transcribed TV/radio/YouTube content, and open-ended survey responses.",
                 "When selecting the data source, prioritize the media channels where narratives about your chosen topic are most prominent.",
                 "Evaluate trade-offs between coverage, accessibility, and quality (e.g., digitization errors, platform bias, sampling limits).",
                 "For data extraction, the chosen source will determine which methodologies can be applied—such as keyword-based queries, scraping, API pulls, or manual collection.",
                 "Consider the level of metadata you can preserve (dates, outlets, authors, geography, language) since these details will later allow systematic comparison and contextualization."
             ],
             ask_yourself=[
-                "Do sources match the Step-1 scope (geo/time/venue)?",
-                "Is coverage balanced across time and outlets?",
-                "Which formats will I parse (PDF/HTML/TXT) and how?",
-                "Which metadata will I retain (date, outlet, author, section, geography, language)?"
+                "Do the chosen sources capture the main arenas where the political debate unfolds?",
+                "Are they sufficiently diverse to avoid bias toward one outlet, ideology, or demographic?",
+                "Do I have legal and technical access to these data (e.g., archives, APIs, scraping permission)?",
+                "What extraction method is most reliable for my source—keyword queries, metadata filters, or transcript parsing?",
+                "How will I ensure that the collected snippets are relevant to the topic and not dominated by noise?",
+                "Is the time window covered by the source appropriate for the research question?",
+                "Can I obtain essential metadata (dates, outlets, geography, language) for contextual analysis?"
             ],
             key_prefix="s2_sources"
         )
 
-        # 2) EXAMPLE
-        example_card(
-            "National broadsheets + business dailies (2019–2024)",
-            (
-                "Define outlets list (e.g., *La Repubblica*, *Corriere*, *Il Sole 24 Ore*), retrieve articles containing "
-                "seed terms (e.g., *“just transition”, “decarbonization”*), filter to Italian language, deduplicate wire copies, "
-                "and retain metadata: **date**, **outlet**, **section**, **author** (if available)."
-            ),
-            key_prefix="s2_example"
-        )
 
         # 3) OUTPUT
         output_card(
