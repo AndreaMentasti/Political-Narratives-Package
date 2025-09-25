@@ -43,7 +43,7 @@ ALLOW_LOCAL = _truthy(os.environ.get("ALLOW_LOCAL")) or _truthy(_get_secret("ALL
 
 # ───────────────────────── Page header ─────────────────────────
 st.set_page_config(page_title="Political Narratives Guide", layout="wide")
-st.title("Political Narratives — Guide + Paper Q&A")
+st.title("Political Narratives Guide")
 
 # ───────────────────────── Sidebar ─────────────────────────
 with st.sidebar:
