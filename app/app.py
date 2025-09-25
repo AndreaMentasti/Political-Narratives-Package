@@ -292,10 +292,13 @@ def render_step(step: int):
 
         # 1) GUIDE
         question_card(
-            "Source selection & pre-processing",
+            "Guide: source selection & data extraction ✅",
             how_to=[
-                "List candidate sources and justify relevance; decide access (APIs, archives, scraping, existing corpora).",
-                "Plan pre-processing: language filtering, deduplication, parsing, and metadata normalization."
+                "After selecting the topic, the next step is gathering data. Common sources include digitizes newspaper, social media, transcribed TV/radio/YouTube content, and open-ended survey responses.",
+                "When selecting the data source, prioritize the media channels where narratives about your chosen topic are most prominent.",
+                "Evaluate trade-offs between coverage, accessibility, and quality (e.g., digitization errors, platform bias, sampling limits).",
+                "For data extraction, the chosen source will determine which methodologies can be applied—such as keyword-based queries, scraping, API pulls, or manual collection.",
+                "Consider the level of metadata you can preserve (dates, outlets, authors, geography, language) since these details will later allow systematic comparison and contextualization."
             ],
             ask_yourself=[
                 "Do sources match the Step-1 scope (geo/time/venue)?",
