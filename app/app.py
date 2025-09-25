@@ -503,7 +503,7 @@ def render_step(step: int):
 
 def render_guide_tab():
     _init_guide_state()
-    st.markdown("Use this guide to understand what are **Political Narratives** and to organize the pipeline for your research. Nothing is mandatory; check items you’ve considered and jot notes.")
+    st.markdown("Use this guide to familiarize yourself with the concept of **political narratives** and to structure the research pipeline. Nothing here is mandatory — simply mark the items you have considered and jot down notes along the way")
 
     selection = st.segmented_control(
         "Steps",
