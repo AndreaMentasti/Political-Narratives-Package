@@ -298,11 +298,12 @@ def render_step(step: int):
                 "When selecting the data source, prioritize the media channels where narratives about your chosen topic are most prominent.",
                 "Evaluate trade-offs between coverage, accessibility, and quality (e.g., digitization errors, platform bias, sampling limits).",
                 "For data extraction, the chosen source will determine which methodologies can be applied—such as keyword-based queries, scraping, API pulls, or manual collection.",
-                "Consider the level of metadata you can preserve (dates, outlets, authors, geography, language) since these details will later allow systematic comparison and contextualization."
+                "Consider the level of metadata you can preserve (dates, outlets, authors, geography, language) since these details will later be the basis of your analysis."
             ],
             ask_yourself=[
                 "Do the chosen sources capture the main arenas where the political debate unfolds?",
                 "Are they sufficiently diverse to avoid bias toward one outlet, ideology, or demographic?",
+                "Is the extraction method able to produce snippets that are neither too short to lose context nor too long to become too complicated for the analysis?",
                 "Do I have legal and technical access to these data (e.g., archives, APIs, scraping permission)?",
                 "What extraction method is most reliable for my source—keyword queries, metadata filters, or transcript parsing?",
                 "How will I ensure that the collected snippets are relevant to the topic and not dominated by noise?",
@@ -312,14 +313,22 @@ def render_step(step: int):
             key_prefix="s2_sources"
         )
 
+        # 2) EXAMPLE
+        example_card(
+            "Extracting data using Twitter Historical APIv2 💡",
+            (
+                "In *Gehring & Grigoletto (2025)* our focus is on narratives about climate change policies in the United States, collected from the social media platform Twitter. "
+                "We specifically choose the U.S. due to the significant role Twitter plays in shaping and disseminating political narratives there. "
+                "The data collection process involves querying the **Twitter historical APIv2** with a set of **keywords** adapted from *Oehl, Schaffer, and Bernauer (2017)*"
+            ),
+            key_prefix="s1_example"
+        )
 
         # 3) OUTPUT
         output_card(
-            "What you should have before Step 3",
+            "What you should have before Step 3 ⚠️",
             bullets=[
-                "A **documented source list** with access method.",
-                "A **pre-processing plan** (filters, de-duplication).",
-                "A **sample corpus** (pilot pull) with required metadata fields.",
+                "A dataset with the extracted text snippets and other relevant information for your analysis.",
             ],
             key_prefix="s2_output"
         )
