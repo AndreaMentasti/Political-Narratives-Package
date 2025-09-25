@@ -253,7 +253,7 @@ def render_step(step: int):
 
         # 1) GUIDE
         question_card(
-            "Define a clear topic",
+            "Guide: Define a clear topic ✅",
             how_to=[
                 "A well-defined topic is a prerequisite for fruitful narrative analysis. "
                 "The clearer the topic, the more straightforward the identification of relevant characters "
@@ -276,7 +276,7 @@ def render_step(step: int):
 
         # 2) EXAMPLE
         example_card(
-            "Focusing on policy narratives within climate change",
+            "Focusing on policy narratives within climate change 💡",
             (
                 "In *Gehring & Grigoletto (2025)* we analyze the **political economy of climate change**. "
                 "From the literature we identify two dominant discussions—**scientific evidence** and **policy responses**—and, "
@@ -288,7 +288,7 @@ def render_step(step: int):
 
         # 3) OUTPUT
         output_card(
-            "What you should have before Step 2",
+            "What you should have before Step 2 ⚠",
             bullets=[
                 "A **1–2 sentence** topic statement (domain + population + medium + lens + time/geo).",
                 "**Inclusion/exclusion rules** (keywords, venues, languages).",
