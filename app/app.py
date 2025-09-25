@@ -198,26 +198,36 @@ def output_card(title: str, bullets: list[str] | None = None, body_md: str | Non
             st.markdown(body_md)
 
 def render_intro():
-    st.subheader("Welcome — Political Narratives guide")
+    st.subheader(" Political Narratives guide")
     st.markdown(
         """
-**Political narratives** are structured storylines through which actors (e.g., government, industry, NGOs, experts, citizens)
-frame *problems, responsibilities, risks, and solutions* in public discourse.  
-This app helps you apply the framework step by step: define a topic → gather sources → identify characters →
-design prompts → annotate and assemble outputs.
+**Political narratives** are communicative devices that focus attention, encode roles and identities, 
+and shape norms and behavior. Formally, fix a topic *T* and a universe of characters 
+*K = H ∪ I*, partitioned into human characters *H* (individuals or collective actors such as 
+corporations, parties, states, movements) and instrument characters *I* (policies, laws, technologies).  
 
-**How to use this tab**
+For any text unit (tweet, paragraph, article), let *K′ ⊆ K* be the set of characters that appear. 
+A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing 
+character to either a drama-triangle role or neutrality.  
+
+We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, 
+villain, or victim. If all characters are neutral, the text is about the topic but does not constitute 
+a political narrative in this sense.  
+
+This definition accommodates fragments and non-sequential formulations 
+(e.g., *“Corporations are villains”*) while remaining compatible with causal or temporal representations.
+
+**How to use this guide:**
 - Use the step selector above to move from **1 → 5**.
 - Each step has three “cards”:
   - **Guide**: brief “How to” + reflective **Ask yourself** items ✅
-  - **Example**: a concrete mini-case clarifying the step
-  - **Output**: what you should have before moving on
-- Jot ideas in the **Annotations** box at the end of each step.
+  - **Example**: a concrete mini-case from an already implemented framework clarifying the step 💡
+  - **Output**: what you should have before moving on ⚠️
+- Jot ideas in the **Annotations** box at the end of each step, and keep comments about your progress.
 
 **Other tabs**
-- **Paper Q&A**: ask questions about the paper (uses RAG over `data/paper.pdf`).
-
-> Tip: A focused topic and a simple, consistent output schema make later steps easier.
+- **Paper Chatbot**: ask questions about the paper and about the implementation of the Political Narratives framework.
+- **Prompt Playground**: provide a short prompt and a text snippet to get a sense of what the Political Narrative framework does.
         """
     )
     # Quick start to jump into Step 1
