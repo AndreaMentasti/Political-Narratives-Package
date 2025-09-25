@@ -199,6 +199,34 @@ def output_card(title: str, bullets: list[str] | None = None, body_md: str | Non
         if body_md:
             st.markdown(body_md)
 
+def render_intro():
+    st.subheader("Political Narratives guide")
+    st.markdown(
+        """
+The purpose of a political narrative is influencing perceptions, beliefs, and preferences about characters contained in the narrative.  
+**Political narratives** exert their influence by depicting characters in one of the three archetypal roles—**hero**, **villain**, or **victim**.  
+They are communicative devices that focus attention, encode roles and identities, and shape norms and behavior.
+
+Formally, fix a topic *T* and a universe of characters *K = H ∪ I*, partitioned into human characters *H* (individuals or collective actors such as corporations, parties, states, movements) and instrument characters *I* (policies, laws, technologies).  
+For any text unit (tweet, paragraph, article), let *K′ ⊆ K* be the set of characters that appear.  
+A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing character to either a drama-triangle role or neutrality.  
+We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, villain, or victim; if all characters are neutral, the text is about the topic but does not constitute a political narrative in this sense.  
+This definition accommodates fragments and non-sequential formulations (e.g., *“Corporations are villains”*) while remaining compatible with causal or temporal representations.
+
+**How to use this guide**
+- Use the step selector above to move from **1 → 5**.
+- Each step includes three cards:
+  - **Guide** — brief “How to” plus reflective **Ask yourself** items.
+  - **Example** — a concrete mini-case clarifying the step.
+  - **Output** — what you should have before moving on.
+- Jot ideas in the **Annotations** box at the end of each step and keep notes on your progress.
+
+**Other tabs**
+- **Paper Q&A** — ask questions about the paper and the Political Narratives framework.
+- **Prompt Playground** — try a short prompt and text snippet to see the framework in action.
+        """
+    )
+
 def render_step(step: int):
     """
     Content for each of the 5 steps from your paper:
@@ -462,20 +490,15 @@ def render_step(step: int):
 
 def render_guide_tab():
     _init_guide_state()
-    # ⬇️ Only the text below changed, as requested
-    st.markdown(
-        "Use this guide to understand what the concept of **Political Narrative** is and to organize the pipeline for your research. "
-        "Nothing is mandatory—mark items you’ve considered and jot notes."
-    )
+    st.markdown("Use this guide to understand what the concept of **Political Narrative** is and to organize the pipeline for your research. Nothing is mandatory—mark items you’ve considered and jot notes.")
 
-    # Step selector (free navigation; no gating)
+    # Step selector now includes an Intro page (default selected)
     step = st.segmented_control(
         "Steps",
-        options=[1, 2, 3, 4, 5],
-        format_func=lambda i: {1:"1 • Topic", 2:"2 • Data", 3:"3 • Characters", 4:"4 • Prompts", 5:"5 • Outputs"}[i],
+        options=["Intro", 1, 2, 3, 4, 5],
+        format_func=lambda v: "Intro" if v == "Intro" else {1:"1 • Topic", 2:"2 • Data", 3:"3 • Characters", 4:"4 • Prompts", 5:"5 • Outputs"}[v],
         key="guide_step_selector"
     )
-    st.session_state["guide"]["current_step"] = step
 
     # Sidebar progress: a step turns green only when ALL its checkboxes are marked
     with st.sidebar:
@@ -496,7 +519,11 @@ def render_guide_tab():
         st.write(f"{'✅' if _step_complete('s5_') else '⬜️'} Step 5 — Outputs")
         st.caption("A step turns green only when all its checkboxes are marked.")
 
-    render_step(step)
+    # Body: render Intro or a numbered step
+    if step == "Intro":
+        render_intro()
+    else:
+        render_step(step)
 
 # ───────────────────────── Tabs ─────────────────────────
 tab_guide, tab_qa = st.tabs(["Guide (5-step pipeline)", "Paper Q&A"])
@@ -531,3 +558,4 @@ with tab_qa:
             with st.spinner("Thinking..."):
                 out = qa({"query": q})
             st.write(out["result"])
+
