@@ -154,15 +154,13 @@ STRICT_QA_PROMPT = PromptTemplate(
 
 # ───────────────────────── Helpers (Guide tab) ─────────────────────────
 def _init_guide_state():
-    # notes: per-step free text
-    # done:     which checkboxes are ticked
-    # registry: all checkbox keys that exist (for per-step totals)
     st.session_state.setdefault("guide", {
-        "current_step": 1,
+        "current_step": "Intro",         # default to Intro
         "notes": {1: "", 2: "", 3: "", 4: "", 5: ""},
         "done": {},
-        "registry": {}  # e.g., {"s1_scope_q1": True, "s1_scope_q2": True, ...}
+        "registry": {}
     })
+
 
 def question_card(title: str, how_to: list[str], ask_yourself: list[str], key_prefix: str):
     with st.container(border=True):
@@ -198,6 +196,36 @@ def output_card(title: str, bullets: list[str] | None = None, body_md: str | Non
             st.markdown("\n".join([f"- {b}" for b in bullets]))
         if body_md:
             st.markdown(body_md)
+
+def render_intro():
+    st.subheader("Welcome — Political Narratives guide")
+    st.markdown(
+        """
+**Political narratives** are structured storylines through which actors (e.g., government, industry, NGOs, experts, citizens)
+frame *problems, responsibilities, risks, and solutions* in public discourse.  
+This app helps you apply the framework step by step: define a topic → gather sources → identify characters →
+design prompts → annotate and assemble outputs.
+
+**How to use this tab**
+- Use the step selector above to move from **1 → 5**.
+- Each step has three “cards”:
+  - **Guide**: brief “How to” + reflective **Ask yourself** items ✅
+  - **Example**: a concrete mini-case clarifying the step
+  - **Output**: what you should have before moving on
+- Jot ideas in the **Annotations** box at the end of each step.
+
+**Other tabs**
+- **Paper Q&A**: ask questions about the paper (uses RAG over `data/paper.pdf`).
+
+> Tip: A focused topic and a simple, consistent output schema make later steps easier.
+        """
+    )
+    # Quick start to jump into Step 1
+    if st.button("Start with Step 1 →", key="intro_start_btn"):
+        st.session_state["guide"]["current_step"] = 1
+        st.session_state["guide_step_selector"] = 1
+        st.rerun()
+
 
 def render_step(step: int):
     """
@@ -464,20 +492,18 @@ def render_guide_tab():
     _init_guide_state()
     st.markdown("Use this walkthrough to plan your pipeline. Nothing is mandatory; check items you’ve considered and jot notes.")
 
-    # Step selector (free navigation; no gating)
-    step = st.segmented_control(
+    selection = st.segmented_control(
         "Steps",
-        options=[1, 2, 3, 4, 5],
-        format_func=lambda i: {1:"1 • Topic", 2:"2 • Data", 3:"3 • Characters", 4:"4 • Prompts", 5:"5 • Outputs"}[i],
+        options=["Intro", 1, 2, 3, 4, 5],
+        format_func=lambda v: "Intro" if v == "Intro" else {1:"1 • Topic", 2:"2 • Data", 3:"3 • Characters", 4:"4 • Prompts", 5:"5 • Outputs"}[v],
         key="guide_step_selector"
     )
-    st.session_state["guide"]["current_step"] = step
+    st.session_state["guide"]["current_step"] = selection
 
-    # Sidebar progress: a step turns green only when ALL its checkboxes are marked
+    # Sidebar progress (unchanged)
     with st.sidebar:
         st.divider()
         st.markdown("## Guide progress")
-
         done = st.session_state["guide"]["done"]
         registry = st.session_state["guide"]["registry"]
 
@@ -492,7 +518,11 @@ def render_guide_tab():
         st.write(f"{'✅' if _step_complete('s5_') else '⬜️'} Step 5 — Outputs")
         st.caption("A step turns green only when all its checkboxes are marked.")
 
-    render_step(step)
+    # Body
+    if selection == "Intro":
+        render_intro()
+    else:
+        render_step(selection)
 
 # ───────────────────────── Tabs ─────────────────────────
 tab_guide, tab_qa = st.tabs(["Guide (5-step pipeline)", "Paper Q&A"])
