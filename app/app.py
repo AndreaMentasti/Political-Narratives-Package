@@ -208,14 +208,12 @@ The purpose of a political narrative is influencing perceptions, beliefs, and pr
 Formally, fix a topic *T* and a universe of characters *K = H ∪ I*, partitioned into human characters *H* (individuals or collective actors such as corporations, parties, states, movements) and instrument characters *I* (policies, laws, technologies). For any text unit (tweet, paragraph, article), let *K′ ⊆ K* be the set of characters that appear.  
 A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing character to either a drama-triangle role or neutrality. We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, villain, or victim; if all characters are neutral, the text is about the topic but does not constitute a political narrative in this sense.  
 
-This definition accommodates fragments and non-sequential formulations (e.g., *“Corporations are villains”*) while remaining compatible with causal or temporal representations.
-
 **How to use this guide**
 - Use the step selector above to move from **1 → 5**.
 - Each step includes three cards:
-  - **Guide** — brief “How to” plus reflective **Ask yourself** items.
-  - **Example** — a concrete mini-case clarifying the step.
-  - **Output** — what you should have before moving on.
+  - **Guide ✅** — brief “How to” plus reflective **Ask yourself** items.
+  - **Example 💡** — a concrete mini-case clarifying the step.
+  - **Output ⚠️** — what you should have before moving on.
 - Jot ideas in the **Annotations** box at the end of each step and keep notes on your progress.
 
 **Other tabs**
@@ -240,7 +238,7 @@ def render_step(step: int):
 
         # 1) GUIDE
         question_card(
-            "Define a clear topic",
+            "Guide: define a clear topic ✅",
             how_to=[
                 "A well-defined topic is a prerequisite for fruitful narrative analysis. "
                 "The clearer the topic, the more straightforward the identification of relevant characters "
@@ -263,7 +261,7 @@ def render_step(step: int):
 
         # 2) EXAMPLE
         example_card(
-            "Focusing on policy narratives within climate change",
+            "Focusing on policy narratives within climate change 💡",
             (
                 "In *Gehring & Grigoletto (2025)* we analyze the **political economy of climate change**. "
                 "From the literature we identify two dominant discussions—**scientific evidence** and **policy responses**—and, "
@@ -275,17 +273,15 @@ def render_step(step: int):
 
         # 3) OUTPUT
         output_card(
-            "What you should have before Step 2",
+            "What you should have before Step 2 ⚠️",
             bullets=[
-                "A **1–2 sentence** topic statement (domain + population + medium + lens + time/geo).",
-                "**Inclusion/exclusion rules** (keywords, venues, languages).",
-                "Initial **seed keywords/entities**.",
-                "A brief **rationale** for timeliness and relevance."
+                "A precise topic for the analysis of Political Narratives",
+                "Availability of a source for the data extraction"
             ],
             key_prefix="s1_output"
         )
 
-        st.text_area("Annotations for Step 1 (optional)", key="notes_s1",
+        st.text_area("Personal comments for Step 1", key="notes_s1",
                      value=st.session_state["guide"]["notes"][1], height=120)
         st.session_state["guide"]["notes"][1] = st.session_state["notes_s1"]
 
