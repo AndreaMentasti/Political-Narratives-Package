@@ -201,8 +201,11 @@ def render_intro():
     st.subheader(" Political Narratives guide")
     st.markdown(
         """
-**Political narratives** are communicative devices that focus attention, encode roles and identities, 
-and shape norms and behavior. Formally, fix a topic *T* and a universe of characters 
+The purpose of a political narrative is influencing perceptions, beliefs, and preferences about characters contained in the narrative. 
+**Political narratives** exert their influence by depicting characters in one of the three archetipal roles: hero, villain, or victim.
+These are communicative devices that focus attention, encode roles and identities, and shape norms and behavior. 
+
+Formally, fix a topic *T* and a universe of characters 
 *K = H ∪ I*, partitioned into human characters *H* (individuals or collective actors such as 
 corporations, parties, states, movements) and instrument characters *I* (policies, laws, technologies).  
 
@@ -288,7 +291,7 @@ def render_step(step: int):
 
         # 3) OUTPUT
         output_card(
-            "What you should have before Step 2 ⚠",
+            "What you should have before Step 2 ⚠️",
             bullets=[
                 "A **1–2 sentence** topic statement (domain + population + medium + lens + time/geo).",
                 "**Inclusion/exclusion rules** (keywords, venues, languages).",
@@ -500,7 +503,7 @@ def render_step(step: int):
 
 def render_guide_tab():
     _init_guide_state()
-    st.markdown("Use this walkthrough to plan your pipeline. Nothing is mandatory; check items you’ve considered and jot notes.")
+    st.markdown("Use this guide to understand what are **Political Narratives** and to organize the pipeline for your research. Nothing is mandatory; check items you’ve considered and jot notes.")
 
     selection = st.segmented_control(
         "Steps",
