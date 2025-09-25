@@ -1,4 +1,11 @@
-# Political Narratives Package (Local, No API)
+# Political Narratives Package
+
+The Political Narrative Package works both as a repository to replicate the analysis of Political Narratives as in *Gehring & Grigoletto (2025)* and as an interactive space where to organize the steps for your own independent research on Political Narratives.
+We provide the user with the code to query OpenAI API, the prompts that must be used (or readapted) to retrieve the Political Narratives, and some instructions to create an OpenAI API account.
+Moreover, at the link [Launch the Political Narratives App](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) you will find an interactive APP that guides you through the logic behind the Political Narrative Framework.
+
+- The code is in
+- The online APP allows to navigate the steps to prepare your research. You can reflect on the main questions to do and ask yourself, check them, and leave comments for yourself. Moreover, you will have some claryfiyng examples taken from the paper of reference. 
 
 Local RAG (Q&A) + Prompt Playground — **no API keys**. Uses [Ollama](https://ollama.com) and local embeddings.
 
