@@ -235,9 +235,10 @@ This definition accommodates fragments and non-sequential formulations
     )
     # Quick start to jump into Step 1
     if st.button("Start with Step 1 →", key="intro_start_btn"):
-    # Only update your own state; do NOT touch the widget key here
-    st.session_state["guide"]["current_step"] = 1
-    st.rerun()
+        # Only update your own state; do NOT touch the widget key here
+        st.session_state["guide"]["current_step"] = 1
+        st.rerun()
+
 
 
 def render_step(step: int):
