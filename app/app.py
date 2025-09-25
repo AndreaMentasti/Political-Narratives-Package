@@ -154,13 +154,13 @@ STRICT_QA_PROMPT = PromptTemplate(
 
 # ───────────────────────── Helpers (Guide tab) ─────────────────────────
 def _init_guide_state():
-    # Initialize guide state + a mirror "current_step" we control
     st.session_state.setdefault("guide", {
-        "current_step": "Intro",          # default landing page
+        "current_step": "Intro",         # default to Intro
         "notes": {1: "", 2: "", 3: "", 4: "", 5: ""},
         "done": {},
-        "registry": {},
+        "registry": {}
     })
+
 
 
 
@@ -237,8 +237,10 @@ This definition accommodates fragments and non-sequential formulations
     )
     # Quick start to jump into Step 1
     if st.button("Start with Step 1 →", key="intro_start_btn"):
+        # Only update your own state; do NOT touch the widget key here
         st.session_state["guide"]["current_step"] = 1
         st.rerun()
+
 
 
 
@@ -507,27 +509,17 @@ def render_guide_tab():
     _init_guide_state()
     st.markdown("Use this walkthrough to plan your pipeline. Nothing is mandatory — mark items you’ve considered and jot notes.")
 
-    # Options and current index (use index=..., not selection=...)
-    options = ["Intro", 1, 2, 3, 4, 5]
-    try:
-        curr = st.session_state["guide"]["current_step"]
-    except KeyError:
-        curr = "Intro"
-    idx = options.index(curr) if curr in options else 0
-
     selection = st.segmented_control(
         "Steps",
-        options=options,
-        index=idx,                         # <-- supported on all versions
+        options=["Intro", 1, 2, 3, 4, 5],
+        selection=st.session_state["guide"]["current_step"],   # <-- your original line
         format_func=lambda v: "Intro" if v == "Intro" else {
-            1: "1 • Topic", 2: "2 • Data", 3: "3 • Characters", 4: "4 • Prompts", 5: "5 • Outputs"
-        }[v],
+            1:"1 • Topic", 2:"2 • Data", 3:"3 • Characters", 4:"4 • Prompts", 5:"5 • Outputs"}[v],
         key="guide_step_selector",
     )
-    # Keep our own state in sync with widget output
     st.session_state["guide"]["current_step"] = selection
 
-    # Sidebar progress
+    # Sidebar progress (unchanged)
     with st.sidebar:
         st.divider()
         st.markdown("## Guide progress")
@@ -550,6 +542,7 @@ def render_guide_tab():
         render_intro()
     else:
         render_step(selection)
+
 
 
 # ───────────────────────── Tabs ─────────────────────────
