@@ -301,7 +301,7 @@ def render_step(step: int):
                 "Consider the level of metadata you can preserve (dates, outlets, authors, geography, language) since these details will later be the basis of your analysis."
             ],
             ask_yourself=[
-                "Do the chosen sources capture the main arenas where the political debate unfolds?",
+                "Do the chosen sources capture the main media where the political debate unfolds?",
                 "Are they sufficiently diverse to avoid bias toward one outlet, ideology, or demographic?",
                 "Is the extraction method able to produce snippets that are neither too short to lose context nor too long to become too complicated for the analysis?",
                 "Do I have legal and technical access to these data (e.g., archives, APIs, scraping permission)?",
