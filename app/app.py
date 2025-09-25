@@ -154,15 +154,15 @@ STRICT_QA_PROMPT = PromptTemplate(
 
 # ───────────────────────── Helpers (Guide tab) ─────────────────────────
 def _init_guide_state():
+    # notes: per-step free text
+    # done:     which checkboxes are ticked
+    # registry: all checkbox keys that exist (for per-step totals)
     st.session_state.setdefault("guide", {
-        "current_step": "Intro",         # default to Intro
+        "current_step": 1,
         "notes": {1: "", 2: "", 3: "", 4: "", 5: ""},
         "done": {},
-        "registry": {}
+        "registry": {}  # e.g., {"s1_scope_q1": True, "s1_scope_q2": True, ...}
     })
-
-
-
 
 def question_card(title: str, how_to: list[str], ask_yourself: list[str], key_prefix: str):
     with st.container(border=True):
@@ -199,51 +199,6 @@ def output_card(title: str, bullets: list[str] | None = None, body_md: str | Non
         if body_md:
             st.markdown(body_md)
 
-def render_intro():
-    st.subheader(" Political Narratives guide")
-    st.markdown(
-        """
-The purpose of a political narrative is influencing perceptions, beliefs, and preferences about characters contained in the narrative. 
-**Political narratives** exert their influence by depicting characters in one of the three archetipal roles: hero, villain, or victim.
-These are communicative devices that focus attention, encode roles and identities, and shape norms and behavior. 
-
-Formally, fix a topic *T* and a universe of characters 
-*K = H ∪ I*, partitioned into human characters *H* (individuals or collective actors such as 
-corporations, parties, states, movements) and instrument characters *I* (policies, laws, technologies).  
-
-For any text unit (tweet, paragraph, article), let *K′ ⊆ K* be the set of characters that appear. 
-A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing 
-character to either a drama-triangle role or neutrality.  
-
-We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, 
-villain, or victim. If all characters are neutral, the text is about the topic but does not constitute 
-a political narrative in this sense.  
-
-This definition accommodates fragments and non-sequential formulations 
-(e.g., *“Corporations are villains”*) while remaining compatible with causal or temporal representations.
-
-**How to use this guide:**
-- Use the step selector above to move from **1 → 5**.
-- Each step has three “cards”:
-  - **Guide**: brief “How to” + reflective **Ask yourself** items ✅
-  - **Example**: a concrete mini-case from an already implemented framework clarifying the step 💡
-  - **Output**: what you should have before moving on ⚠️
-- Jot ideas in the **Annotations** box at the end of each step, and keep comments about your progress.
-
-**Other tabs**
-- **Paper Chatbot**: ask questions about the paper and about the implementation of the Political Narratives framework.
-- **Prompt Playground**: provide a short prompt and a text snippet to get a sense of what the Political Narrative framework does.
-        """
-    )
-    # Quick start to jump into Step 1
-    if st.button("Start with Step 1 →", key="intro_start_btn"):
-        st.session_state["guide"]["current_step"] = 1
-        st.rerun()
-
-
-
-
-
 def render_step(step: int):
     """
     Content for each of the 5 steps from your paper:
@@ -260,7 +215,7 @@ def render_step(step: int):
 
         # 1) GUIDE
         question_card(
-            "Guide: Define a clear topic ✅",
+            "Define a clear topic",
             how_to=[
                 "A well-defined topic is a prerequisite for fruitful narrative analysis. "
                 "The clearer the topic, the more straightforward the identification of relevant characters "
@@ -283,7 +238,7 @@ def render_step(step: int):
 
         # 2) EXAMPLE
         example_card(
-            "Focusing on policy narratives within climate change 💡",
+            "Focusing on policy narratives within climate change",
             (
                 "In *Gehring & Grigoletto (2025)* we analyze the **political economy of climate change**. "
                 "From the literature we identify two dominant discussions—**scientific evidence** and **policy responses**—and, "
@@ -295,7 +250,7 @@ def render_step(step: int):
 
         # 3) OUTPUT
         output_card(
-            "What you should have before Step 2 ⚠️",
+            "What you should have before Step 2",
             bullets=[
                 "A **1–2 sentence** topic statement (domain + population + medium + lens + time/geo).",
                 "**Inclusion/exclusion rules** (keywords, venues, languages).",
@@ -507,29 +462,26 @@ def render_step(step: int):
 
 def render_guide_tab():
     _init_guide_state()
-    st.markdown("Use this walkthrough to plan your pipeline. Nothing is mandatory — mark items you’ve considered and jot notes.")
-
-    # Use index= instead of selection= for wider Streamlit compatibility
-    options = ["Intro", 1, 2, 3, 4, 5]
-    curr = st.session_state["guide"].get("current_step", "Intro")
-    idx = options.index(curr) if curr in options else 0
-
-    selection = st.segmented_control(
-        "Steps",
-        options=options,
-        index=idx,  # <— replace selection=... with index=...
-        format_func=lambda v: "Intro" if v == "Intro" else {
-            1: "1 • Topic", 2: "2 • Data", 3: "3 • Characters", 4: "4 • Prompts", 5: "5 • Outputs"
-        }[v],
-        key="guide_step_selector",
+    # ⬇️ Only the text below changed, as requested
+    st.markdown(
+        "Use this guide to understand what the concept of **Political Narrative** is and to organize the pipeline for your research. "
+        "Nothing is mandatory—mark items you’ve considered and jot notes."
     )
-    # sync our own state
-    st.session_state["guide"]["current_step"] = selection
 
-    # Sidebar progress
+    # Step selector (free navigation; no gating)
+    step = st.segmented_control(
+        "Steps",
+        options=[1, 2, 3, 4, 5],
+        format_func=lambda i: {1:"1 • Topic", 2:"2 • Data", 3:"3 • Characters", 4:"4 • Prompts", 5:"5 • Outputs"}[i],
+        key="guide_step_selector"
+    )
+    st.session_state["guide"]["current_step"] = step
+
+    # Sidebar progress: a step turns green only when ALL its checkboxes are marked
     with st.sidebar:
         st.divider()
         st.markdown("## Guide progress")
+
         done = st.session_state["guide"]["done"]
         registry = st.session_state["guide"]["registry"]
 
@@ -544,13 +496,7 @@ def render_guide_tab():
         st.write(f"{'✅' if _step_complete('s5_') else '⬜️'} Step 5 — Outputs")
         st.caption("A step turns green only when all its checkboxes are marked.")
 
-    # Body
-    if selection == "Intro":
-        render_intro()
-    else:
-        render_step(selection)
-
-
+    render_step(step)
 
 # ───────────────────────── Tabs ─────────────────────────
 tab_guide, tab_qa = st.tabs(["Guide (5-step pipeline)", "Paper Q&A"])
