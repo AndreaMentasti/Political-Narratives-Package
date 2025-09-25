@@ -204,8 +204,7 @@ def render_intro():
     st.markdown(
         """
 The purpose of a political narrative is influencing perceptions, beliefs, and preferences about characters contained in the narrative.  
-**Political narratives** exert their influence by depicting characters in one of the three archetypal roles—**hero**, **villain**, or **victim**.  
-They are communicative devices that focus attention, encode roles and identities, and shape norms and behavior.
+**Political narratives** exert their influence by depicting characters in one of the three archetypal roles—**hero**, **villain**, or **victim**.  They are communicative devices that focus attention, encode roles and identities, and shape norms and behavior.
 
 Formally, fix a topic *T* and a universe of characters *K = H ∪ I*, partitioned into human characters *H* (individuals or collective actors such as corporations, parties, states, movements) and instrument characters *I* (policies, laws, technologies).  
 For any text unit (tweet, paragraph, article), let *K′ ⊆ K* be the set of characters that appear.  
