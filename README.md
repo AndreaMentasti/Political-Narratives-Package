@@ -9,7 +9,39 @@ Moreover, at the link [Launch the Political Narratives App](https://political-na
   The APP can be used online through the above link, or it can be downloaded locally. The online version only uses OpenAI API queries, and necessitate a API key from the user's OpenAI account. In the local version you can decide wether to use an API key, or to use Ollama LLM (we provide the steps to download it in this guide). 
 
 ## Requirements for the Political Narrative replication
-- The user needs to create an environment using the requirements in the ````requirements/```` folder(preferred Anaconda for compliance with how the requirement file is written)
+- The user needs to create an environment using the requirements in the ````requirements/```` folder (preferred Anaconda for compliance with how the requirement file is written)
+  ```bash
+  conda env create -f acn_data_analysis.yml
+  conda activate acn_data_analysis
+- Set the ````OPENA_API_KEY```` as an environmental variable:
+  ````bash
+  conda env config vars set OPENAI_API_KEY="sk-your-key-here"
+  conda deactivate
+  conda activate acn_data_analysis
+- Open the python script in this environment.
+- To run the script, the following folder structure is needed:
+  ```bash
+  C:\Users\GustavPirich\Dropbox\climate_nature_narratives\
+  ├─ input\
+  │  └─ openAI\
+  │     ├─ newspaper_snippet_system_message_stage1.json   # system prompt for stage 1
+  │     └─ newspaper_snippet_system_message_stage2.json   # system prompt for stage 2
+  └─ output\
+   └─ data\
+      ├─ processed_newspaper\
+      │  └─ c_3_fixed_snippets_dataset.xlsx             # input dataset (Excel, with snippet_id + content)
+      └─ openAI\
+         ├─ batch_input\
+         │  └─ newspaper\                               # [empty] receives batch_XX.csv (created by script)
+         ├─ api_input\
+         │  └─ newspaper\                               # [empty] receives *_input.jsonl (API request payloads)
+         ├─ api_output\
+         │  └─ newspaper\                               # [empty] receives *_stage*.csv (API responses)
+         ├─ batch_id\
+         │  └─ newspaper\                               # [empty] receives *_id.json (batch job IDs)
+         └─ predictions\                                # [empty] final merged output CSV ends up here
+
+
 ## Requirements for the Guide APP
 - Python 3.10+
 - Install [Ollama](https://ollama.com) and pull a small model:
