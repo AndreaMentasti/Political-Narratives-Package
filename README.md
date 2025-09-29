@@ -29,7 +29,7 @@ The APP can be used online through the above link, or downloaded and run locally
   │  └─ openAI\
   │     ├─ newspaper_snippet_system_message_stage1.json   # system prompt for stage 1
   │     └─ newspaper_snippet_system_message_stage2.json   # system prompt for stage 2
-  |     └─ c_3_fixed_snippets_dataset.xlsx                # input dataset (Excel, with snippet_id + content)
+  │     └─ c_3_fixed_snippets_dataset.xlsx                # input dataset (Excel, with snippet_id + content)
   └─ output\
    └─ data\
       └─ openAI\
