@@ -372,12 +372,15 @@ def render_step(step: int):
 
 
         # 2) EXAMPLE
+        # 2) EXAMPLE
         example_card(
-            "Buckets and exemplars for just transition in Italy",
+            "Buckets and exemplars for climate policy 💡",
             (
-                "**Government:** Ministry of Environment; **Industry:** ENEL, Confindustria; "
-                "**Labor:** CGIL, CISL; **NGOs:** Legambiente; **Experts:** university economists; **Citizens:** local committees. "
-                "Claims include **competitiveness**, **phased timelines**, **worker protection**, **environmental justice**."
+                "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
+                "we pre-specify ten characters: five human characters (made of institutions and groups of individuals) "
+                "and five instrument characters (policy tools and instruments).\n\n"
+                "**Human Characters:** DEVELOPING ECONOMIES | US DEMOCRATS | US REPUBLICANS | CORPORATIONS | US PEOPLE\n\n"
+                "**Instrument Characters:** EMISSION PRICING | REGULATIONS | FOSSIL INDUSTRY | GREEN TECH | NUCLEAR TECH"
             ),
             key_prefix="s3_example"
         )
