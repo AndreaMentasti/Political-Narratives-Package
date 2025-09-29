@@ -1,6 +1,6 @@
 # Political Narratives Package
 
-The Political Narrative Package works both as a repository to replicate the analysis of Political Narratives as in *Gehring & Grigoletto (2025)* and as an interactive space where to organize the steps for your own independent research on Political Narratives.
+The **Political Narrative Package** works both as a repository to replicate the analysis of Political Narratives as in *Gehring & Grigoletto (2025)* and as an interactive space where to organize the steps for your own independent research on Political Narratives.
 We provide the user with the code to query OpenAI API, the prompts that must be used (or readapted) to retrieve the Political Narratives, and some instructions to create an OpenAI API account.
 Moreover, at the link [Launch the Political Narratives App](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) you will find an interactive APP that guides you through the logic behind the Political Narrative Framework.
 
@@ -29,10 +29,10 @@ Local Political Narratives Guide — **no API keys**. Uses [Ollama](https://olla
   python -m streamlit run app\app.py
 
 ### Optional: Upgrade answers with OpenAI (BYO key)
-By default the app runs fully local with Ollama (free).  
-If you want higher-quality guidance and faster responses:
+By default the app runs fully local with Ollama (free). If you want higher-quality guidance and faster responses:
 1. Choose **Provider → OpenAI (bring your own key)** in the sidebar.
-2. Paste your **OpenAI API key**. 
+2. Paste your **OpenAI API key**.
+To paste an OpenAI API key you must own an account from [OpenAI](https://platform.openai.com/), and then create an [API key](https://platform.openai.com/api-keys).
    
 
 ## Try the App
