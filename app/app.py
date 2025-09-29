@@ -381,8 +381,8 @@ def render_step(step: int):
                 "and five instrument characters (policy tools and instruments).\n\n"
                 "**Human Characters:** DEVELOPING ECONOMIES | US DEMOCRATS | US REPUBLICANS | CORPORATIONS | US PEOPLE\n\n"
                 "**Instrument Characters:** EMISSION PRICING | REGULATIONS | FOSSIL INDUSTRY | GREEN TECH | NUCLEAR TECH\n\n"
-                "We carefully decided to have ten character to balance the complexity of the analysis with"
-                "good practices to avoid overloading the LLM in the annotation process. These characters are easily recognizable"
+                "We carefully decided to have ten character to balance the complexity of the analysis with "
+                "good practices to avoid overloading the LLM in the annotation process. These characters are easily recognizable "
                 "by the LLM thanks to precise descriptions in the prompt design step (Step 4)."
             ),
             key_prefix="s3_example"
@@ -390,11 +390,10 @@ def render_step(step: int):
 
         # 3) OUTPUT
         output_card(
-            "What you should have before Step 4",
+            "Output - What you should have before Step 4 ⚠️",
             bullets=[
-                "A **character schema** (buckets + named exemplars).",
-                "A list of **typical claims** per bucket and **omissions** to watch for.",
-                "A **proxy list** for detection (entity lexicons, regex/NER patterns)."
+                "A contained list of relevant characters, both in human and instrument form",
+                "A set of descriptions for these characters is needed in the next step, so it's good practice to annotate these during this stage (useful, but not necessary now)"
             ],
             key_prefix="s3_output"
         )
