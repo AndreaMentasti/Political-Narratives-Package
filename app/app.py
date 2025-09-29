@@ -528,13 +528,13 @@ def render_step(step: int):
         example_card(
             "Prompt design for the political narratives of climate change 💡",
             (
-                "# (a) Relevance classifier (Stage 1)\n"
+                "##### (a) Relevance classifier (Stage 1)\n"
                 "Decide if a three-sentence newspaper excerpt is relevant to **US climate change discourse**.\n"
                 "- 0 = irrelevant (no meaningful climate discussion)\n"
                 "- 1 = assert (asserts existence of climate change)\n"
                 "- 2 = deny (denies or mocks climate change)\n"
                 "- 3 = relevant (substantive discussion of climate change policy)\n\n"
-                "# (b) Character detection & role assignment (Stage 2)\n"
+                "##### (b) Character detection & role assignment (Stage 2)\n"
                 "Identify pre-specified characters and assign contextual roles:\n"
                 "- Villain (1) | Hero (2) | Victim (3) | No role (4)\n\n"
                 "Characters: Developing Economies, US Democrats, US Republicans, Corporations, US People, "
