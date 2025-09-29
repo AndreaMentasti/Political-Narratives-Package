@@ -13,11 +13,13 @@ Moreover, at the link [Launch the Political Narratives App](https://political-na
   ```bash
   conda env create -f acn_data_analysis.yml
   conda activate acn_data_analysis
-- Set the ````OPENA_API_KEY```` as an environmental variable:
+  
+- Set the ````OPENAI_API_KEY```` as an environmental variable:
   ````bash
   conda env config vars set OPENAI_API_KEY="sk-your-key-here"
   conda deactivate
   conda activate acn_data_analysis
+  
 - Open the python script in this environment.
 - To run the script, the following folder structure is needed:
   ```bash
