@@ -94,78 +94,6 @@ def load_pdf(path: str):
         st.warning(f"Could not read PDF '{path}': {e}")
     return docs
 
-@st.cache_resource(show_spinner=True)
-def build_vectorstore():
-    splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
-    all_docs = []
-
-    if os.path.exists(PAPER_PATH):
-        for d in load_pdf(PAPER_PATH):
-            for chunk in splitter.split_text(d.page_content or ""):
-                all_docs.append(Document(page_content=chunk, metadata=d.metadata))
-    else:
-        st.warning(f"Paper not found at {PAPER_PATH}. Please add your PDF there.")
-
-    if not all_docs:
-        return None
-
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    return FAISS.from_documents(all_docs, embeddings)
-
-vs = build_vectorstore()
-st.sidebar.write("Docs in index:", vs.index.ntotal if vs else 0)
-
-def get_llm(provider: str, user_key: str | None, local_model: str):
-    """
-    Returns an LLM handle:
-    - OpenAI path only if a key is provided.
-    - Otherwise warns and stops execution gracefully.
-    """
-    if provider.startswith("OpenAI"):
-        if not user_key:
-            st.warning("Paste your OpenAI API key in the sidebar to ask questions.")
-            st.stop()
-        return ChatOpenAI(
-            model="gpt-4o-mini",
-            temperature=FIXED_TEMPERATURE,
-            max_tokens=OPENAI_MAX_TOKENS,
-            api_key=user_key,
-        )
-
-    if ChatOllama is None:
-        st.error("Ollama not available in this environment.")
-        st.stop()
-    return ChatOllama(
-        model=local_model,
-        temperature=FIXED_TEMPERATURE,
-        model_kwargs={"num_predict": 256, "num_ctx": 2048, "top_k": 30, "top_p": 0.9},
-    )
-
-GUIDE_CONTEXT = build_guide_context()
-
-GUIDE_AWARE_PROMPT = PromptTemplate(
-    input_variables=["context", "question"],
-    template=(
-        "You are a careful research assistant.\n\n"
-        "PRIMARY OBJECTIVE:\n"
-        "Respond by GUIDING the user through the 5-step pipeline and the Intro. "
-        "Explicitly reference relevant steps by number (e.g., 'Step 2 – Data', 'Step 3 – Characters') and "
-        "use the guidance below to structure your answer. Then support with excerpts from the paper.\n\n"
-        "GUIDE (Intro + Steps 1–5):\n"
-        f"{GUIDE_CONTEXT}\n\n"
-        "PAPER EXCERPTS (for evidence/details):\n"
-        "{context}\n\n"
-        "USER QUESTION:\n{question}\n\n"
-        "RESPONSE FORMAT (follow this):\n"
-        "1) Brief answer in 1–2 sentences.\n"
-        "2) Step-by-step guidance (cite specific steps: 1→5) tailored to the question.\n"
-        "3) Evidence/Notes from the paper (quote or summarize the relevant excerpt).\n"
-        "4) Next actions: a short checklist the user can do now.\n"
-        "If the paper excerpts do not contain needed details, say so clearly and rely on the Guide to propose a path forward."
-    ),
-)
-
-
 # ───────────────────────── Build guide KB (Intro + Steps) ─────────────────────────
 def build_guide_context() -> str:
     """Compact knowledge base from the Intro and all 5 steps to steer the LLM."""
@@ -249,6 +177,77 @@ def build_guide_context() -> str:
         + "\nSTEP 4 – PROMPTS\n" + step4_how + step4_ask
         + "\nSTEP 5 – OUTPUTS\n" + step5_how + step5_ask
     )
+
+@st.cache_resource(show_spinner=True)
+def build_vectorstore():
+    splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
+    all_docs = []
+
+    if os.path.exists(PAPER_PATH):
+        for d in load_pdf(PAPER_PATH):
+            for chunk in splitter.split_text(d.page_content or ""):
+                all_docs.append(Document(page_content=chunk, metadata=d.metadata))
+    else:
+        st.warning(f"Paper not found at {PAPER_PATH}. Please add your PDF there.")
+
+    if not all_docs:
+        return None
+
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    return FAISS.from_documents(all_docs, embeddings)
+
+vs = build_vectorstore()
+st.sidebar.write("Docs in index:", vs.index.ntotal if vs else 0)
+
+def get_llm(provider: str, user_key: str | None, local_model: str):
+    """
+    Returns an LLM handle:
+    - OpenAI path only if a key is provided.
+    - Otherwise warns and stops execution gracefully.
+    """
+    if provider.startswith("OpenAI"):
+        if not user_key:
+            st.warning("Paste your OpenAI API key in the sidebar to ask questions.")
+            st.stop()
+        return ChatOpenAI(
+            model="gpt-4o-mini",
+            temperature=FIXED_TEMPERATURE,
+            max_tokens=OPENAI_MAX_TOKENS,
+            api_key=user_key,
+        )
+
+    if ChatOllama is None:
+        st.error("Ollama not available in this environment.")
+        st.stop()
+    return ChatOllama(
+        model=local_model,
+        temperature=FIXED_TEMPERATURE,
+        model_kwargs={"num_predict": 256, "num_ctx": 2048, "top_k": 30, "top_p": 0.9},
+    )
+
+GUIDE_CONTEXT = build_guide_context()
+
+GUIDE_AWARE_PROMPT = PromptTemplate(
+    input_variables=["context", "question"],
+    template=(
+        "You are a careful research assistant.\n\n"
+        "PRIMARY OBJECTIVE:\n"
+        "Respond by GUIDING the user through the 5-step pipeline and the Intro. "
+        "Explicitly reference relevant steps by number (e.g., 'Step 2 – Data', 'Step 3 – Characters') and "
+        "use the guidance below to structure your answer. Then support with excerpts from the paper.\n\n"
+        "GUIDE (Intro + Steps 1–5):\n"
+        f"{GUIDE_CONTEXT}\n\n"
+        "PAPER EXCERPTS (for evidence/details):\n"
+        "{context}\n\n"
+        "USER QUESTION:\n{question}\n\n"
+        "RESPONSE FORMAT (follow this):\n"
+        "1) Brief answer in 1–2 sentences.\n"
+        "2) Step-by-step guidance (cite specific steps: 1→5) tailored to the question.\n"
+        "3) Evidence/Notes from the paper (quote or summarize the relevant excerpt).\n"
+        "4) Next actions: a short checklist the user can do now.\n"
+        "If the paper excerpts do not contain needed details, say so clearly and rely on the Guide to propose a path forward."
+    ),
+)
 
 
 # ───────────────────────── Helpers (Guide tab) ─────────────────────────
