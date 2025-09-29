@@ -21,6 +21,7 @@ Moreover, at the link [Launch the Political Narratives App](https://political-na
   conda activate acn_data_analysis
   
 - Open the python script in this environment.
+- 
 - To run the script, the following folder structure is needed:
   ```bash
   C:\Users\GustavPirich\Dropbox\climate_nature_narratives\
