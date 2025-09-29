@@ -8,11 +8,11 @@ Moreover, at the link [Launch the Political Narratives App](https://political-na
 - The online APP allows to navigate the steps to prepare your research. You can reflect on the main questions to ask yourself, check them, and annotate progress. Moreover, you will have some claryfiyng examples taken from the paper of reference.
   The APP can be used online through the above link, or it can be downloaded locally. The online version only uses OpenAI API queries, and necessitate a API key from the user's OpenAI account. In the local version you can decide wether to use an API key, or to use Ollama LLM (we provide the steps to download it in this guide). 
 
-Local Political Narratives Guide — **no API keys**. Uses [Ollama](https://ollama.com) and local embeddings.
-
-## Requirements
+## Requirements for the Political Narrative replication
+- The user needs to create an environment using the requirements in the ````requirements/```` folder(preferred Anaconda for compliance with how the requirement file is written)
+## Requirements for the Guide APP
 - Python 3.10+
-- Install Ollama and pull a small model:
+- Install [Ollama](https://ollama.com) and pull a small model:
   ```bash
   ollama pull llama3.2:3b-instruct
   # or
