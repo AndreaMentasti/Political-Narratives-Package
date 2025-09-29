@@ -468,11 +468,9 @@ def render_step(step: int):
             key_prefix="s3_chars"
         )
 
-
-        # 2) EXAMPLE
         # 2) EXAMPLE
         example_card(
-            "Example - Relevant characters for climate change political discourse 💡",
+            "Relevant characters for climate change political discourse 💡",
             (
                 "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
                 "we pre-specify ten characters: five human characters (made of institutions and groups of individuals) "
@@ -528,15 +526,15 @@ def render_step(step: int):
 
         # 2) EXAMPLE
         example_card(
-            "Two prompt tracks used in this package 💡",
+            "Prompt design for the political narratives of climate change 💡",
             (
-                "### (a) Relevance classifier (Stage 1)\n"
+                "# (a) Relevance classifier (Stage 1)\n"
                 "Decide if a three-sentence newspaper excerpt is relevant to **US climate change discourse**.\n"
                 "- 0 = irrelevant (no meaningful climate discussion)\n"
                 "- 1 = assert (asserts existence of climate change)\n"
                 "- 2 = deny (denies or mocks climate change)\n"
                 "- 3 = relevant (substantive discussion of climate change policy)\n\n"
-                "### (b) Character detection & role assignment (Stage 2)\n"
+                "# (b) Character detection & role assignment (Stage 2)\n"
                 "Identify pre-specified characters and assign contextual roles:\n"
                 "- Villain (1) | Hero (2) | Victim (3) | No role (4)\n\n"
                 "Characters: Developing Economies, US Democrats, US Republicans, Corporations, US People, "
@@ -550,7 +548,7 @@ def render_step(step: int):
         output_card(
             "What you should have before Step 5 ⚠️",
             bullets=[
-                "A finalized **prompt spec** for both tasks (relevance + character/role), including schema and guardrails.",
+                "A finalized **prompt** for both tasks (relevance + character/role), including schema and guardrails.",
                 "A set of **few-shot examples** (both positive and near-miss).",
                 "Consistent key names to enable parsing into (M, R) downstream."
             ],
