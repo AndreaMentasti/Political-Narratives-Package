@@ -576,29 +576,30 @@ Respond in JSON format, returning the value in the key \\"r\\"."
 }"""
 
         default_roles_json = """{
-  "SYSTEM_MESSAGE": "You are an average US citizen. The user will provide the content of a three-sentence newspaper article excerpt published by a US newspaper between 2010 and 2021. 
-Your task is to analyze it within the context of US political discourse, particularly in relation to climate change and related policies. Respond in JSON format.
+  "SYSTEM_MESSAGE": "You are an average US citizen. The user will provide a three-sentence US newspaper excerpt (2010–2021). 
+Analyze it in the context of US political discourse on climate change and respond in JSON format.
 
-1. Character Analysis: Identify whether the excerpt mentions specific characters. For each character mentioned, assess their contextual role using the following scale:
-   - Villain (1): ...
-   - Hero (2): ...
-   - Victim (3): ...
-   - No role (4): ...
+1. Character Analysis: For each mentioned character, assign a role:
+   - 1 = Villain: contributes to problems, opposes positive change, engages in harmful actions.
+   - 2 = Hero: leads efforts to combat climate change, promotes environmental policies, acts commendably.
+   - 3 = Victim: suffers unfairly, is attacked, or endures consequences of climate change or others’ actions.
+   - 4 = No role: mentioned but not clearly cast as Villain/Hero/Victim, or context is neutral/ambiguous.
 
-2. Character Definitions: Evaluate these characters in the context of the excerpt.
-   - a: Developing Economies
-   - b: US Democrats
-   - c: US Republicans
-   - d: Corporations
-   - e: US People
-   - f: Emission Pricing Tools
-   - g: Regulation Policies
-   - h: Fossil Fuels
-   - i: Green Technologies
-   - j: Nuclear Energy
+2. Characters to evaluate (keys a–j):
+   a: Developing Economies — emerging and poorer nations (incl. BRICS). Mentions of their governments, representatives, or citizens in the context of climate negotiations or responsibilities.
+   b: US Democrats — politicians or public figures tied to the Democratic Party (e.g., Biden, Obama, Pelosi). References to Democratic climate policies, proposals, or positions.
+   c: US Republicans — politicians or public figures tied to the Republican Party (e.g., Trump, McConnell, Cruz). Mentions of opposition or support to climate-related policies from the GOP side.
+   d: Corporations and Industry — private-sector actors including large companies, SMEs, banks, CEOs, and industry lobbies. Includes mentions of energy, tech, finance, or manufacturing in the climate context.
+   e: US People — the collective public, workers, voters, youth, and grassroots movements (e.g., Sunrise Movement, Extinction Rebellion). Includes references to citizens as beneficiaries, victims, or agents of climate action.
+   f: Emission Pricing Tools — market-based policies like carbon taxes, cap-and-trade, carbon markets, or pollution credits. References to pricing carbon as a solution or a burden.
+   g: Regulation Policies — government bans or regulations (e.g., banning fracking, fossil phaseouts, plastics bans, degrowth/anti-capitalist proposals). Mentions of regulatory tools to address climate change.
+   h: Fossil Fuels — oil, gas, coal, and related infrastructure (power plants, pipelines). Mentions in the context of pollution, energy needs, or phaseout debates.
+   i: Green Technologies — renewable and low-carbon solutions like solar, wind, EVs, hydrogen, batteries, geothermal. Mentions of their potential, adoption, or challenges.
+   j: Nuclear Energy — nuclear power, fission, or fusion technologies. Mentions of nuclear plants or research in the climate policy debate.
 
-3. Final Output: Respond with a JSON object containing keys a–j with values 0–4 as defined above."
+3. Final Output: Respond with a JSON object containing keys a–j. Each value must be 0 (not mentioned) or 1–4 (role as defined above)."
 }"""
+
 
         # Initialize session storage
         st.session_state.setdefault("s4_relevance_json", default_relevance_json)
