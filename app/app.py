@@ -557,7 +557,7 @@ def render_step(step: int):
 
         # ——— PROMPT PASTE AREAS (stores in session_state) ———
         st.markdown("### Paste your JSON prompts")
-        st.caption("Provide machine-readable JSON specs for Stage 1 (relevance classification) and Stage 2 (character/role assignment).")
+        st.caption("Provide machine-readable JSON specs for Stage 1 (relevance classification) and Stage 2 (character/role assignment). You can find the original prompts for *Gehring and Grigoletto (2025) in the GitHub repository.")
 
         # Load defaults from uploaded JSON system messages
         default_relevance_json = """{
