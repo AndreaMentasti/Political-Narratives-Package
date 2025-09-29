@@ -1,12 +1,12 @@
 # Political Narratives Package
 
-The **Political Narrative Package** works both as a repository to replicate the analysis of Political Narratives as in *Gehring & Grigoletto (2025)* and as an interactive space where to organize the steps for your own independent research on Political Narratives.
-We provide the user with the code to query OpenAI API, the prompts that must be used (or readapted) to retrieve the Political Narratives, and some instructions to create an OpenAI API account.
+The **Political Narratives** Package works both as a repository to replicate the analysis of Political Narratives as in *Gehring & Grigoletto (2025)* and as an interactive space to organize the steps for your own independent research on Political Narratives.
+We provide the user with the code to query the OpenAI API, the prompts that can be used (or adapted) to retrieve Political Narratives, and instructions to create an OpenAI API account.
 Moreover, at the link [Launch the Political Narratives App](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) you will find an interactive APP that guides you through the logic behind the Political Narrative Framework.
 
 
-The online APP allows to navigate the steps to prepare your research. You can reflect on the main questions to ask yourself, check them, and annotate progress. Moreover, you will have some claryfiyng examples taken from the paper of reference.
-The APP can be used online through the above link, or it can be downloaded locally. The online version only uses OpenAI API queries, and necessitate a API key from the user's OpenAI account. In the local version you can decide wether to use an API key, or to use Ollama LLM (we provide the steps to download it in this guide). 
+The online APP allows you to navigate the steps to prepare your research. You can reflect on the main questions to ask yourself, check them, and annotate your progress. In addition, the APP provides clarifying examples taken from the paper of reference.
+The APP can be used online through the above link, or downloaded and run locally. The online version only uses OpenAI API queries and therefore requires an API key from the user’s OpenAI account. In the local version, you can decide whether to use an API key, or to use Ollama LLM (we provide the steps to download it in this guide). 
 
 ## Requirements for the Political Narrative replication
 - The user needs to create an environment using the requirements in the ````requirements/```` folder (preferred Anaconda for compliance with how the requirement file is written)
