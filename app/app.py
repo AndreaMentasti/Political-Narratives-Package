@@ -501,14 +501,13 @@ def render_step(step: int):
         st.session_state["guide"]["notes"][3] = st.session_state["notes_s3"]
 
     # --- STEP 4 ---
-    # --- STEP 4 ---
     if step == 4:
         st.subheader("Step 4 — Prepare the prompt(s)")
         st.caption("Specify the mapping from raw text to (M, R) with a simple, consistent schema.")
 
         # 1) GUIDE
         question_card(
-            "Guide: task, unit, schema, and guardrails ✅",
+            "Guide: prepare the prompt(s) ✅",
             how_to=[
                 "Choose ONE main task (classify / extract / summarize / compare / generate) and one input unit (headline / paragraph / article / tweet).",
                 "Define a **JSON schema** (keys, allowed labels, brief rationale) and **guardrails** (e.g., cite spans, no external knowledge, be concise).",
@@ -521,6 +520,7 @@ def render_step(step: int):
                 "Is the chosen input unit appropriate for context vs. speed constraints?",
                 "Is the schema unambiguous, machine-readable, and easy to parse?",
                 "Do my few-shot examples include near-miss/edge cases?",
+                "Do I provide a description of the selected characters?",
                 "Have I specified guardrails (no external knowledge, cite spans, be concise)?"
             ],
             key_prefix="s4_prompt"
@@ -530,21 +530,18 @@ def render_step(step: int):
         example_card(
             "Two prompt tracks used in this package 💡",
             (
-                "### (a) Relevance classifier\n"
-                "Goal: keep only tweets that contribute to the political discourse on **climate policy**.\n\n"
-                "**Allowed labels:** `irrelevant | assert | deny | relevant`\n\n"
-                "Examples (illustrative):\n"
-                "- *irrelevant*: Personal updates unrelated to climate policy.\n"
-                "- *assert*: “Climate change is real and man-made.” (no policy content)\n"
-                "- *deny*: “Climate change is a hoax.” (no policy content)\n"
-                "- *relevant*: Mentions of **policies/laws/technologies** or **political actors** arguing about climate policy.\n\n"
-                "### (b) Character detection & role assignment\n"
-                "Goal: identify pre-specified **characters** and assign one of four roles.\n\n"
-                "**Roles:** `Hero | Victim | Villain | Neutral`\n\n"
-                "Notes:\n"
-                "- Include **Neutral** when the character is present but not cast as hero/victim/villain.\n"
-                "- Use your Step-3 character list (e.g., Human: DEVELOPING ECONOMIES, US DEMOCRATS, US REPUBLICANS, CORPORATIONS, US PEOPLE; "
-                "Instrument: EMISSION PRICING, REGULATIONS, FOSSIL INDUSTRY, GREEN TECH, NUCLEAR TECH)."
+                "### (a) Relevance classifier (Stage 1)\n"
+                "Decide if a three-sentence newspaper excerpt is relevant to **US climate change discourse**.\n"
+                "- 0 = irrelevant (no meaningful climate discussion)\n"
+                "- 1 = assert (asserts existence of climate change)\n"
+                "- 2 = deny (denies or mocks climate change)\n"
+                "- 3 = relevant (substantive discussion of climate change policy)\n\n"
+                "### (b) Character detection & role assignment (Stage 2)\n"
+                "Identify pre-specified characters and assign contextual roles:\n"
+                "- Villain (1) | Hero (2) | Victim (3) | No role (4)\n\n"
+                "Characters: Developing Economies, US Democrats, US Republicans, Corporations, US People, "
+                "Emission Pricing Tools, Regulation Policies, Fossil Fuels, Green Technologies, Nuclear Energy.\n"
+                "Output JSON contains keys `a`–`j` (one per character)."
             ),
             key_prefix="s4_example"
         )
@@ -562,68 +559,61 @@ def render_step(step: int):
 
         # ——— PROMPT PASTE AREAS (stores in session_state) ———
         st.markdown("### Paste your JSON prompts")
-        st.caption("Provide machine-readable JSON specs for (a) relevance classification and (b) character/role assignment. These will be saved in your session.")
+        st.caption("Provide machine-readable JSON specs for Stage 1 (relevance classification) and Stage 2 (character/role assignment).")
 
-        # Defaults (shown once, then replaced by user values)
-        default_relevance_json = (
-            '{\n'
-            '  "task": "classify_relevance",\n'
-            '  "unit": "tweet",\n'
-            '  "labels": ["irrelevant", "assert", "deny", "relevant"],\n'
-            '  "instructions": "Decide if the tweet contributes to the political discourse on climate policy. Return exactly one label.",\n'
-            '  "guardrails": ["Use only the provided text", "No external knowledge", "Be concise"],\n'
-            '  "output_schema": {"label": "string", "rationale": "string"},\n'
-            '  "few_shot": [\n'
-            '    {"text": "Going for a run today!", "label": "irrelevant", "rationale": "No policy content"},\n'
-            '    {"text": "Climate change is man-made.", "label": "assert", "rationale": "No policy or political actors"},\n'
-            '    {"text": "Climate change is a hoax.", "label": "deny", "rationale": "No policy or political actors"},\n'
-            '    {"text": "We need carbon pricing to cut emissions.", "label": "relevant", "rationale": "Mentions a policy instrument"}\n'
-            '  ]\n'
-            '}'
-        )
+        # Load defaults from uploaded JSON system messages
+        default_relevance_json = """{
+  "SYSTEM_MESSAGE": "You are an average US citizen. The user will provide the content of a three-sentence newspaper article excerpt published by a US newspaper between 2010 and 2021. 
+Your task is to analyze the excerpt within the context of US political discourse, particularly in relation to climate change. Respond in JSON format.
 
-        default_roles_json = (
-            '{\n'
-            '  "task": "detect_characters_and_roles",\n'
-            '  "unit": "tweet",\n'
-            '  "characters": {\n'
-            '    "human": ["DEVELOPING ECONOMIES", "US DEMOCRATS", "US REPUBLICANS", "CORPORATIONS", "US PEOPLE"],\n'
-            '    "instrument": ["EMISSION PRICING", "REGULATIONS", "FOSSIL INDUSTRY", "GREEN TECH", "NUCLEAR TECH"]\n'
-            '  },\n'
-            '  "roles": ["Hero", "Victim", "Villain", "Neutral"],\n'
-            '  "instructions": "Detect which of the predefined characters appear and assign exactly one role per appearing character.",\n'
-            '  "guardrails": ["Use only the provided text", "No external knowledge", "Cite spans when possible"],\n'
-            '  "output_schema": {\n'
-            '    "present": [{"character": "string", "role": "Hero|Victim|Villain|Neutral", "span_quote": "string"}],\n'
-            '    "notes": "string"\n'
-            '  },\n'
-            '  "few_shot": [\n'
-            '    {\n'
-            '      "text": "Energy companies profit while people suffer.",\n'
-            '      "present": [\n'
-            '        {"character": "CORPORATIONS", "role": "Villain", "span_quote": "Energy companies profit"},\n'
-            '        {"character": "US PEOPLE", "role": "Victim", "span_quote": "people suffer"}\n'
-            '      ],\n'
-            '      "notes": "No explicit policy instrument mentioned."\n'
-            '    }\n'
-            '  ]\n'
-            '}'
-        )
+1. Relevance Check: Analyze the excerpt in the context of US climate change discussion and determine its relevance. Provide one of the following values:
+   - 0 (irrelevant): If the excerpt does not discuss climate change in a meaningful way. For example, if it only includes a hashtag (like #climatechange) or a passing reference but does not engage in any discussion about climate change or related policies, it should be considered irrelevant.
+   - 1 (assert): If the excerpt asserts the existence of climate change but does not engage with specific policies or actions related to it. This includes excerpts that acknowledge climate change as an issue without going deeper into details.
+   - 2 (deny): If the excerpt denies the existence or severity of man-made climate change, referring to it as a hoax, scam, or fraud, or using sarcasm or language that undermines the reality of climate change.
+   - 3 (relevant): If the excerpt discusses climate change or related policies in a substantive way. This includes any excerpt that debates, critiques, or supports policies or actions related to climate change, as well as conversations on how to combat or adapt to climate change.
+
+Respond in JSON format, returning the value in the key \\"r\\"."
+}"""
+
+        default_roles_json = """{
+  "SYSTEM_MESSAGE": "You are an average US citizen. The user will provide the content of a three-sentence newspaper article excerpt published by a US newspaper between 2010 and 2021. 
+Your task is to analyze it within the context of US political discourse, particularly in relation to climate change and related policies. Respond in JSON format.
+
+1. Character Analysis: Identify whether the excerpt mentions specific characters. For each character mentioned, assess their contextual role using the following scale:
+   - Villain (1): ...
+   - Hero (2): ...
+   - Victim (3): ...
+   - No role (4): ...
+
+2. Character Definitions: Evaluate these characters in the context of the excerpt.
+   - a: Developing Economies
+   - b: US Democrats
+   - c: US Republicans
+   - d: Corporations
+   - e: US People
+   - f: Emission Pricing Tools
+   - g: Regulation Policies
+   - h: Fossil Fuels
+   - i: Green Technologies
+   - j: Nuclear Energy
+
+3. Final Output: Respond with a JSON object containing keys a–j with values 0–4 as defined above."
+}"""
 
         # Initialize session storage
         st.session_state.setdefault("s4_relevance_json", default_relevance_json)
         st.session_state.setdefault("s4_roles_json", default_roles_json)
 
         st.text_area(
-            "🧩 (a) Relevance prompt JSON",
+            "🧩 (a) Stage 1 — Relevance prompt JSON",
             key="s4_relevance_json",
-            height=260
+            height=320
         )
 
         st.text_area(
-            "🧩 (b) Character & role prompt JSON",
+            "🧩 (b) Stage 2 — Character & role prompt JSON",
             key="s4_roles_json",
-            height=320
+            height=500
         )
 
         # Optional free notes area (consistent with other steps)
