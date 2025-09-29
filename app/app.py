@@ -380,7 +380,7 @@ def render_step(step: int):
                 "we pre-specify ten characters: five human characters (made of institutions and groups of individuals) "
                 "and five instrument characters (policy tools and instruments).\n\n"
                 "**Human Characters:** DEVELOPING ECONOMIES | US DEMOCRATS | US REPUBLICANS | CORPORATIONS | US PEOPLE\n\n"
-                "**Instrument Characters:** EMISSION PRICING | REGULATIONS | FOSSIL INDUSTRY | GREEN TECH | NUCLEAR TECH"
+                "**Instrument Characters:** EMISSION PRICING | REGULATIONS | FOSSIL INDUSTRY | GREEN TECH | NUCLEAR TECH\n\n"
                 "We carefully decided to have ten character to balance the complexity of the analysis with"
                 "good practices to avoid overloading the LLM in the annotation process. These characters are easily recognizable"
                 "by the LLM thanks to precise descriptions in the prompt design step (Step 4)."
