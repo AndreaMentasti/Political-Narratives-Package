@@ -501,55 +501,138 @@ def render_step(step: int):
         st.session_state["guide"]["notes"][3] = st.session_state["notes_s3"]
 
     # --- STEP 4 ---
+    # --- STEP 4 ---
     if step == 4:
         st.subheader("Step 4 — Prepare the prompt(s)")
         st.caption("Specify the mapping from raw text to (M, R) with a simple, consistent schema.")
 
         # 1) GUIDE
         question_card(
-            "Task, input unit, schema, and guardrails",
+            "Guide: task, unit, schema, and guardrails ✅",
             how_to=[
-                "Choose ONE main task (classify/extract/summarize/compare/generate) and a text unit (headline/lead/paragraph/article).",
-                "Define a JSON schema (keys, allowed labels, brief rationale) and guardrails (cite spans, no external knowledge, be concise).",
-                "Add 2–4 worked examples (cover easy + tricky)."
+                "Choose ONE main task (classify / extract / summarize / compare / generate) and one input unit (headline / paragraph / article / tweet).",
+                "Define a **JSON schema** (keys, allowed labels, brief rationale) and **guardrails** (e.g., cite spans, no external knowledge, be concise).",
+                "Add **2–4 worked examples** (cover easy + tricky edge cases).",
+                "Co-design prompts with the same model you will use for annotation (e.g., GPT-4o-mini via OpenAI) to align capabilities and outputs.",
+                "This package supports two tasks: (a) topic relevance classification and (b) character detection + role assignment."
             ],
             ask_yourself=[
-                "Is the task singular and clear?",
-                "Is the unit appropriate for context vs. speed?",
-                "Is the schema unambiguous and machine-readable?",
-                "Do I include few-shots, including edge cases?"
+                "Is the task singular and clear (avoid mixing multiple tasks in one prompt)?",
+                "Is the chosen input unit appropriate for context vs. speed constraints?",
+                "Is the schema unambiguous, machine-readable, and easy to parse?",
+                "Do my few-shot examples include near-miss/edge cases?",
+                "Have I specified guardrails (no external knowledge, cite spans, be concise)?"
             ],
             key_prefix="s4_prompt"
         )
 
         # 2) EXAMPLE
         example_card(
-            "Frame classification with actor extraction (JSON)",
+            "Two prompt tracks used in this package 💡",
             (
-                "```json\n"
-                "{\n"
-                '  "frame": "responsibility|justice|solutions",\n'
-                '  "actors": ["..."],\n'
-                '  "rationale": "<1-2 sentences citing spans>"\n'
-                "}\n"
-                "```\n"
-                "_Guardrails_: Use only provided text; cite quoted spans; keep rationale ≤ 2 sentences."
+                "### (a) Relevance classifier\n"
+                "Goal: keep only tweets that contribute to the political discourse on **climate policy**.\n\n"
+                "**Allowed labels:** `irrelevant | assert | deny | relevant`\n\n"
+                "Examples (illustrative):\n"
+                "- *irrelevant*: Personal updates unrelated to climate policy.\n"
+                "- *assert*: “Climate change is real and man-made.” (no policy content)\n"
+                "- *deny*: “Climate change is a hoax.” (no policy content)\n"
+                "- *relevant*: Mentions of **policies/laws/technologies** or **political actors** arguing about climate policy.\n\n"
+                "### (b) Character detection & role assignment\n"
+                "Goal: identify pre-specified **characters** and assign one of four roles.\n\n"
+                "**Roles:** `Hero | Victim | Villain | Neutral`\n\n"
+                "Notes:\n"
+                "- Include **Neutral** when the character is present but not cast as hero/victim/villain.\n"
+                "- Use your Step-3 character list (e.g., Human: DEVELOPING ECONOMIES, US DEMOCRATS, US REPUBLICANS, CORPORATIONS, US PEOPLE; "
+                "Instrument: EMISSION PRICING, REGULATIONS, FOSSIL INDUSTRY, GREEN TECH, NUCLEAR TECH)."
             ),
             key_prefix="s4_example"
         )
 
         # 3) OUTPUT
         output_card(
-            "What you should have before Step 5",
+            "What you should have before Step 5 ⚠️",
             bullets=[
-                "A finalized **prompt spec**: task, input unit, schema, guardrails.",
-                "A set of **few-shot examples** (good and near-miss)."
+                "A finalized **prompt spec** for both tasks (relevance + character/role), including schema and guardrails.",
+                "A set of **few-shot examples** (both positive and near-miss).",
+                "Consistent key names to enable parsing into (M, R) downstream."
             ],
             key_prefix="s4_output"
         )
 
-        st.text_area("Annotations for Step 4 (optional)", key="notes_s4",
-                     value=st.session_state["guide"]["notes"][4], height=120)
+        # ——— PROMPT PASTE AREAS (stores in session_state) ———
+        st.markdown("### Paste your JSON prompts")
+        st.caption("Provide machine-readable JSON specs for (a) relevance classification and (b) character/role assignment. These will be saved in your session.")
+
+        # Defaults (shown once, then replaced by user values)
+        default_relevance_json = (
+            '{\n'
+            '  "task": "classify_relevance",\n'
+            '  "unit": "tweet",\n'
+            '  "labels": ["irrelevant", "assert", "deny", "relevant"],\n'
+            '  "instructions": "Decide if the tweet contributes to the political discourse on climate policy. Return exactly one label.",\n'
+            '  "guardrails": ["Use only the provided text", "No external knowledge", "Be concise"],\n'
+            '  "output_schema": {"label": "string", "rationale": "string"},\n'
+            '  "few_shot": [\n'
+            '    {"text": "Going for a run today!", "label": "irrelevant", "rationale": "No policy content"},\n'
+            '    {"text": "Climate change is man-made.", "label": "assert", "rationale": "No policy or political actors"},\n'
+            '    {"text": "Climate change is a hoax.", "label": "deny", "rationale": "No policy or political actors"},\n'
+            '    {"text": "We need carbon pricing to cut emissions.", "label": "relevant", "rationale": "Mentions a policy instrument"}\n'
+            '  ]\n'
+            '}'
+        )
+
+        default_roles_json = (
+            '{\n'
+            '  "task": "detect_characters_and_roles",\n'
+            '  "unit": "tweet",\n'
+            '  "characters": {\n'
+            '    "human": ["DEVELOPING ECONOMIES", "US DEMOCRATS", "US REPUBLICANS", "CORPORATIONS", "US PEOPLE"],\n'
+            '    "instrument": ["EMISSION PRICING", "REGULATIONS", "FOSSIL INDUSTRY", "GREEN TECH", "NUCLEAR TECH"]\n'
+            '  },\n'
+            '  "roles": ["Hero", "Victim", "Villain", "Neutral"],\n'
+            '  "instructions": "Detect which of the predefined characters appear and assign exactly one role per appearing character.",\n'
+            '  "guardrails": ["Use only the provided text", "No external knowledge", "Cite spans when possible"],\n'
+            '  "output_schema": {\n'
+            '    "present": [{"character": "string", "role": "Hero|Victim|Villain|Neutral", "span_quote": "string"}],\n'
+            '    "notes": "string"\n'
+            '  },\n'
+            '  "few_shot": [\n'
+            '    {\n'
+            '      "text": "Energy companies profit while people suffer.",\n'
+            '      "present": [\n'
+            '        {"character": "CORPORATIONS", "role": "Villain", "span_quote": "Energy companies profit"},\n'
+            '        {"character": "US PEOPLE", "role": "Victim", "span_quote": "people suffer"}\n'
+            '      ],\n'
+            '      "notes": "No explicit policy instrument mentioned."\n'
+            '    }\n'
+            '  ]\n'
+            '}'
+        )
+
+        # Initialize session storage
+        st.session_state.setdefault("s4_relevance_json", default_relevance_json)
+        st.session_state.setdefault("s4_roles_json", default_roles_json)
+
+        st.text_area(
+            "🧩 (a) Relevance prompt JSON",
+            key="s4_relevance_json",
+            height=260
+        )
+
+        st.text_area(
+            "🧩 (b) Character & role prompt JSON",
+            key="s4_roles_json",
+            height=320
+        )
+
+        # Optional free notes area (consistent with other steps)
+        st.text_area(
+            "Annotations for Step 4 (optional)",
+            key="notes_s4",
+            value=st.session_state["guide"]["notes"][4],
+            height=120
+        )
         st.session_state["guide"]["notes"][4] = st.session_state["notes_s4"]
 
     # --- STEP 5 ---
