@@ -374,13 +374,16 @@ def render_step(step: int):
         # 2) EXAMPLE
         # 2) EXAMPLE
         example_card(
-            "Buckets and exemplars for climate policy 💡",
+            "Example - Relevant characters for climate change political discourse 💡",
             (
                 "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
                 "we pre-specify ten characters: five human characters (made of institutions and groups of individuals) "
                 "and five instrument characters (policy tools and instruments).\n\n"
                 "**Human Characters:** DEVELOPING ECONOMIES | US DEMOCRATS | US REPUBLICANS | CORPORATIONS | US PEOPLE\n\n"
                 "**Instrument Characters:** EMISSION PRICING | REGULATIONS | FOSSIL INDUSTRY | GREEN TECH | NUCLEAR TECH"
+                "We carefully decided to have ten character to balance the complexity of the analysis with"
+                "good practices to avoid overloading the LLM in the annotation process. These characters are easily recognizable"
+                "by the LLM thanks to precise descriptions in the prompt design step (Step 4)."
             ),
             key_prefix="s3_example"
         )
