@@ -343,16 +343,16 @@ def render_step(step: int):
         st.caption("Map the topic into human and instrument actors with agency and claims.")
 
         # 1) GUIDE
+        # 1) GUIDE
         question_card(
             "Guide: character selection ✅",
-            how_to = [
+            how_to=[
                 "Identify relevant characters for the topic (human and instrument) — this is the core of Step 3.",
                 "Anchor selection in your research question and analytical focus; choose characters that speak to your hypotheses.",
                 "Balance scope with feasibility: too many characters can reduce precision and raise compute costs; a focused set improves reliability and interpretability.",
-                "Build the character list via literature review, exploratory tools (topic modeling, entity recognition/RELATIO), and domain reading; document your choices.",
-            ]
-
-            ask_yourself = [
+                "Build the character list via literature review, exploratory tools (topic modeling, entity recognition/RELATIO), and domain reading; document your choices."
+            ],
+            ask_yourself=[
                 # Conceptual framing
                 "Which entities matter most for the topic at hand?",
                 "Are these best understood as human actors (individuals, groups, organizations, states) or instrumental actors (policies, tools, institutions)?",
@@ -366,10 +366,10 @@ def render_step(step: int):
                 # Practical implementation
                 "Is the chosen character list feasible for LLM coding (not too long, not too ambiguous)?",
                 "Can each character plausibly appear in different roles (hero, villain, victim), or are some inherently neutral/instrumental?",
-            ]
-
+            ],
             key_prefix="s3_chars"
         )
+
 
         # 2) EXAMPLE
         example_card(
