@@ -141,16 +141,115 @@ def get_llm(provider: str, user_key: str | None, local_model: str):
         model_kwargs={"num_predict": 256, "num_ctx": 2048, "top_k": 30, "top_p": 0.9},
     )
 
-STRICT_QA_PROMPT = PromptTemplate(
+GUIDE_CONTEXT = build_guide_context()
+
+GUIDE_AWARE_PROMPT = PromptTemplate(
     input_variables=["context", "question"],
     template=(
-        "You are a careful research assistant. Answer the user's question using mainly the information in the provided paper excerpts.\n"
-        "If the excerpts do not contain the answer, look carefully again, and then you can refer to external knowledge to give an answer.\n"
-        "Excerpts from the paper:\n{context}\n\n"
-        "Question: {question}\n\n"
-        "Answer:"
+        "You are a careful research assistant.\n\n"
+        "PRIMARY OBJECTIVE:\n"
+        "Respond by GUIDING the user through the 5-step pipeline and the Intro. "
+        "Explicitly reference relevant steps by number (e.g., 'Step 2 – Data', 'Step 3 – Characters') and "
+        "use the guidance below to structure your answer. Then support with excerpts from the paper.\n\n"
+        "GUIDE (Intro + Steps 1–5):\n"
+        f"{GUIDE_CONTEXT}\n\n"
+        "PAPER EXCERPTS (for evidence/details):\n"
+        "{context}\n\n"
+        "USER QUESTION:\n{question}\n\n"
+        "RESPONSE FORMAT (follow this):\n"
+        "1) Brief answer in 1–2 sentences.\n"
+        "2) Step-by-step guidance (cite specific steps: 1→5) tailored to the question.\n"
+        "3) Evidence/Notes from the paper (quote or summarize the relevant excerpt).\n"
+        "4) Next actions: a short checklist the user can do now.\n"
+        "If the paper excerpts do not contain needed details, say so clearly and rely on the Guide to propose a path forward."
     ),
 )
+
+
+# ───────────────────────── Build guide KB (Intro + Steps) ─────────────────────────
+def build_guide_context() -> str:
+    """Compact knowledge base from the Intro and all 5 steps to steer the LLM."""
+    intro = (
+        "INTRO SUMMARY\n"
+        "Political narratives influence beliefs and preferences via three archetypal roles: hero, villain, victim. "
+        "Fix a topic T and characters K = H ∪ I (human + instrument). A text is a political narrative if at least "
+        "one character is hero/villain/victim (else neutral-only → not a narrative). The pipeline has 5 steps.\n"
+    )
+
+    step1_how = (
+        "- Define a precise topic; balance specificity vs. generality.\n"
+        "- Ensure data availability and metadata (dates/outlets/geo/language).\n"
+    )
+    step1_ask = (
+        "- Does the topic surface distinct political narratives?\n"
+        "- Enough identifiable characters?\n"
+        "- Sources available with essential metadata?\n"
+        "- Any risks to communities and mitigation plan?\n"
+    )
+
+    step2_how = (
+        "- Choose sources (news, social media, TV/radio/YouTube transcripts, surveys).\n"
+        "- Evaluate coverage, access, quality; decide extraction (API, scraping, keywords).\n"
+        "- Preserve metadata for downstream analysis.\n"
+    )
+    step2_ask = (
+        "- Do sources capture the core debate?\n"
+        "- Sufficient diversity to avoid bias?\n"
+        "- Is snippet length appropriate?\n"
+        "- Legal/technical access? Best extraction method? Time window suitable?\n"
+    )
+
+    step3_how = (
+        "- Identify relevant characters (human + instrument) guided by your question.\n"
+        "- Balance breadth vs. feasibility; focused sets improve reliability.\n"
+        "- Build via literature, exploratory tools (topic modeling, NER/RELATIO), domain reading; document choices.\n"
+    )
+    step3_ask = (
+        "- Which entities matter most? Human vs. instrument?\n"
+        "- Scope (national/regional/global) and exclusions?\n"
+        "- Which characters recur in literature and exploration?\n"
+        "- How many to track while staying interpretable?\n"
+        "- Feasible for LLM; can each appear as hero/villain/victim?\n"
+    )
+
+    step4_how = (
+        "- Choose ONE main task and text unit; define JSON schema + guardrails.\n"
+        "- Add 2–4 worked examples incl. near-miss cases.\n"
+    )
+    step4_ask = (
+        "- Is task singular and clear? Unit appropriate?\n"
+        "- Is schema unambiguous and machine-readable? Few-shots cover edge cases?\n"
+    )
+
+    step5_how = (
+        "- Decide batch size/retries; store JSONL/CSV with doc/label/rationale/timestamps.\n"
+        "- Pilot + QC (agreement/self-consistency, golds, audits).\n"
+        "- Assemble tidy table: stage flags, presence m_i,k, role dummies r_i,k.\n"
+    )
+    step5_ask = (
+        "- Pilot size + QC checks?\n"
+        "- Where to version outputs?\n"
+        "- Which quality metrics and audits/visualizations?\n"
+    )
+
+    # Optional: the concrete Step 3 example you added
+    step3_example = (
+        "STEP 3 EXAMPLE\n"
+        "Human: DEVELOPING ECONOMIES | US DEMOCRATS | US REPUBLICANS | CORPORATIONS | US PEOPLE\n"
+        "Instrument: EMISSION PRICING | REGULATIONS | FOSSIL INDUSTRY | GREEN TECH | NUCLEAR TECH\n"
+        "Ten characters balance complexity and LLM reliability; prompts will include precise descriptions.\n"
+    )
+
+    return (
+        intro
+        + "\nSTEP 1 – TOPIC\n" + step1_how + step1_ask
+        + "\nSTEP 2 – DATA\n" + step2_how + step2_ask
+        + "\nSTEP 3 – CHARACTERS\n" + step3_how + step3_ask
+        + "\n" + step3_example
+        + "\nSTEP 4 – PROMPTS\n" + step4_how + step4_ask
+        + "\nSTEP 5 – OUTPUTS\n" + step5_how + step5_ask
+    )
+
 
 # ───────────────────────── Helpers (Guide tab) ─────────────────────────
 def _init_guide_state():
@@ -546,7 +645,7 @@ tab_guide, tab_qa = st.tabs(["Guide (5-step pipeline)", "Paper Q&A"])
 with tab_guide:
     render_guide_tab()
 
-# Tab 2 — Q&A (your original flow)
+# Tab 2 — Q&A (guide-aware flow)
 with tab_qa:
     if vs is None:
         st.info("No documents indexed. Add your paper at data/paper.pdf and rerun.")
@@ -556,20 +655,42 @@ with tab_qa:
         if provider.startswith("OpenAI") and not user_key:
             st.stop()
 
-        retriever = vs.as_retriever(search_kwargs={"k": 4})
+        # Toggle to control guide-aware behavior
+        use_guide_mode = st.toggle(
+            "Guide-aware answers (use Intro + Steps 1–5 to structure replies)",
+            value=True,
+            help="When on, the assistant will guide you using the first-tab content and cite steps explicitly."
+        )
+
+        # Use a slightly larger k for more context
+        retriever = vs.as_retriever(search_kwargs={"k": 6})
+
+        # Choose the prompt (assumes GUIDE_AWARE_PROMPT was defined earlier)
+        qa_prompt = GUIDE_AWARE_PROMPT if use_guide_mode else STRICT_QA_PROMPT
+
         qa = RetrievalQA.from_chain_type(
             llm=llm,
             retriever=retriever,
             chain_type="stuff",
-            chain_type_kwargs={"prompt": STRICT_QA_PROMPT},
+            chain_type_kwargs={"prompt": qa_prompt},
             return_source_documents=False,
         )
 
-        st.caption("Ask questions strictly about the paper. The assistant will answer mainly from the PDF.")
-        q = st.text_input("Your question", key="qa_question_input")
+        # Optional: bias toward the current step from the Guide tab
+        current_step = st.session_state.get("guide", {}).get("current_step")
+        st.caption(
+            "Ask questions about the paper and the Political Narratives framework. "
+            + ("The assistant will guide you using the Intro + Steps 1–5." if use_guide_mode else "The assistant will answer mainly from the PDF.")
+        )
 
+        q = st.text_input("Your question", key="qa_question_input")
         if q:
+            # Prepend a gentle hint for the LLM if guide mode is ON and a step is selected
+            if use_guide_mode and isinstance(current_step, int):
+                q = f"(Focus first on Step {current_step}.) " + q
+
             with st.spinner("Thinking..."):
                 out = qa({"query": q})
             st.write(out["result"])
+
 
