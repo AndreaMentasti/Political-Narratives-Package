@@ -29,10 +29,9 @@ Moreover, at the link [Launch the Political Narratives App](https://political-na
   │  └─ openAI\
   │     ├─ newspaper_snippet_system_message_stage1.json   # system prompt for stage 1
   │     └─ newspaper_snippet_system_message_stage2.json   # system prompt for stage 2
+  |     └─ c_3_fixed_snippets_dataset.xlsx                # input dataset (Excel, with snippet_id + content)
   └─ output\
    └─ data\
-      ├─ processed_newspaper\
-      │  └─ c_3_fixed_snippets_dataset.xlsx             # input dataset (Excel, with snippet_id + content)
       └─ openAI\
          ├─ batch_input\
          │  └─ newspaper\                               # [empty] receives batch_XX.csv (created by script)
