@@ -633,11 +633,10 @@ Analyze it in the context of US political discourse on climate change and respon
         question_card(
             "Guide - GPT Annotation with provided code",
             how_to=[
-                "After the design of the prompts, it's time to run the code to query OpenAI GPT 4o-mini model to perform the task of interest."
-                "For this phase it's necessary to have the right inputs:",
-                "A dataset with observation id, text snippets. Other variables will be discarded before running the main functions.",
-                "The two prompts, one for each task for GPT model. "
-                "Assemble tidy panel with stage-1 flags, presence m_i,k, and role dummies r_i,k."
+            "After the design of the prompts, it's time to run the code to query OpenAI GPT 4o-mini model to perform the task of interest.",
+            "- A dataset with observation id, text snippets. Other variables will be discarded before running the main functions.",
+            "- The two prompts, one for each task for GPT model.",
+            "Assemble tidy panel with stage-1 flags, presence m_i,k, and role dummies r_i,k."
             ],
             ask_yourself=[
                 "What pilot size and QC checks will I run first?",
