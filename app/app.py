@@ -281,7 +281,6 @@ GUIDE_AWARE_PROMPT = PromptTemplate(
         "RESPONSE FORMAT:\n"
         "- Direct answer.\n"
         "- If relevant: Deep dive on the single most relevant Step N (or Intro concept), with 3–6 bullets.\n"
-        "- Evidence/Notes from the paper: 1–3 short bullets quoting or summarizing the provided excerpts (omit if not applicable).\n"
         "- Optional next actions: 3–5 checklist items.\n"
         "Style: conversational, concise, and confident like ChatGPT; avoid listing all steps unless asked."
     ),
