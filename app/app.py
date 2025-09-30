@@ -636,8 +636,7 @@ Analyze it in the context of US political discourse on climate change and respon
             "After the design of the prompts, it's time to run the code to query OpenAI GPT 4o-mini model to perform the task of interest. For this phase it's crucial to have the following two as inputs:",
             "1) A dataset with observation id, text snippets. Other variables will be discarded before running the main functions.",
             "2) The two prompts, one for each task for GPT model.",
-            "Before running, check the folder structure described in the Github repository and replicate it on your machine.
-        
+            "Before running, check the folder structure described in the Github repository and replicate it on your machine."
             ],
             ask_yourself=[
                 "Is my dataset ready for the annotation (id, text, missing values, etc)?",
