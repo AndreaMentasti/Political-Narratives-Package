@@ -279,7 +279,7 @@ GUIDE_AWARE_PROMPT = PromptTemplate(
         "USER QUESTION:\n"
         "{question}\n\n"
         "RESPONSE FORMAT:\n"
-        "- Direct answer.\n"
+        "- Direct answer very detailed also from your own knowledge, not only from the steps and guide.\n"
         "- If relevant: Deep dive on the single most relevant Step N (or Intro concept), with 3–6 bullets.\n"
         "- Optional next actions: 3–5 checklist items.\n"
         "Style: conversational, concise, and confident like ChatGPT; avoid listing all steps unless asked."
