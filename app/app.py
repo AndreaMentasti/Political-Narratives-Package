@@ -270,6 +270,7 @@ GUIDE_AWARE_PROMPT = PromptTemplate(
         "use the guidance below to structure your answer. Then support with excerpts from the paper.\n\n"
         "GUIDE (Intro + Steps 1–5):\n"
         f"{GUIDE_CONTEXT}\n\n"
+        "Give examples from your knowledge and your own judgement. Be original, but reflect on the guidelines.\n\n"
         "PAPER EXCERPTS (for evidence/details):\n"
         "{context}\n\n"
         "USER QUESTION:\n{question}\n\n"
@@ -755,6 +756,10 @@ with tab_guide:
 
 # Tab 2 — Q&A (guide-aware flow)
 with tab_qa:
+    st.markdown(
+    "Use this Q&A to ask focused questions about the steps to perform the **Political Narratives** analysis."
+    "Be precise and reference to the steps or the paper itself.
+    )
     if vs is None:
         st.info("No documents indexed. Add your paper at data/paper.pdf and rerun.")
     else:
@@ -763,18 +768,17 @@ with tab_qa:
         if provider.startswith("OpenAI") and not user_key:
             st.stop()
 
-        # Toggle to control guide-aware behavior
-        use_guide_mode = st.toggle(
-            "Guide-aware answers (use Intro + Steps 1–5 to structure replies)",
-            value=True,
-            help="When on, the assistant will guide you using the first-tab content and cite steps explicitly."
+        # Always guide-aware, no toggle
+        st.markdown(
+            "Use this Q&A to ask focused questions about the paper and the **Political Narratives** framework. "
+            "Answers are structured using the Intro + Steps 1–5 from the Guide tab, "
+            "and supported by excerpts from your PDF."
         )
 
-        # Use a slightly larger k for more context
         retriever = vs.as_retriever(search_kwargs={"k": 6})
 
-        # Choose the prompt (assumes GUIDE_AWARE_PROMPT was defined earlier)
-        qa_prompt = GUIDE_AWARE_PROMPT if use_guide_mode else STRICT_QA_PROMPT
+        # Always use the guide-aware prompt
+        qa_prompt = GUIDE_AWARE_PROMPT
 
         qa = RetrievalQA.from_chain_type(
             llm=llm,
@@ -784,17 +788,15 @@ with tab_qa:
             return_source_documents=False,
         )
 
-        # Optional: bias toward the current step from the Guide tab
         current_step = st.session_state.get("guide", {}).get("current_step")
         st.caption(
             "Ask questions about the paper and the Political Narratives framework. "
-            + ("The assistant will guide you using the Intro + Steps 1–5." if use_guide_mode else "The assistant will answer mainly from the PDF.")
+            "The assistant will guide you using the Intro + Steps 1–5."
         )
 
         q = st.text_input("Your question", key="qa_question_input")
         if q:
-            # Prepend a gentle hint for the LLM if guide mode is ON and a step is selected
-            if use_guide_mode and isinstance(current_step, int):
+            if isinstance(current_step, int):
                 q = f"(Focus first on Step {current_step}.) " + q
 
             with st.spinner("Thinking..."):
