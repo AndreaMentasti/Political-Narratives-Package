@@ -770,9 +770,8 @@ with tab_qa:
 
         # Always guide-aware, no toggle
         st.markdown(
-            "Use this Q&A to ask focused questions about the paper and the **Political Narratives** framework. "
             "Answers are structured using the Intro + Steps 1–5 from the Guide tab, "
-            "and supported by excerpts from your PDF."
+            "and supported by excerpts from the paper of reference."
         )
 
         retriever = vs.as_retriever(search_kwargs={"k": 6})
