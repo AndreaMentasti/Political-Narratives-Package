@@ -665,9 +665,9 @@ Analyze it in the context of US political discourse on climate change and respon
 
         # 3) OUTPUT
         output_card(
-            "What you should have at the end ⚠️",
+            "What you should have at the end 🎆",
             bullets=[
-                "A **clean annotations file** in .csv format matching your schema.",
+                "A **clean annotations file** in .csv format matching your schema. 🎆",
             ],
             key_prefix="s5_output"
         )
