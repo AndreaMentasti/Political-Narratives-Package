@@ -757,7 +757,7 @@ with tab_guide:
 # Tab 2 — Q&A (guide-aware flow)
 with tab_qa:
     st.markdown(
-    "Use this Q&A to ask focused questions about the steps to perform the **Political Narratives** analysis."
+    "Use this Q&A to ask focused questions about the steps to perform the **Political Narratives** analysis. "
     "Be precise and reference to the steps or the paper itself."
     )
     if vs is None:
