@@ -21,28 +21,28 @@ The APP can be used online through the above link, or downloaded and run locally
   conda activate acn_data_analysis
   
 - Open the python script in this environment.
-- 
 - To run the script, the following folder structure is needed:
   ```bash
   C:\Users\GustavPirich\Dropbox\climate_nature_narratives\
   ├─ input\
   │  └─ openAI\
-  │     ├─ newspaper_snippet_system_message_stage1.json   # system prompt for stage 1
-  │     └─ newspaper_snippet_system_message_stage2.json   # system prompt for stage 2
-  │     └─ c_3_fixed_snippets_dataset.xlsx                # input dataset (Excel, with snippet_id + content)
+  │     ├─ newspaper_snippet_system_message_stage1.json     # system prompt for stage 1
+  │     └─ newspaper_snippet_system_message_stage2.json     # system prompt for stage 2
+  │     └─ c_3_fixed_snippets_dataset.xlsx                  # input dataset (Excel, with snippet_id + content)
   └─ output\
    └─ data\
       └─ openAI\
-         ├─ batch_input\
-         │  └─ newspaper\                               # [empty] receives batch_XX.csv (created by script)
-         ├─ api_input\
-         │  └─ newspaper\                               # [empty] receives *_input.jsonl (API request payloads)
-         ├─ api_output\
-         │  └─ newspaper\                               # [empty] receives *_stage*.csv (API responses)
-         ├─ batch_id\
-         │  └─ newspaper\                               # [empty] receives *_id.json (batch job IDs)
-         └─ predictions\                                # [empty] final merged output CSV ends up here
-
+         ├─ batch_input\                                    # [empty] receives batch_XX.csv (created by script)
+         ├─ api_input\                                      # [empty] receives *_input.jsonl (API request payloads)
+         ├─ api_output\                                     # [empty] receives *_stage*.csv (API responses)
+         ├─ batch_id\                                       # [empty] receives *_id.json (batch job IDs)
+         └─ predictions\                                    # [empty] final merged output CSV ends up here
+## Inputs - Output map
+Inputs:
+- dataset with snippets and observation id (in the code ```c_3_fixed_snippets_dataset.xls```)
+- prompt for stage 1 (in the code ```newspaper_snippet_system_message_stage1.json```)
+- prompt for stage 2 (in the code ```newspaper_snippet_system_message_stage2.json```)
+- API key as Environmental variable
 
 ## Requirements for the Guide APP
 - Python 3.10+
