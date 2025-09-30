@@ -758,7 +758,7 @@ with tab_guide:
 with tab_qa:
     st.markdown(
     "Use this Q&A to ask focused questions about the steps to perform the **Political Narratives** analysis."
-    "Be precise and reference to the steps or the paper itself.
+    "Be precise and reference to the steps or the paper itself."
     )
     if vs is None:
         st.info("No documents indexed. Add your paper at data/paper.pdf and rerun.")
