@@ -631,40 +631,44 @@ Analyze it in the context of US political discourse on climate change and respon
 
         # 1) GUIDE
         question_card(
-            "Guide - GPT Annotation with provided code",
+            "Guide - GPT Annotation with provided code ✅",
             how_to=[
             "After the design of the prompts, it's time to run the code to query OpenAI GPT 4o-mini model to perform the task of interest. For this phase it's crucial to have the following two as inputs:",
             "1) A dataset with observation id, text snippets. Other variables will be discarded before running the main functions.",
-            "2) The two prompts, one for each task for GPT model."
+            "2) The two prompts, one for each task for GPT model.",
+            "Before running, check the folder structure described in the Github repository and replicate it on your machine.
         
             ],
             ask_yourself=[
-                "What pilot size and QC checks will I run first?",
-                "Where do parsed outputs live and how will I version them?",
-                "Which metrics indicate acceptable quality, and how will I visualize/audit?"
+                "Is my dataset ready for the annotation (id, text, missing values, etc)?",
+                "Are my prompts correctly specified and specific enough?",
+                "Is my folder structure organised as the one suggested by the authors?
             ],
             key_prefix="s5_outputs"
         )
 
         # 2) EXAMPLE
         example_card(
-            "Files produced and QC pass",
+            "Annotation output and relevant tweets 💡",
             (
-                "- `annotations.jsonl` (one record per unit)\n"
-                "- `parsed.csv` (schema-conformant table)\n"
-                "- `qc_report.md` (agreement/self-consistency + sample audits)\n"
-                "- `changelog.md` (prompt/schema revisions)\n"
+                "In our paper the annotation produces a tidy panel with:\n"
+                "- Stage-1 flags (relevance of the tweet)\n"
+                "- Character presence (which characters appear)\n"
+                "- Role indicators (whether a character is assigned a role)\n\n"
+                "Tweets are defined as relevant if they refer to our topic and contain at least one of the "
+                "pre-specified characters (neutral or with a role). This yields **309,744 relevant tweets**.\n\n"
+                "Within relevant tweets, a political narrative exists if at least one role assignment is present. "
+                "All other relevant tweets contain characters but with no roles, i.e., in a neutral way.\n\n"
             ),
-            key_prefix="s5_example"
+            key_prefix="s4_annotation_example"
         )
+
 
         # 3) OUTPUT
         output_card(
-            "What you should have at the end",
+            "What you should have at the end ⚠️",
             bullets=[
-                "A **clean annotations file** (JSONL/CSV) matching your schema.",
-                "A **QC summary** (agreement or stability checks, audits).",
-                "A **tidy analysis table** (flags, presence, role dummies) ready for modeling/visualization."
+                "A **clean annotations file** in .csv format matching your schema.",
             ],
             key_prefix="s5_output"
         )
