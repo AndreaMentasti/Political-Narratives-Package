@@ -43,6 +43,7 @@ Inputs:
 - prompt for stage 1 (in the code ```newspaper_snippet_system_message_stage1.json```)
 - prompt for stage 2 (in the code ```newspaper_snippet_system_message_stage2.json```)
 - API key as Environmental variable
+  
 Outputs:
 - Dataset with relevance and characther-role flags, in the following format:
   
