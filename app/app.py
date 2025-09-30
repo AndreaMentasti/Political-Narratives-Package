@@ -99,73 +99,105 @@ def build_guide_context() -> str:
     """Compact knowledge base from the Intro and all 5 steps to steer the LLM."""
     intro = (
         "INTRO SUMMARY\n"
-        "Political narratives influence beliefs and preferences via three archetypal roles: hero, villain, victim. "
-        "Fix a topic T and characters K = H ∪ I (human + instrument). A text is a political narrative if at least "
-        "one character is hero/villain/victim (else neutral-only → not a narrative). The pipeline has 5 steps.\n"
+        "Political narratives influence perceptions, beliefs, and preferences by assigning characters to three archetypal "
+        "roles: hero, villain, or victim. Fix a topic T and a universe of characters K partitioned into human and "
+        "instrument characters. A text unit (e.g., tweet, paragraph, article) constitutes a political narrative if at least "
+        "one appearing character is cast as hero, villain, or victim; if all are neutral, the text is about the topic but does "
+        "not form a political narrative in this strict sense. The pipeline has 5 steps: Topic → Data → Characters → Prompts → Outputs.\n"
     )
 
+    # ---------- STEP 1 ----------
     step1_how = (
-        "- Define a precise topic; balance specificity vs. generality.\n"
-        "- Ensure data availability and metadata (dates/outlets/geo/language).\n"
+        "- Start from a well-defined research question and articulate the topic narrowly enough to be analyzable, yet broad enough to yield variation.\n"
+        "- Make explicit what is IN and what is OUT of scope to prevent drift in downstream steps (characters, prompts, audits).\n"
+        "- Balance specificity (clear boundaries, better precision) vs. generality (transferable insights, broader coverage).\n"
+        "- Check feasibility early: ensure there will be enough content, observable variation, and a manageable set of characters.\n"
+        "- Confirm basic metadata needs can be met later (dates, outlets, geography, language) because these enable grouping, fixed effects, and robustness checks.\n"
     )
     step1_ask = (
-        "- Does the topic surface distinct political narratives?\n"
-        "- Enough identifiable characters?\n"
-        "- Sources available with essential metadata?\n"
-        "- Any risks to communities and mitigation plan?\n"
+        "- Does this topic surface enough distinct narratives and public debate to analyze?\n"
+        "- Are there likely to be identifiable characters (actors, organizations, policies) within those narratives?\n"
+        "- Which sources best capture discourse on this topic, and will I have reliable access to them?\n"
+        "- Can I get essential metadata (dates, outlets, geography, language) for downstream analysis?\n"
+        "- Is the question interesting to researchers/practitioners, and are potential harms identified with mitigation plans?\n"
+        "- Is the scope precise enough to be analyzable without being so narrow that it yields too little variation?\n"
     )
 
+    # ---------- STEP 2 ----------
     step2_how = (
-        "- Choose sources (news, social media, TV/radio/YouTube transcripts, surveys).\n"
-        "- Evaluate coverage, access, quality; decide extraction (API, scraping, keywords).\n"
-        "- Preserve metadata for downstream analysis.\n"
+        "- Choose data sources where the debate actually unfolds (e.g., newspapers, social media, transcribed TV/radio/YouTube, surveys).\n"
+        "- Evaluate coverage (breadth, time window), accessibility (APIs, licenses), and quality (OCR errors, platform bias, sampling limits).\n"
+        "- Decide the extraction approach suited to the source: keyword queries, metadata filters, API pulls, scraping, or manual curation.\n"
+        "- Preserve rich metadata (dates, outlets, authors, geography, language) to enable context-aware analysis and identification strategies.\n"
+        "- Aim for snippet lengths that preserve interpretability for the LLM without overshooting context limits.\n"
     )
     step2_ask = (
-        "- Do sources capture the core debate?\n"
-        "- Sufficient diversity to avoid bias?\n"
-        "- Is snippet length appropriate?\n"
-        "- Legal/technical access? Best extraction method? Time window suitable?\n"
+        "- Do these sources capture the main venues of the political debate for my topic?\n"
+        "- Are sources diverse enough to avoid ideological/outlet/demographic bias?\n"
+        "- Is the extraction method precise (relevant results, manageable false positives/negatives)?\n"
+        "- Do I have legal and technical access (archives, APIs, permission to scrape)?\n"
+        "- Is the time window aligned with the question (pre/post events, policy cycles)?\n"
+        "- Will I retain essential metadata for downstream grouping and robustness?\n"
     )
 
+    # ---------- STEP 3 ----------
     step3_how = (
-        "- Identify relevant characters (human + instrument) guided by your question.\n"
-        "- Balance breadth vs. feasibility; focused sets improve reliability.\n"
-        "- Build via literature, exploratory tools (topic modeling, NER/RELATIO), domain reading; document choices.\n"
+        "- Identify a focused set of characters that speak directly to your research question—both human (individuals/groups/organizations/states) "
+        "and instrument (policies, tools, institutions, technologies).\n"
+        "- Balance scope vs. feasibility: too many characters reduce precision and inflate costs; a concise list improves reliability and interpretability.\n"
+        "- Build the list via literature review, exploratory tools (topic models, entity recognition, RELATIO), and domain reading; document inclusion/exclusion decisions.\n"
+        "- Prefer characters that can plausibly appear in multiple roles (hero, villain, victim) to capture narrative variation.\n"
     )
     step3_ask = (
-        "- Which entities matter most? Human vs. instrument?\n"
-        "- Scope (national/regional/global) and exclusions?\n"
-        "- Which characters recur in literature and exploration?\n"
-        "- How many to track while staying interpretable?\n"
-        "- Feasible for LLM; can each appear as hero/villain/victim?\n"
+        "- Which entities matter most for explaining outcomes in my question?\n"
+        "- Should I treat them as human actors or instrument actors, and why?\n"
+        "- What is the analytic scope (national, regional, global) and which entities are out of scope?\n"
+        "- Which characters recur in prior literature or appear prominently in exploratory tools?\n"
+        "- How many characters can I reliably track while keeping labeling interpretable and statistically useful?\n"
+        "- Are character definitions unambiguous enough for LLM labeling across contexts?\n"
     )
 
-    step4_how = (
-        "- Choose ONE main task and text unit; define JSON schema + guardrails.\n"
-        "- Add 2–4 worked examples incl. near-miss cases.\n"
-    )
-    step4_ask = (
-        "- Is task singular and clear? Unit appropriate?\n"
-        "- Is schema unambiguous and machine-readable? Few-shots cover edge cases?\n"
-    )
-
-    step5_how = (
-        "- Decide batch size/retries; store JSONL/CSV with doc/label/rationale/timestamps.\n"
-        "- Pilot + QC (agreement/self-consistency, golds, audits).\n"
-        "- Assemble tidy table: stage flags, presence m_i,k, role dummies r_i,k.\n"
-    )
-    step5_ask = (
-        "- Pilot size + QC checks?\n"
-        "- Where to version outputs?\n"
-        "- Which quality metrics and audits/visualizations?\n"
-    )
-
-    # Optional: the concrete Step 3 example you added
     step3_example = (
         "STEP 3 EXAMPLE\n"
         "Human: DEVELOPING ECONOMIES | US DEMOCRATS | US REPUBLICANS | CORPORATIONS | US PEOPLE\n"
         "Instrument: EMISSION PRICING | REGULATIONS | FOSSIL INDUSTRY | GREEN TECH | NUCLEAR TECH\n"
-        "Ten characters balance complexity and LLM reliability; prompts will include precise descriptions.\n"
+        "Rationale: Ten characters balance analytic richness with annotation reliability and cost. Clear descriptions provided in Step 4 prompts "
+        "help the model consistently detect mentions and roles.\n"
+    )
+
+    # ---------- STEP 4 ----------
+    step4_how = (
+        "- Choose ONE main task and ONE input unit (e.g., classify a tweet, extract from a paragraph) to avoid prompt sprawl.\n"
+        "- Define a minimal **JSON schema** with stable keys, allowed labels, and short rationales, so outputs are machine-readable and easy to parse.\n"
+        "- Add **2–4 worked examples**, including near-miss edge cases, to anchor the model’s decisions and reduce ambiguity.\n"
+        "- Specify guardrails (cite spans if possible, no external knowledge, be concise, follow schema strictly).\n"
+        "- Co-design prompts with the same model you will use for annotation to align capabilities and output formats.\n"
+        "- This workflow supports two tasks: (a) topic relevance classification; (b) character detection + role assignment.\n"
+    )
+    step4_ask = (
+        "- Is the task singular and clearly stated (no multi-task mixing)?\n"
+        "- Is the input unit appropriate for context vs. latency/throughput trade-offs?\n"
+        "- Is the schema unambiguous, stable, and easy to parse downstream?\n"
+        "- Do few-shots cover both straightforward and tricky cases (near-misses)?\n"
+        "- Are character descriptions precise enough for consistent detection and role assignment?\n"
+        "- Have I added guardrails (no external knowledge, cite spans when possible, be concise)?\n"
+    )
+
+    # ---------- STEP 5 ----------
+    step5_how = (
+        "- Prepare inputs: (1) a dataset with observation ID and text snippet fields; (2) finalized prompts for the two tasks (relevance; character+role).\n"
+        "- Verify local folder structure matches the repository layout so paths for data, prompts, and outputs resolve correctly.\n"
+        "- Decide batch size, retries, and logging. Store outputs in JSONL/CSV with document ID, labels, rationales (if any), and timestamps.\n"
+        "- Pilot first: check agreement/self-consistency, maintain a small set of gold items, and audit failure modes before scaling.\n"
+        "- Assemble the tidy table comprising: stage flags (relevance), character presence indicators, and role dummies.\n"
+        "- Version outputs and keep an audit trail so results are reproducible (model, parameters, prompt versions, time of run).\n"
+    )
+    step5_ask = (
+        "- Is my dataset clean (IDs present, text present, no unexpected missing values)?\n"
+        "- Are the two prompts finalized, specific, and aligned with the selected model?\n"
+        "- Does my local folder structure mirror the repository so all scripts can run end-to-end?\n"
+        "- What QC metrics will I monitor (agreement, self-consistency, error audits), and where will I store them?\n"
+        "- How will I version outputs (filenames, folders, or DVC/Git) for reproducibility?\n"
     )
 
     return (
@@ -177,6 +209,7 @@ def build_guide_context() -> str:
         + "\nSTEP 4 – PROMPTS\n" + step4_how + step4_ask
         + "\nSTEP 5 – OUTPUTS\n" + step5_how + step5_ask
     )
+
 
 @st.cache_resource(show_spinner=True)
 def build_vectorstore():
