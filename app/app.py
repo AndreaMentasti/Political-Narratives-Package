@@ -631,10 +631,12 @@ Analyze it in the context of US political discourse on climate change and respon
 
         # 1) GUIDE
         question_card(
-            "Annotation runs, storage, QC, and assembly",
+            "Guide - GPT Annotation with provided code",
             how_to=[
-                "Decide batch size, retries/timeouts; store JSONL/CSV with doc_id, span_id, label, rationale, annotator, timestamp.",
-                "Run a small pilot; compute agreement/self-consistency; add gold items; audit outputs.",
+                "After the design of the prompts, it's time to run the code to query OpenAI GPT 4o-mini model to perform the task of interest."
+                "For this phase it's necessary to have the right inputs:",
+                "A dataset with observation id, text snippets. Other variables will be discarded before running the main functions.",
+                "The two prompts, one for each task for GPT model. "
                 "Assemble tidy panel with stage-1 flags, presence m_i,k, and role dummies r_i,k."
             ],
             ask_yourself=[
