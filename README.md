@@ -43,6 +43,22 @@ Inputs:
 - prompt for stage 1 (in the code ```newspaper_snippet_system_message_stage1.json```)
 - prompt for stage 2 (in the code ```newspaper_snippet_system_message_stage2.json```)
 - API key as Environmental variable
+Outputs:
+- Dataset with relevance and characther-role flags, in the following format:
+  | snippet_id | content (truncated) | relevance | developing | democrats | republican | corporations | people | pricing | banning | fossil | green | nuclear |
+|-----------:|---------------------|:---------:|:----------:|:---------:|:----------:|:------------:|:------:|:------:|:------:|:------:|:-----:|:------:|
+| 1_1  | If you listen…       | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| 1_2  | But is it po…        | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 1_3  | In fact, on…         | 3 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 |
+| 1_4  | One way to…          | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 |
+| 1_5  | It’s also wo…        | 3 | 0 | 0 | 0 | 0 | 4 | 2 | 0 | 4 | 0 | 0 |
+| 1_6  | The politi…          | 3 | 0 | 0 | 0 | 1 | 0 | 2 | 0 | 4 | 0 | 0 |
+| 1_7  | The results…         | 3 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 | 0 | 0 |
+| 1_8  | So the fact…         | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 1_9  | So climate…          | 3 | 0 | 0 | 0 | 0 | 0 | 4 | 4 | 0 | 0 | 0 |
+| 1_10 | (Let’s leav…         | 3 | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
+| 1_11 | It’s almost…         | 3 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 |
+
 
 ## Requirements for the Guide APP 📊
 - Python 3.10+
