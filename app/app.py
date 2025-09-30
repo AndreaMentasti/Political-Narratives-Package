@@ -21,7 +21,7 @@ CHUNK_OVERLAP = 200
 PAPER_PATH = "data/paper.pdf"
 
 FIXED_TEMPERATURE = 0.1
-OPENAI_MAX_TOKENS = 400
+OPENAI_MAX_TOKENS = 2000
 DEFAULT_LOCAL_MODEL = "llama3.2:3b"
 
 # --- robust truthy parsing ---
@@ -263,25 +263,30 @@ GUIDE_CONTEXT = build_guide_context()
 GUIDE_AWARE_PROMPT = PromptTemplate(
     input_variables=["context", "question"],
     template=(
-        "You are a careful research assistant.\n\n"
-        "PRIMARY OBJECTIVE:\n"
-        "Respond by GUIDING the user through the 5-step pipeline and the Intro. "
-        "Explicitly reference relevant steps by number (e.g., 'Step 2 – Data', 'Step 3 – Characters') and "
-        "use the guidance below to structure your answer. Then support with excerpts from the paper.\n\n"
+        "You are a precise, independent research assistant for the Political Narratives project.\n\n"
+        "HOW TO ANSWER:\n"
+        "1) Start with a direct answer to the user's question in 2–4 sentences.\n"
+        "2) Only reference Guide steps when explicitly asked about a step (e.g., 'Step 3', 'characters') or when it clearly adds value.\n"
+        "   If so, provide a focused deep dive into the single most relevant step (do NOT enumerate all steps).\n"
+        "   Use the exact step label (e.g., 'Step 3 – Characters') and summarize the key guidance.\n"
+        "3) If the user asks about core definitions or concepts (e.g., 'What is a political narrative?'), use the Intro to explain clearly.\n"
+        "4) Add practical tips/examples from your own judgment when useful, but keep them aligned with the Guide.\n"
+        "5) Support factual claims with short evidence from the paper excerpts when possible; if details are missing, say so briefly.\n\n"
         "GUIDE (Intro + Steps 1–5):\n"
         f"{GUIDE_CONTEXT}\n\n"
-        "Give examples from your knowledge and your own judgement. Be original, but reflect on the guidelines.\n\n"
         "PAPER EXCERPTS (for evidence/details):\n"
         "{context}\n\n"
-        "USER QUESTION:\n{question}\n\n"
-        "RESPONSE FORMAT (follow this):\n"
-        "1) Brief answer in 1–2 sentences.\n"
-        "2) Step-by-step guidance (cite specific steps: 1→5) tailored to the question.\n"
-        "3) Evidence/Notes from the paper (quote or summarize the relevant excerpt).\n"
-        "4) Next actions: a short checklist the user can do now.\n"
-        "If the paper excerpts do not contain needed details, say so clearly and rely on the Guide to propose a path forward."
+        "USER QUESTION:\n"
+        "{question}\n\n"
+        "RESPONSE FORMAT:\n"
+        "- Direct answer.\n"
+        "- If relevant: Deep dive on the single most relevant Step N (or Intro concept), with 3–6 bullets.\n"
+        "- Evidence/Notes from the paper: 1–3 short bullets quoting or summarizing the provided excerpts (omit if not applicable).\n"
+        "- Optional next actions: 3–5 checklist items.\n"
+        "Style: conversational, concise, and confident like ChatGPT; avoid listing all steps unless asked."
     ),
 )
+
 
 
 # ───────────────────────── Helpers (Guide tab) ─────────────────────────
