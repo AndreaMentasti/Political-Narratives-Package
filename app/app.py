@@ -642,7 +642,7 @@ Analyze it in the context of US political discourse on climate change and respon
             ask_yourself=[
                 "Is my dataset ready for the annotation (id, text, missing values, etc)?",
                 "Are my prompts correctly specified and specific enough?",
-                "Is my folder structure organised as the one suggested by the authors?
+                "Is my folder structure organised as the one suggested by the authors?"
             ],
             key_prefix="s5_outputs"
         )
