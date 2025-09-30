@@ -779,8 +779,10 @@ with tab_qa:
             "and supported by excerpts from the paper of reference."
         )
 
-        retriever = vs.as_retriever(search_kwargs={"k": 6})
-
+        retriever = vs.as_retriever(
+            search_kwargs={"k": 12, "fetch_k": 24},
+            search_type="mmr"
+        )
         # Always use the guide-aware prompt
         qa_prompt = GUIDE_AWARE_PROMPT
 
