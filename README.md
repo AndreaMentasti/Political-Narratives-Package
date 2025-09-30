@@ -45,11 +45,12 @@ Inputs:
 - API key as Environmental variable
 Outputs:
 - Dataset with relevance and characther-role flags, in the following format:
-  | id   | content            | rel | dev | dem | rep | corp | ppl | pric | ban | fos | green | nuc |
-  |------|--------------------|-----|-----|-----|-----|------|-----|------|-----|-----|-------|-----|
-  | 1_1  | If you listen…     |  3  |  0  |  0  |  0  |  0   |  0  |  0   |  0  |  1  |   0   |  0  |
-  | 1_2  | But is it po…      |  3  |  0  |  0  |  0  |  0   |  0  |  0   |  0  |  0  |   0   |  0  |
-  | 1_3  | In fact, on…       |  3  |  0  |  0  |  0  |  0   |  0  |  2   |  0  |  0  |   0   |  0  |
+  
+  | id   | content            | relevance | dev | dem | rep | corp | ppl | pric | ban | fos | green | nuc |
+  |------|--------------------|-----------|-----|-----|-----|------|-----|------|-----|-----|-------|-----|
+  | 1_1  | If you listen…     |     3     |  0  |  0  |  2  |  0   |  0  |  0   |  0  |  1  |   0   |  0  |
+  | 1_2  | But is it po…      |     3     |  0  |  0  |  0  |  0   |  0  |  0   |  0  |  0  |   0   |  0  |
+  | 1_3  | In fact, on…       |     3     |  0  |  1  |  0  |  0   |  0  |  2   |  0  |  0  |   0   |  0  |
 
 
 ## Requirements for the Guide APP 📊
