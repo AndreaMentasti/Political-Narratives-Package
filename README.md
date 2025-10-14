@@ -9,7 +9,7 @@ The online APP allows you to navigate the steps to prepare your research. You ca
 The APP can be used online through the above link, or downloaded and run locally. The online version only uses OpenAI API queries and therefore requires an API key from the user’s OpenAI account. In the local version, you can decide whether to use an API key, or to use Ollama LLM (we provide the steps to download it in this guide). 
 
 ## Requirements for the Political Narrative replication ​🗂️​
-- The user needs to create an environment using the requirements in the ````requirements/```` folder (preferred Anaconda for compliance with how the requirement file is written)
+- The user needs to create an environment using the requirements in the ````replication_material/requirements/```` folder (preferred Anaconda for compliance with how the requirement file is written)
   ```bash
   conda env create -f acn_data_analysis.yml
   conda activate acn_data_analysis
