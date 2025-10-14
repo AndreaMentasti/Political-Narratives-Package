@@ -54,7 +54,7 @@ Outputs:
   | 1_3  | In fact, on…       |     3     |  0  |  1  |  0  |  0   |  0  |  2   |  0  |  0  |   0   |  0  |
 
 
-## Requirements for the Guide APP 📊
+## Requirements for the Local Version of the Guide APP 📊
 - Python 3.10+
 - Install [Ollama](https://ollama.com) and pull a small model:
   ```bash
@@ -72,14 +72,14 @@ Outputs:
   ```bash
   python -m streamlit run app\app.py
 
-### Optional: Upgrade answers with OpenAI (BYO key)
+### Optional: Upgrade answers with OpenAI
 By default the app runs fully local with Ollama (free). If you want higher-quality guidance and faster responses:
 1. Choose **Provider → OpenAI (bring your own key)** in the sidebar.
 2. Paste your **OpenAI API key**.
 To paste an OpenAI API key you must own an account from [OpenAI](https://platform.openai.com/), and then create an [API key](https://platform.openai.com/api-keys).
    
 
-## Try the App
+## Try the Online App
 
 👉 [Launch the Political Narratives App](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/)
 
