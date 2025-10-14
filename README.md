@@ -23,7 +23,7 @@ The APP can be used online through the above link, or downloaded and run locally
 - Open the python script in this environment.
 - To run the script, the following folder structure is needed:
   ```bash
-  C:\Users\GustavPirich\Dropbox\climate_nature_narratives\
+  C:\Users\AndreaMentasti\Dropbox\climate_nature_narratives\
   ├─ input\
   │  └─ openAI\
   │     ├─ newspaper_snippet_system_message_stage1.json     # system prompt for stage 1
