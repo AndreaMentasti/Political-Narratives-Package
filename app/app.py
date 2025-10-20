@@ -786,12 +786,12 @@ with tab_qa:
         qa_prompt = GUIDE_AWARE_PROMPT
 
        doc_chain = create_stuff_documents_chain(llm, GUIDE_AWARE_PROMPT)
-qa = create_retrieval_chain(retriever, doc_chain)
+        qa = create_retrieval_chain(retriever, doc_chain)
 
-# Input key must be "input"
-out = qa.invoke({"input": q})
+        # Input key must be "input"
+        out = qa.invoke({"input": q})
 
-# The answer lives under "answer"
-st.write(out["answer"])
+        # The answer lives under "answer"
+        st.write(out["answer"])
 
 
