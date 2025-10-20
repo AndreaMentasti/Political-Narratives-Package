@@ -3,10 +3,10 @@ streamlit>=1.45,<1.51
 
 pypdf==4.2.0
 
-# Python 3.13-compatible FAISS wheel
+# Python 3.13 wheel exists
 faiss-cpu==1.12.0
 
-# LangChain 0.2 "split" family
+# LangChain 0.2 "split" packages (versions that EXIST)
 langchain==0.2.16
 langchain-core==0.2.41
 langchain-community==0.2.19
@@ -18,5 +18,6 @@ langchain-ollama==0.1.2
 # Embeddings + OpenAI SDK
 sentence-transformers==2.7.0
 openai==1.51.2
+
 
 
