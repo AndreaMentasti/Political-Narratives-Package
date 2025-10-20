@@ -1,23 +1,23 @@
-# Let Streamlit Cloud’s preinstalled version stand
+# Streamlit
 streamlit>=1.45,<1.51
 
+# PDF support
 pypdf==4.2.0
 
-# Python 3.13 wheel exists
+# Vector store
 faiss-cpu==1.12.0
 
-# LangChain 0.2 "split" packages (versions that EXIST)
+# LangChain ecosystem (split package stack)
 langchain==0.2.16
 langchain-core==0.2.41
-langchain-community==0.2.19
+langchain-community>=0.2.16,<0.3
 langchain-openai==0.2.6
 langchain-text-splitters==0.2.2
-langchain-huggingface==0.1.2
 langchain-ollama==0.1.2
 
-# Embeddings + OpenAI SDK
-sentence-transformers==2.7.0
+# OpenAI SDK
 openai==1.51.2
+
 
 
 
