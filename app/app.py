@@ -1,15 +1,13 @@
 import os
 import streamlit as st
 from pypdf import PdfReader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_core.documents import Document
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.docstore.document import Document
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain.chains import create_retrieval_chain
-
+from langchain.chains import RetrievalQA
+from langchain.prompts import PromptTemplate
 
 # Optional local chat via Ollama (only if ALLOW_LOCAL is truthy)
 try:
@@ -262,29 +260,32 @@ def get_llm(provider: str, user_key: str | None, local_model: str):
 
 GUIDE_CONTEXT = build_guide_context()
 
-GUIDE_AWARE_PROMPT = ChatPromptTemplate.from_template(
-    "You are a precise, independent research assistant for the Political Narratives project.\n\n"
-    "HOW TO ANSWER:\n"
-    "1) Start with a direct answer to the user's question in 2–4 sentences.\n"
-    "2) Only reference Guide steps when explicitly asked about a step (e.g., 'Step 3', 'characters') or when it clearly adds value.\n"
-    "   If so, provide a focused deep dive into the single most relevant step (do NOT enumerate all steps).\n"
-    "   Use the exact step label (e.g., 'Step 3 – Characters') and summarize the key guidance.\n"
-    "3) If the user asks about core definitions or concepts (e.g., 'What is a political narrative?'), use the Intro to explain clearly.\n"
-    "4) Add practical tips/examples from your own judgment when useful, but keep them aligned with the Guide.\n"
-    "5) Support factual claims with short evidence from the paper excerpts when possible; if details are missing, say so briefly.\n\n"
-    "GUIDE (Intro + Steps 1–5):\n"
-    f"{GUIDE_CONTEXT}\n\n"
-    "PAPER EXCERPTS (for evidence/details):\n"
-    "{context}\n\n"
-    "USER QUESTION:\n"
-    "{question}\n\n"
-    "RESPONSE FORMAT:\n"
-    "- Direct answer very detailed also from your own knowledge, not only from the steps and guide.\n"
-    "- If relevant: Deep dive on the single most relevant Step N (or Intro concept), with 3–6 bullets.\n"
-    "- Optional next actions: 3–5 checklist items.\n"
-    "Style: conversational, concise, and confident like ChatGPT; avoid listing all steps unless asked."
+GUIDE_AWARE_PROMPT = PromptTemplate(
+    input_variables=["context", "question"],
+    template=(
+        "You are a precise, independent research assistant for the Political Narratives project.\n\n"
+        "HOW TO ANSWER:\n"
+        "1) Start with a direct answer to the user's question in 2–4 sentences.\n"
+        "2) Only reference Guide steps when explicitly asked about a step (e.g., 'Step 3', 'characters') or when it clearly adds value.\n"
+        "   If so, provide a focused deep dive into the single most relevant step (do NOT enumerate all steps).\n"
+        "   Use the exact step label (e.g., 'Step 3 – Characters') and summarize the key guidance.\n"
+        "3) If the user asks about core definitions or concepts (e.g., 'What is a political narrative?'), use the Intro to explain clearly.\n"
+        "4) Add practical tips/examples from your own judgment when useful, but keep them aligned with the Guide.\n"
+        "5) Support factual claims with short evidence from the paper excerpts when possible; if details are missing, say so briefly.\n\n"
+        "GUIDE (Intro + Steps 1–5):\n"
+        f"{GUIDE_CONTEXT}\n\n"
+        "PAPER EXCERPTS (for evidence/details):\n"
+        "{context}\n\n"
+        "USER QUESTION:\n"
+        "{question}\n\n"
+        "RESPONSE FORMAT:\n"
+        "- Direct answer.\n"
+        "- Direct answer very detailed also from your own knowledge, not only from the steps and guide.\n"
+        "- If relevant: Deep dive on the single most relevant Step N (or Intro concept), with 3–6 bullets.\n"
+        "- Optional next actions: 3–5 checklist items.\n"
+        "Style: conversational, concise, and confident like ChatGPT; avoid listing all steps unless asked."
+    ),
 )
-
 
 
 
@@ -759,11 +760,10 @@ with tab_guide:
     render_guide_tab()
 
 # Tab 2 — Q&A (guide-aware flow)
-# Tab 2 — Q&A (guide-aware flow)
 with tab_qa:
     st.markdown(
-        "Use this Q&A to ask focused questions about the steps to perform the **Political Narratives** analysis. "
-        "Be precise and reference to the steps or the paper itself."
+    "Use this Q&A to ask focused questions about the steps to perform the **Political Narratives** analysis. "
+    "Be precise and reference to the steps or the paper itself."
     )
     if vs is None:
         st.info("No documents indexed. Add your paper at data/paper.pdf and rerun.")
@@ -783,15 +783,30 @@ with tab_qa:
             search_kwargs={"k": 12, "fetch_k": 24},
             search_type="mmr"
         )
+        # Always use the guide-aware prompt
+        qa_prompt = GUIDE_AWARE_PROMPT
 
-        # Build the doc chain with the chat prompt
-        doc_chain = create_stuff_documents_chain(llm, GUIDE_AWARE_PROMPT)
-        qa = create_retrieval_chain(retriever, doc_chain)
+        qa = RetrievalQA.from_chain_type(
+            llm=llm,
+            retriever=retriever,
+            chain_type="stuff",
+            chain_type_kwargs={"prompt": qa_prompt},
+            return_source_documents=False,
+        )
 
-        # Ask the user and run only if they typed something
+        current_step = st.session_state.get("guide", {}).get("current_step")
+        st.caption(
+            "Ask questions about the paper and the Political Narratives framework. "
+            "The assistant will guide you using the Intro + Steps 1–5."
+        )
+
         q = st.text_input("Your question", key="qa_question_input")
         if q:
-            out = qa.invoke({"input": q})
-            st.write(out["answer"])
+            if isinstance(current_step, int):
+                q = f"(Focus first on Step {current_step}.) " + q
+
+            with st.spinner("Thinking..."):
+                out = qa({"query": q})
+            st.write(out["result"])
 
 
