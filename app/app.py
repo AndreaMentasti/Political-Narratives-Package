@@ -4,7 +4,7 @@ import streamlit as st
 st.set_page_config(page_title="Political Narratives Guide", layout="wide")
 st.title("Political Narratives Guide")
 
-# ───────────────────────── Helpers (Guide tab) ─────────────────────────
+# ───────────────────────── Helpers (Guide page) ─────────────────────────
 def _init_guide_state():
     # notes: per-step free text
     # done:     which checkboxes are ticked
@@ -84,7 +84,6 @@ def render_step(step: int):
         st.subheader("Step 1 — Select and define the topic")
         st.caption("A precise topic definition anchors character selection and downstream analysis.")
 
-        # 1) GUIDE
         question_card(
             "Guide: define a clear topic ✅",
             how_to=[
@@ -107,7 +106,6 @@ def render_step(step: int):
             key_prefix="s1_scope"
         )
 
-        # 2) EXAMPLE
         example_card(
             "Focusing on policy narratives within climate change 💡",
             (
@@ -119,7 +117,6 @@ def render_step(step: int):
             key_prefix="s1_example"
         )
 
-        # 3) OUTPUT
         output_card(
             "What you should have before Step 2 ⚠️",
             bullets=[
@@ -138,7 +135,6 @@ def render_step(step: int):
         st.subheader("Step 2 — Identify the source and extract data")
         st.caption("Choose sources (e.g., newspapers, social media, transcribed TV/radio/YouTube, surveys).")
 
-        # 1) GUIDE
         question_card(
             "Guide: source selection & data extraction ✅",
             how_to=[
@@ -161,7 +157,6 @@ def render_step(step: int):
             key_prefix="s2_sources"
         )
 
-        # 2) EXAMPLE
         example_card(
             "Extracting data using Twitter Historical APIv2 💡",
             (
@@ -172,7 +167,6 @@ def render_step(step: int):
             key_prefix="s2_example"
         )
 
-        # 3) OUTPUT
         output_card(
             "What you should have before Step 3 ⚠️",
             bullets=[
@@ -239,18 +233,19 @@ def render_step(step: int):
                      value=st.session_state["guide"]["notes"][3], height=120)
         st.session_state["guide"]["notes"][3] = st.session_state["notes_s3"]
 
-    # --- STEP 4 ---
+    # --- STEP 4 (restored) ---
     if step == 4:
         st.subheader("Step 4 — Prepare the prompt(s)")
         st.caption("Specify the mapping from raw text to (M, R) with a simple, consistent schema.")
 
+        # 1) GUIDE
         question_card(
             "Guide: prepare the prompt(s) ✅",
             how_to=[
                 "Choose ONE main task (classify / extract / summarize / compare / generate) and one input unit (headline / paragraph / article / tweet).",
                 "Define a **JSON schema** (keys, allowed labels, brief rationale) and **guardrails** (e.g., cite spans, no external knowledge, be concise).",
                 "Add **2–4 worked examples** (cover easy + tricky edge cases).",
-                "Co-design prompts with the same model you will use for annotation to align capabilities and outputs.",
+                "Co-design prompts with the same model you will use for annotation (e.g., GPT-4o-mini via OpenAI) to align capabilities and outputs.",
                 "This package supports two tasks: (a) topic relevance classification and (b) character detection + role assignment."
             ],
             ask_yourself=[
@@ -264,6 +259,7 @@ def render_step(step: int):
             key_prefix="s4_prompt"
         )
 
+        # 2) EXAMPLE
         example_card(
             "Prompt design for the political narratives of climate change 💡",
             (
@@ -278,11 +274,12 @@ def render_step(step: int):
                 "- Villain (1) | Hero (2) | Victim (3) | No role (4)\n\n"
                 "Characters: Developing Economies, US Democrats, US Republicans, Corporations, US People, "
                 "Emission Pricing Tools, Regulation Policies, Fossil Fuels, Green Technologies, Nuclear Energy.\n"
-                "Output JSON contains keys `a`–`j` (one per character)."
+                "Output JSON contains keys a–j (one per character)."
             ),
             key_prefix="s4_example"
         )
 
+        # 3) OUTPUT
         output_card(
             "What you should have before Step 5 ⚠️",
             bullets=[
@@ -293,6 +290,66 @@ def render_step(step: int):
             key_prefix="s4_output"
         )
 
+        # ——— PROMPT PASTE AREAS (stores in session_state) ———
+        st.markdown("### Paste your JSON prompts")
+        st.caption("Provide machine-readable JSON specs for Stage 1 (relevance classification) and Stage 2 (character/role assignment). You can find the original prompts for *Gehring and Grigoletto (2025) in the GitHub repository.")
+
+        # Load defaults from uploaded JSON system messages
+        default_relevance_json = """{
+  "SYSTEM_MESSAGE": "You are an average US citizen. The user will provide the content of a three-sentence newspaper article excerpt published by a US newspaper between 2010 and 2021. 
+Your task is to analyze the excerpt within the context of US political discourse, particularly in relation to climate change. Respond in JSON format.
+
+1. Relevance Check: Analyze the excerpt in the context of US climate change discussion and determine its relevance. Provide one of the following values:
+   - 0 (irrelevant): If the excerpt does not discuss climate change in a meaningful way. For example, if it only includes a hashtag (like #climatechange) or a passing reference but does not engage in any discussion about climate change or related policies, it should be considered irrelevant.
+   - 1 (assert): If the excerpt asserts the existence of climate change but does not engage with specific policies or actions related to it. This includes excerpts that acknowledge climate change as an issue without going deeper into details.
+   - 2 (deny): If the excerpt denies the existence or severity of man-made climate change, referring to it as a hoax, scam, or fraud, or using sarcasm or language that undermines the reality of climate change.
+   - 3 (relevant): If the excerpt discusses climate change or related policies in a substantive way. This includes any excerpt that debates, critiques, or supports policies or actions related to climate change, as well as conversations on how to combat or adapt to climate change.
+
+Respond in JSON format, returning the value in the key \\"r\\"."
+}"""
+
+        default_roles_json = """{
+  "SYSTEM_MESSAGE": "You are an average US citizen. The user will provide a three-sentence US newspaper excerpt (2010–2021). 
+Analyze it in the context of US political discourse on climate change and respond in JSON format.
+
+1. Character Analysis: For each mentioned character, assign a role:
+   - 1 = Villain: contributes to problems, opposes positive change, engages in harmful actions.
+   - 2 = Hero: leads efforts to combat climate change, promotes environmental policies, acts commendably.
+   - 3 = Victim: suffers unfairly, is attacked, or endures consequences of climate change or others’ actions.
+   - 4 = No role: mentioned but not clearly cast as Villain/Hero/Victim, or context is neutral/ambiguous.
+
+2. Characters to evaluate (keys a–j):
+   a: Developing Economies — emerging and poorer nations (incl. BRICS). Mentions of their governments, representatives, or citizens in the context of climate negotiations or responsibilities.
+   b: US Democrats — politicians or public figures tied to the Democratic Party (e.g., Biden, Obama, Pelosi). References to Democratic climate policies, proposals, or positions.
+   c: US Republicans — politicians or public figures tied to the Republican Party (e.g., Trump, McConnell, Cruz). Mentions of opposition or support to climate-related policies from the GOP side.
+   d: Corporations and Industry — private-sector actors including large companies, SMEs, banks, CEOs, and industry lobbies. Includes mentions of energy, tech, finance, or manufacturing in the climate context.
+   e: US People — the collective public, workers, voters, youth, and grassroots movements (e.g., Sunrise Movement, Extinction Rebellion). Includes references to citizens as beneficiaries, victims, or agents of climate action.
+   f: Emission Pricing Tools — market-based policies like carbon taxes, cap-and-trade, carbon markets, or pollution credits. References to pricing carbon as a solution or a burden.
+   g: Regulation Policies — government bans or regulations (e.g., banning fracking, fossil phaseouts, plastics bans, degrowth/anti-capitalist proposals). Mentions of regulatory tools to address climate change.
+   h: Fossil Fuels — oil, gas, coal, and related infrastructure (power plants, pipelines). Mentions in the context of pollution, energy needs, or phaseout debates.
+   i: Green Technologies — renewable and low-carbon solutions like solar, wind, EVs, hydrogen, batteries, geothermal. Mentions of their potential, adoption, or challenges.
+   j: Nuclear Energy — nuclear power, fission, or fusion technologies. Mentions of nuclear plants or research in the climate policy debate.
+
+3. Final Output: Respond with a JSON object containing keys a–j. Each value must be 0 (not mentioned) or 1–4 (role as defined above)."
+}"""
+
+        # Initialize session storage
+        st.session_state.setdefault("s4_relevance_json", default_relevance_json)
+        st.session_state.setdefault("s4_roles_json", default_roles_json)
+
+        st.text_area(
+            "🧩 (a) Stage 1 — Relevance prompt JSON",
+            key="s4_relevance_json",
+            height=320
+        )
+
+        st.text_area(
+            "🧩 (b) Stage 2 — Character & role prompt JSON",
+            key="s4_roles_json",
+            height=500
+        )
+
+        # Optional free notes area (consistent with other steps)
         st.text_area(
             "Annotations for Step 4 (optional)",
             key="notes_s4",
@@ -324,7 +381,7 @@ def render_step(step: int):
         )
 
         example_card(
-            "Annotation output and relevant tweets 💡",
+            "Annotation output and relevant texts 💡",
             (
                 "A typical tidy output includes:\n"
                 "- Stage-1 flags (relevance of the text)\n"
@@ -384,6 +441,7 @@ def render_guide_page():
 
 # ───────────────────────── Single-page App ─────────────────────────
 render_guide_page()
+
 
 
 
