@@ -1,7 +1,15 @@
 streamlit==1.37.1
 pypdf==4.2.0
 faiss-cpu==1.8.0.post1
+
+# LangChain 0.1 family (legacy import paths)
 langchain==0.1.20
+langchain-core==0.1.52
 langchain-community==0.0.37
 langchain-openai==0.1.7
+# DO NOT install langchain-text-splitters / langchain-huggingface / langchain-ollama here
+
+# Embeddings + deps
 sentence-transformers==2.7.0
+openai==1.51.2
+
