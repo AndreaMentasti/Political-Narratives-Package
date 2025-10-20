@@ -759,10 +759,11 @@ with tab_guide:
     render_guide_tab()
 
 # Tab 2 — Q&A (guide-aware flow)
+# Tab 2 — Q&A (guide-aware flow)
 with tab_qa:
     st.markdown(
-    "Use this Q&A to ask focused questions about the steps to perform the **Political Narratives** analysis. "
-    "Be precise and reference to the steps or the paper itself."
+        "Use this Q&A to ask focused questions about the steps to perform the **Political Narratives** analysis. "
+        "Be precise and reference to the steps or the paper itself."
     )
     if vs is None:
         st.info("No documents indexed. Add your paper at data/paper.pdf and rerun.")
@@ -782,16 +783,15 @@ with tab_qa:
             search_kwargs={"k": 12, "fetch_k": 24},
             search_type="mmr"
         )
-        # Always use the guide-aware prompt
-        qa_prompt = GUIDE_AWARE_PROMPT
 
-       doc_chain = create_stuff_documents_chain(llm, GUIDE_AWARE_PROMPT)
+        # Build the doc chain with the chat prompt
+        doc_chain = create_stuff_documents_chain(llm, GUIDE_AWARE_PROMPT)
         qa = create_retrieval_chain(retriever, doc_chain)
 
-        # Input key must be "input"
-        out = qa.invoke({"input": q})
-
-        # The answer lives under "answer"
-        st.write(out["answer"])
+        # Ask the user and run only if they typed something
+        q = st.text_input("Your question", key="qa_question_input")
+        if q:
+            out = qa.invoke({"input": q})
+            st.write(out["answer"])
 
 
