@@ -4,7 +4,7 @@ from pypdf import PdfReader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 from langchain_community.vectorstores import FAISS
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain_openai import ChatOpenAI
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
@@ -69,6 +69,8 @@ with st.sidebar:
             help="Paste your key (starts with sk- or sk-proj-). Used only in your session.",
             key="openai_key_input",
         )
+        if user_key:
+            os.environ["OPENAI_API_KEY"] = user_key
     elif ALLOW_LOCAL:
         local_model = st.selectbox(
             "Ollama model",
@@ -225,7 +227,7 @@ def build_vectorstore():
     if not all_docs:
         return None
 
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
     return FAISS.from_documents(all_docs, embeddings)
 
 vs = build_vectorstore()
