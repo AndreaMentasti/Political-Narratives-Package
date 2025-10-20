@@ -1,20 +1,19 @@
 import os
 import streamlit as st
 from pypdf import PdfReader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.docstore.document import Document
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_core.documents import Document
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_openai import ChatOpenAI
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 
 # Optional local chat via Ollama (only if ALLOW_LOCAL is truthy)
 try:
-    from langchain_community.chat_models import ChatOllama
+    from langchain_ollama import ChatOllama
 except Exception:
-    ChatOllama = None  # not available / not needed online
-
+    ChatOllama = None
 # ───────────────────────── Constants ─────────────────────────
 CHUNK_SIZE = 1200
 CHUNK_OVERLAP = 200
