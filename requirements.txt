@@ -1,16 +1,23 @@
-streamlit==1.37.1
-pypdf==4.2.0
-faiss-cpu==1.8.0.post1
+# Let Streamlit Cloud’s preinstalled version stand (optional to omit entirely)
+streamlit>=1.45,<1.51
 
-# LangChain 0.2 “split” packages
-langchain==0.2.14
-langchain-core==0.2.36
-langchain-community==0.2.12
-langchain-openai==0.2.5
+pypdf==4.2.0
+
+# IMPORTANT: pick a faiss-cpu that exists for Python 3.13
+faiss-cpu==1.12.0
+
+# LangChain 0.2 "split" family (works with your updated imports)
+langchain==0.2.16
+langchain-core==0.2.41
+langchain-community==0.2.25
+langchain-openai==0.2.6
 langchain-text-splitters==0.2.2
 langchain-huggingface==0.1.2
-langchain-ollama==0.1.1
+langchain-ollama==0.1.2
 
+# Embeddings stack
 sentence-transformers==2.7.0
+
+# OpenAI SDK that langchain-openai 0.2.x expects
 openai==1.51.2
 
