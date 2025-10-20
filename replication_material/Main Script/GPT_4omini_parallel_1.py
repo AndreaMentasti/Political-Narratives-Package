@@ -1,7 +1,7 @@
 #%% Running Cell 1
 # gpt_parallel.py
 # --------------------------------------------------------------------
-# Author: Andrea Mentasti (adaptation of Remo Agovic' code) 
+# Author: Matteo Grigoletto, Andrea Mentasti (adaptation of Remo Agovic' code) 
 # Date: 2025-10-16
 #
 # Description: Parallel classification with checkpoint-based resumption.
@@ -74,8 +74,7 @@ JSON_SCHEMA = {
 # -----------------------------
 
 # Adjust this path to your main folder:
-#main = r"C:\Users\AndreaMentasti\Dropbox\Narratives, identity, zero-sum thinking and political reforms"
-main = r"C:\Users\bracl\Dropbox\Narratives, identity, zero-sum thinking and political reforms"
+main = r"C:\Users\AndreaMentasti\Political_Narratives_Project"
 
 # Base folders for output
 output_data_folder = os.path.join(main, "output", "data", "openai_output")
@@ -108,7 +107,7 @@ checkpoint_path = os.path.join(run_partial_results_folder, "checkpoint.txt")
 csv_path = os.path.join(main, "data", "output", "opinion_question.csv") # depending on your data you might want to convert .csv in .feather
 path_df = os.path.join(main, "data", "output", "opinion_question.feather")
 
-prompt_path = os.path.join(main, "code", "prompts", "system_message_peru.json") # This to be uploaded
+prompt_path = os.path.join(main, "code", "prompts", "system_message.json") # This to be uploaded
 
 # Load the system prompt
 with open(prompt_path, 'r', encoding='utf-8') as file:
@@ -452,4 +451,5 @@ if __name__ == "__main__":
     run_classification_in_chunks(chunk_size=100)
 
     # 2) (Optional) Merge partial results into one final CSV
+
     merge_partial_results_into_final()
