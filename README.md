@@ -61,10 +61,10 @@ This key is personal and directly linked to the user's wallet, so it's important
 According to this structure, you need to fill the ````prompts/```` folder with the system message of the stage.  
 IMPORTANT: your input ````.csv```` must contain a column called ```` id```` and a colummn called ````text````.
 
-- Make minimal changes to the Python script.
-  Change the directory: ```` main = r"D:\your directory"````
-  
-  Insert your dataset: ```` csv_path = os.path.join(main, "data", "output", "your_data.csv")````
+- Make minimal changes to the Python script: change the directory and insert your dataset:
+- ````bash
+  main = r"D:\your directory"
+  csv_path = os.path.join(main, "data", "output", "your_data.csv")
   
 ## Inputs - Output map
 Inputs:
