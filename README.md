@@ -63,6 +63,7 @@ IMPORTANT: your input ````.csv```` must contain a column called ```` id```` and 
 
 - Make minimal changes to the Python script.
   Change the directory: ```` main = r"D:\your directory"````
+  
   Insert your dataset: ```` csv_path = os.path.join(main, "data", "output", "your_data.csv")````
   
 ## Inputs - Output map
