@@ -17,6 +17,7 @@ There are two ways to approach this package:
 2) The second approach is useful for less expereinced users that needs to completely shape their research. Through the [online guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) they can organize their research from scraps thanks to a set of very useful instructions and best practices.
 
 ## Instructions to adopt the Political Narrative framework ​🗂️​
+We provide here a step-by-step explanation on how to adapt the code and run it on your machine.
 - The user needs to create an environment using the requirements in the ````replication_material/requirements/```` folder (preferred Anaconda for compliance with how the requirement file is written)
   ```bash
   conda env create -f acn_data_analysis.yml
