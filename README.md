@@ -116,9 +116,3 @@ Outputs:
   | 1_3  | In fact, on…       |     3     |  0  |  1  |  0  |  0   |  0  |  2   |  0  |  0  |   0   |  0  |
 
 
-👉 [Launch the Political Narratives App](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/)
-
-You can:
-- Navigate the steps to analyse Political Narratives.
-- Reflect on the main questions you should answer before starting your analysis.
-- Build the steps of your research.
