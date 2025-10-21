@@ -20,7 +20,8 @@ There are two ways to approach this package:
 
 ## Instructions to adopt the Political Narrative framework ​🗂️​
 We provide here a step-by-step explanation on how to adapt the code and run it on your machine.
-- (For beginner python users) The first step is to download Anaconda and Anaconda Prompt at the [link](https://www.anaconda.com/docs/getting-started/anaconda/install).
+
+- (For beginner Python users) The first step is to download Anaconda and Anaconda Prompt at the [link](https://www.anaconda.com/docs/getting-started/anaconda/install).
 
 -  Open Anaconda Prompt and set the ````OPENAI_API_KEY```` as an environmental variable in your current environment (likely ````base````):
     ````bash
@@ -36,10 +37,10 @@ This key is personal and directly linked to the user's wallet, so it's important
   spyder
   
 - Download the python script from the folder ````code and prompts\````, and open it directly in spyder using the top left command bar. Here the user can choose one of the two Python scripts depending on the task that he needs to perform:
-  - The **stage 1 script** allows the user tho classify a text based on its relevance to the topic selected. This code returns an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant).
-  - The **stage 2 script** is the core of the Political Narrative Package, and it allows the user to retrieve the character-role classification. The code returns a dataset with a column for each specified character taking values from 0 to 4, where 0 is no-mention of the character, 1 is Villain role, 2 is Hero role, 3 is Victim role, and 4 for appearence of the character in none of these roles (Neutral).
+  - The **stage 1 script**  ````annotation_openai_stage1```` allows the user tho classify a text based on its relevance to the topic selected. This code returns an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant).
+  - The **stage 2 script** ````annotation_openai_stage2```` is the core of the Political Narrative Package, and it allows the user to retrieve the character-role classification. The code returns a dataset with a column for each specified character taking values from 0 to 4, where 0 is no-mention of the character, 1 is Villain role, 2 is Hero role, 3 is Victim role, and 4 for appearence of the character in none of these roles (Neutral).
  
-- To run the script, the user needs to construct the following folder structure:
+- Once selected the script, the user must build the following folder structure locally:
   ```bash
   C:\Users\AndreaMentasti\Dropbox\climate_nature_narratives\
   ├─ input\
