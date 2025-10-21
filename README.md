@@ -7,9 +7,9 @@ Moreover, at the link [Launch the Political Narratives App](https://political-na
 This guide allows you to navigate the steps to prepare your research: you can reflect on the main questions to ask yourself, check them, and annotate your progress. In addition, this interactive resource provides clarifying examples taken from the paper of reference.
 
 Before diving to the instructions to run the code, here a detailed explanation of everything you find in this repository:
-- ````app```` folder: this folder contains the code for the online guideline that you can access [here](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/). This folder do not provide useful insights to the user.
-- ````code and prompts```` folder: this is the core of the repository. Here the user can download the Python scripts and the prompts needed to perform the Political Narrative analysis.
-- ````data```` folder: here it is contained the paper by *Gehring & Grigoletto (2025)*. User can access it and get a deeper understanding on how to shape a research using the framework.
+- ````app\```` folder: this folder contains the code for the online guideline that you can access [here](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/). This folder do not provide useful insights to the user.
+- ````code and prompts\```` folder: this is the core of the repository. Here the user can download the Python scripts and the prompts needed to perform the Political Narrative analysis.
+- ````data\```` folder: here it is contained the paper by *Gehring & Grigoletto (2025)*. User can access it and get a deeper understanding on how to shape a research using the framework.
   
 ### How to Proceed? ✅
 There are two ways to approach this package:
@@ -24,15 +24,16 @@ We provide here a step-by-step explanation on how to adapt the code and run it o
   conda env config vars set OPENAI_API_KEY="sk-your-key-here"
   conda deactivate
   conda activate base
+
 This step is crucial for the success of the annotation process. This code requires an individual OpenAI API key, that the user can retrieve in his [OpenAI personal page](https://platform.openai.com/api-keys). 
-This key is personal and directly linked to the user wallet, so it's important to keep it personal and hidden in the machine and not in the script.
+This key is personal and directly linked to the user's wallet, so it's important to keep it personal and hidden in the machine and not in the script.
 
 - Open Anaconda Prompt and activate Spyder (or your preferred Python IDE) by running the command
   ````bash
   spyder
   
-- Open the python script in this environment.
-- To run the script, the following folder structure is needed:
+- Download the python script from the folder ````code and prompts\````, and open it directly in spyder using the top left command bar.
+- To run the script, the user needs to construct the following folder structure:
   ```bash
   C:\Users\AndreaMentasti\Dropbox\climate_nature_narratives\
   ├─ input\
@@ -48,6 +49,10 @@ This key is personal and directly linked to the user wallet, so it's important t
          ├─ api_output\                                     # [empty] receives *_stage*.csv (API responses)
          ├─ batch_id\                                       # [empty] receives *_id.json (batch job IDs)
          └─ predictions\                                    # [empty] final merged output CSV ends up here
+- Make minimal changes to the Python script:
+  ````bash
+  spyder bdhwwwwwwwwwwwwwwwwwwwwwwwwwwu
+  hbwwwwwwwwwwwwwwwwwwwwwww
 ## Inputs - Output map
 Inputs:
 - dataset with snippets and observation id (in the code ```c_3_fixed_snippets_dataset.xls```)
