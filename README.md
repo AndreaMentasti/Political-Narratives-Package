@@ -9,12 +9,13 @@ Moreover, at the link [Launch the Political Narratives App](https://political-na
 This guide allows you to navigate the steps to prepare your research: you can reflect on the main questions to ask yourself, check them, and annotate your progress. In addition, this interactive resource provides clarifying examples taken from the paper of reference.
 
 Before diving to the instructions to run the code, here a detailed explanation of everything you find in this repository:
-- ````app\````: this folder contains the code for the online guideline that you can access [here](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/). This folder do not provide useful insights to the user.
-- ````code and prompts\````: this is the core of the repository. Here the user can download the Python scripts and the prompts needed to perform the Political Narrative analysis.
-- ````data\````: here is contained the paper by *Gehring & Grigoletto (2025)*. User can access it and get a deeper understanding on how to shape a research using the framework.
+- ````app\````: this folder contains the code for the online guideline that interested users can access [here](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/). This folder do not provide useful insights to the user.
+- ````code and prompts\````: this is the core of the repository. Here the users can download the Python scripts and the prompts needed to perform the Political Narrative analysis.
+- ````data\````: here is contained the paper by *Gehring & Grigoletto (2025)*. Users can access it and get a deeper understanding on how to shape a research using the framework.
   
 ### How to Proceed? ✅
 There are two ways to approach this package:
+
 1) The first one is the independent approach, where users advanced in their research can simply download the Python code to perform the annotation and apply it to their data. The steps to follow are listed below.
    
 2) The second approach is useful for less expereinced users that need to completely shape their research. Through the [online guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) they can organize their research from scratch thanks to a set of very useful instructions and best practices.
