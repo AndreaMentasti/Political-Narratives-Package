@@ -2,7 +2,7 @@
 
 The **Political Narratives** Package allow users to adapt the Political Narratives framework presented in *Gehring & Grigoletto (2025)* to their own research. By following the steps described in this repository, interested users will be able to identify the occurrence of political narratives in their data sources. 
 
-**What is a Political Narrative?**
+**What is a Political Narrative?** 
 
 We provide you with the code to query the OpenAI API, the prompts that can be used (or adapted) to retrieve Political Narratives, and guidelines to adopt the Political Narrative framework.  
 Moreover, at the link [Launch the Political Narratives App](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) you will find an interactive website that guides you through the logic behind the Political Narrative Framework.
@@ -34,7 +34,8 @@ This key is personal and directly linked to the user's wallet, so it's important
   ````bash
   spyder
   
-- Download the python script from the folder ````code and prompts\````, and open it directly in spyder using the top left command bar.
+- Download the python script from the folder ````code and prompts\````, and open it directly in spyder using the top left command bar. Here the user can choose one of the two Python scripts depending on the task that he needs to perform.
+  The **stage 1 prompt** allows the user tho classify a text based on its relevance to the topic selected. This codes return an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant).
 - To run the script, the user needs to construct the following folder structure:
   ```bash
   C:\Users\AndreaMentasti\Dropbox\climate_nature_narratives\
