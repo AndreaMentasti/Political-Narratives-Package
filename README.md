@@ -11,7 +11,7 @@ This guide allows you to navigate the steps to prepare your research: you can re
 Before diving to the instructions to run the code, here a detailed explanation of everything you find in this repository:
 - ````app\````: this folder contains the code for the online guideline that you can access [here](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/). This folder do not provide useful insights to the user.
 - ````code and prompts\````: this is the core of the repository. Here the user can download the Python scripts and the prompts needed to perform the Political Narrative analysis.
-- ````data\````: here it is contained the paper by *Gehring & Grigoletto (2025)*. User can access it and get a deeper understanding on how to shape a research using the framework.
+- ````data\````: here is contained the paper by *Gehring & Grigoletto (2025)*. User can access it and get a deeper understanding on how to shape a research using the framework.
   
 ### How to Proceed? ✅
 There are two ways to approach this package:
