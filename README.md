@@ -42,24 +42,29 @@ This key is personal and directly linked to the user's wallet, so it's important
  
 - Once selected the script, the user must build the following folder structure locally:
   ```bash
-  C:\Users\AndreaMentasti\Dropbox\climate_nature_narratives\
-  ├─ input\
-  │  └─ openAI\
-  │     ├─ newspaper_snippet_system_message_stage1.json     # system prompt for stage 1
-  │     └─ newspaper_snippet_system_message_stage2.json     # system prompt for stage 2
-  │     └─ c_3_fixed_snippets_dataset.xlsx                  # input dataset (Excel, with snippet_id + content)
-  └─ output\
-   └─ data\
-      └─ openAI\
-         ├─ batch_input\                                    # [empty] receives batch_XX.csv (created by script)
-         ├─ api_input\                                      # [empty] receives *_input.jsonl (API request payloads)
-         ├─ api_output\                                     # [empty] receives *_stage*.csv (API responses)
-         ├─ batch_id\                                       # [empty] receives *_id.json (batch job IDs)
-         └─ predictions\                                    # [empty] final merged output CSV ends up here
-- Make minimal changes to the Python script:
-  ````bash
-  spyder bdhwwwwwwwwwwwwwwwwwwwwwwwwwwu
-  hbwwwwwwwwwwwwwwwwwwwwwww
+  <main>/
+  ├─ code/
+  │  ├─ annotation_openai_stage1.py
+  │  ├─ annotation_openai_stage2.py
+  │  └─ prompts/
+  │     └─ system_message_stage1.json
+  │     └─ system_message_stage2.json
+  ├─ data/
+  │  ├─ raw/
+  │  └─ output/
+  │     └─ your_data.csv              # <-- your input CSV
+  ├─ output/
+  │  └─ data/
+  │     ├─ openai_output/             # partial batches will land here
+  │     └─ openai_final/              # merged final file lands here
+  └─ logs/
+According to this structure, you need to fill the ````prompts/```` folder with the system message of the stage.  
+IMPORTANT: your input ````.csv```` must contain a column called ```` id```` and a colummn called ````text````.
+
+- Make minimal changes to the Python script.
+  Change the directory: ```` main = r"D:\your directory"````
+  Insert your dataset: ```` csv_path = os.path.join(main, "data", "output", "your_data.csv")````
+  
 ## Inputs - Output map
 Inputs:
 - dataset with snippets and observation id (in the code ```c_3_fixed_snippets_dataset.xls```)
