@@ -34,8 +34,9 @@ This key is personal and directly linked to the user's wallet, so it's important
   ````bash
   spyder
   
-- Download the python script from the folder ````code and prompts\````, and open it directly in spyder using the top left command bar. Here the user can choose one of the two Python scripts depending on the task that he needs to perform.
-  The **stage 1 prompt** allows the user tho classify a text based on its relevance to the topic selected. This codes return an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant).
+- Download the python script from the folder ````code and prompts\````, and open it directly in spyder using the top left command bar. Here the user can choose one of the two Python scripts depending on the task that he needs to perform:
+    1)The **stage 1 prompt** allows the user tho classify a text based on its relevance to the topic selected. This codes return an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant).
+    2)hgug
 - To run the script, the user needs to construct the following folder structure:
   ```bash
   C:\Users\AndreaMentasti\Dropbox\climate_nature_narratives\
