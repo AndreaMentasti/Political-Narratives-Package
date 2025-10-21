@@ -8,9 +8,9 @@ This guide allows you to navigate the steps to prepare your research: you can re
 
 Before diving to the instructions to run the code, here a detailed explanation of everything you find in this repository:
 - ````app```` folder: this folder contains the code for the online guideline that you can access [here](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/). This folder do not provide useful insights to the user.
-- - ````code and prompts```` folder: this is the core of the repository. Here the user can download the Python scripts and the prompts needed to perform the Political Narrative analysis.
+- ````code and prompts```` folder: this is the core of the repository. Here the user can download the Python scripts and the prompts needed to perform the Political Narrative analysis.
 - ````data```` folder: here it is contained the paper by *Gehring & Grigoletto (2025)*. User can access it and get a deeper understanding on how to shape a research using the framework.
-- 
+  
 ### How to Proceed? ✅
 There are two ways to approach this package:
 1) The first one is the independent approach, where users advanced in their research can simply download the Python code to perform the annotation and apply it to their data. The steps to follow are listed below.
@@ -18,10 +18,10 @@ There are two ways to approach this package:
 
 ## Instructions to adopt the Political Narrative framework ​🗂️​
 We provide here a step-by-step explanation on how to adapt the code and run it on your machine.
-- The user needs to create an environment using the requirements in the ````replication_material/requirements/```` folder (preferred Anaconda for compliance with how the requirement file is written)
-  ```bash
-  conda env create -f acn_data_analysis.yml
-  conda activate acn_data_analysis
+- (For beginner python users) The first step is to download Anaconda and Anaconda Prompt at the [link](https://www.anaconda.com/docs/getting-started/anaconda/install).
+- Open Anaconda Prompt and activate Spyder (or your preferred Python IDE) by running the command
+  ````bash
+  spyder
   
 - Set the ````OPENAI_API_KEY```` as an environmental variable:
   ````bash
