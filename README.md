@@ -19,15 +19,17 @@ There are two ways to approach this package:
 ## Instructions to adopt the Political Narrative framework ​🗂️​
 We provide here a step-by-step explanation on how to adapt the code and run it on your machine.
 - (For beginner python users) The first step is to download Anaconda and Anaconda Prompt at the [link](https://www.anaconda.com/docs/getting-started/anaconda/install).
-- Open Anaconda Prompt and activate Spyder (or your preferred Python IDE) by running the command
-  ````bash
-  spyder
-  
-- Set the ````OPENAI_API_KEY```` as an environmental variable:
+- Set the ````OPENAI_API_KEY```` as an environmental variable in your current environment (likely ````base````):
   ````bash
   conda env config vars set OPENAI_API_KEY="sk-your-key-here"
   conda deactivate
-  conda activate acn_data_analysis
+  conda activate base
+This step is crucial for the success of the annotation process. This code requires an individual OpenAI API key, that the user can retrieve in his [OpenAI personal page](https://platform.openai.com/api-keys). 
+This key is personal and directly linked to the user wallet, so it's important to keep it personal and hidden in the machine and not in the script.
+
+- Open Anaconda Prompt and activate Spyder (or your preferred Python IDE) by running the command
+  ````bash
+  spyder
   
 - Open the python script in this environment.
 - To run the script, the following folder structure is needed:
