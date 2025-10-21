@@ -16,7 +16,8 @@ Before diving to the instructions to run the code, here a detailed explanation o
 ### How to Proceed? ✅
 There are two ways to approach this package:
 1) The first one is the independent approach, where users advanced in their research can simply download the Python code to perform the annotation and apply it to their data. The steps to follow are listed below.
-2) The second approach is useful for less expereinced users that needs to completely shape their research. Through the [online guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) they can organize their research from scraps thanks to a set of very useful instructions and best practices.
+   
+2) The second approach is useful for less expereinced users that need to completely shape their research. Through the [online guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) they can organize their research from scraps thanks to a set of very useful instructions and best practices.
 
 ## Instructions to adopt the Political Narrative framework ​🗂️​
 We provide here a step-by-step explanation on how to adapt the code and run it on your machine.
