@@ -4,7 +4,7 @@ The **Political Narratives** Package allow users to adapt the Political Narrativ
 
 **What is a Political Narrative?**
 
-We provide you with the code to query the OpenAI API, the prompts that can be used (or adapted) to retrieve Political Narratives, and guidelines to adopt the Political Narrative framework.//
+We provide you with the code to query the OpenAI API, the prompts that can be used (or adapted) to retrieve Political Narratives, and guidelines to adopt the Political Narrative framework.  
 Moreover, at the link [Launch the Political Narratives App](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) you will find an interactive website that guides you through the logic behind the Political Narrative Framework.
 This guide allows you to navigate the steps to prepare your research: you can reflect on the main questions to ask yourself, check them, and annotate your progress. In addition, this interactive resource provides clarifying examples taken from the paper of reference.
 
