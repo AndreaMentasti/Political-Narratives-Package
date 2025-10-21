@@ -59,12 +59,44 @@ This key is personal and directly linked to the user's wallet, so it's important
   │     └─ openai_final/              # merged final file lands here
   └─ logs/
 According to this structure, you need to fill the ````prompts/```` folder with the system message of the stage.  
-IMPORTANT: your input ````.csv```` must contain a column called ```` id```` and a colummn called ````text````.
+IMPORTANT: your input ````.csv```` must contain a column called ```` id```` and a column called ````text````.
 
 - Make minimal changes to the Python script: change the directory and insert your dataset:
   ````bash
   main = r"D:\your directory"
   csv_path = os.path.join(main, "data", "output", "your_data.csv")
+
+- Change the JSON structure based on the number of characters: depending on your character selection, you might need to modify the structure of the .JSON file that is created by OpenAI. You can access it by changing the following part of the script:
+  ````bash
+    JSON_SCHEMA = {
+        "name": "ArticleClassification",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {"type": ["integer", "string"]},
+                            "a": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                            "b": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                            "c": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                            "d": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                            "e": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                            "f": {"type": "integer", "enum": [0, 1, 2, 3, 4]}                   
+                            },
+                        "required": ["id","a","b","c","d","e","f"],
+                        "additionalProperties": False
+                    }
+                }
+             },
+            "required": ["items"],
+            "additionalProperties": False
+        },
+        "strict": True
+  }
+ You can match your prompt by accessing the properties in this code.
   
 ## Inputs - Output map
 Inputs:
