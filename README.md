@@ -62,7 +62,7 @@ According to this structure, you need to fill the ````prompts/```` folder with t
 IMPORTANT: your input ````.csv```` must contain a column called ```` id```` and a colummn called ````text````.
 
 - Make minimal changes to the Python script: change the directory and insert your dataset:
-- ````bash
+  ````bash
   main = r"D:\your directory"
   csv_path = os.path.join(main, "data", "output", "your_data.csv")
   
