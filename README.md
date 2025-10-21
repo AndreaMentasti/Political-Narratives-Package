@@ -21,6 +21,7 @@ There are two ways to approach this package:
 ## Instructions to adopt the Political Narrative framework ​🗂️​
 We provide here a step-by-step explanation on how to adapt the code and run it on your machine.
 - (For beginner python users) The first step is to download Anaconda and Anaconda Prompt at the [link](https://www.anaconda.com/docs/getting-started/anaconda/install).
+
 -  Open Anaconda Prompt and set the ````OPENAI_API_KEY```` as an environmental variable in your current environment (likely ````base````):
     ````bash
     conda env config vars set OPENAI_API_KEY="sk-your-key-here"
