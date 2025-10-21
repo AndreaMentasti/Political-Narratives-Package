@@ -35,8 +35,8 @@ This key is personal and directly linked to the user's wallet, so it's important
   spyder
   
 - Download the python script from the folder ````code and prompts\````, and open it directly in spyder using the top left command bar. Here the user can choose one of the two Python scripts depending on the task that he needs to perform:
-    1)The **stage 1 prompt** allows the user tho classify a text based on its relevance to the topic selected. This codes return an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant).
-    2)hgug
+    - 1) The **stage 1 script** allows the user tho classify a text based on its relevance to the topic selected. This code returns an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant).
+      2) The **stage 2 script** is the core of the Political Narrative Package, and it allows the user to retrieve the character-role classification. The code returns a dataset with a column for each specified character taking values from 0 to 4, where 0 is no-mention of the character, 1 is Villain role, 2 is Hero role, 3 is Victim role, and 4 for appearence of the character in none of these roles (Neutral).
 - To run the script, the user needs to construct the following folder structure:
   ```bash
   C:\Users\AndreaMentasti\Dropbox\climate_nature_narratives\
