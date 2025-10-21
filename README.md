@@ -17,7 +17,7 @@ Before diving to the instructions to run the code, here a detailed explanation o
 There are two ways to approach this package:
 1) The first one is the independent approach, where users advanced in their research can simply download the Python code to perform the annotation and apply it to their data. The steps to follow are listed below.
    
-2) The second approach is useful for less expereinced users that need to completely shape their research. Through the [online guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) they can organize their research from scraps thanks to a set of very useful instructions and best practices.
+2) The second approach is useful for less expereinced users that need to completely shape their research. Through the [online guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) they can organize their research from scratch thanks to a set of very useful instructions and best practices.
 
 ## Instructions to adopt the Political Narrative framework ​🗂️​
 We provide here a step-by-step explanation on how to adapt the code and run it on your machine.
@@ -59,15 +59,15 @@ This key is personal and directly linked to the user's wallet, so it's important
   │     ├─ openai_output/             # partial batches will land here
   │     └─ openai_final/              # merged final file lands here
   └─ logs/
-According to this structure, you need to fill the ````prompts/```` folder with the system message of the stage.  
-IMPORTANT: your input ````.csv```` must contain a column called ```` id```` and a column called ````text````.
+According to this structure, the user needs to fill the ````prompts/```` folder with the system message of the stage.  
+IMPORTANT: the input ````.csv```` must contain a column called ````id```` and a column called ````text````.
 
 - Make minimal changes to the Python script: change the directory and insert your dataset:
   ````bash
   main = r"D:\your directory"
   csv_path = os.path.join(main, "data", "output", "your_data.csv")
 
-- Change the JSON structure based on the number of characters: depending on your character selection, you might need to modify the structure of the .JSON file that is created by OpenAI. You can access it by changing the following part of the script:
+- Change the JSON structure based on the number of characters: depending on your character selection, you might need to modify the structure of the ````.JSON```` file that is created by OpenAI. You can access it by changing the following part of the script:
   ````bash
     JSON_SCHEMA = {
         "name": "ArticleClassification",
