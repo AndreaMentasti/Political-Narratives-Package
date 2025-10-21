@@ -101,13 +101,13 @@ IMPORTANT: the input ````.csv```` must contain a column called ````id```` and a 
   
 ## Inputs - Output map
 Inputs:
-- dataset with snippets and observation id (in the code ```c_3_fixed_snippets_dataset.xls```)
-- prompt for stage 1 (in the code ```newspaper_snippet_system_message_stage1.json```)
-- prompt for stage 2 (in the code ```newspaper_snippet_system_message_stage2.json```)
+- dataset with text snippets and observation id (in the code ```your_code.csv```)
+- prompt for stage 1 (in the code ```system_message_stage1.json```)
+- prompt for stage 2 (in the code ```system_message_stage2.json```)
 - API key as Environmental variable
   
 Outputs:
-- Dataset with relevance and characther-role flags, in the following format:
+- Dataset with relevance (if you run the stage 1 script) or characther-role flags (if you run the second script):
   
   | id   | content            | relevance | dev | dem | rep | corp | ppl | pric | ban | fos | green | nuc |
   |------|--------------------|-----------|-----|-----|-----|------|-----|------|-----|-----|-------|-----|
@@ -116,37 +116,9 @@ Outputs:
   | 1_3  | In fact, on…       |     3     |  0  |  1  |  0  |  0   |  0  |  2   |  0  |  0  |   0   |  0  |
 
 
-## Requirements for the Local Version of the Guide APP 📊
-- Python 3.10+
-- Install [Ollama](https://ollama.com) and pull a small model:
-  ```bash
-  ollama pull llama3.2:3b-instruct
-  # or
-  ollama pull qwen2.5:3b-instruct
-- Clone this repository from GitHub on your machine:
-  ```bash
-  git clone https://github.com/AndreaMentasti/Political-Narratives-Package.git
-  cd Political-Narratives-Package
-- Install the requirements:
-  ```bash
-  pip install r- requirements.txt
-- Open the APP locally:
-  ```bash
-  python -m streamlit run app\app.py
-
-### Optional: Upgrade answers with OpenAI
-By default the app runs fully local with Ollama (free). If you want higher-quality guidance and faster responses:
-1. Choose **Provider → OpenAI (bring your own key)** in the sidebar.
-2. Paste your **OpenAI API key**.
-To paste an OpenAI API key you must own an account from [OpenAI](https://platform.openai.com/), and then create an [API key](https://platform.openai.com/api-keys).
-   
-
-## Try the Online App
-
 👉 [Launch the Political Narratives App](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/)
 
 You can:
 - Navigate the steps to analyse Political Narratives.
 - Reflect on the main questions you should answer before starting your analysis.
-- Ask questions about the paper/repo (locally indexed).
-- Use the prompt playground to experiment with Drama Triangle annotations.
+- Build the steps of your research.
