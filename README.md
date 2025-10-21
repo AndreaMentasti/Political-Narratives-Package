@@ -1,14 +1,22 @@
 # Political Narratives Package
 
-The **Political Narratives** Package works both as a repository to replicate the analysis of Political Narratives as in *Gehring & Grigoletto (2025)* and as an interactive space to organize the steps for your own independent research on Political Narratives.
-We provide the user with the code to query the OpenAI API, the prompts that can be used (or adapted) to retrieve Political Narratives, and instructions to create an OpenAI API account.
+The **Political Narratives** Package allows users to adapt the Political Narratives framework presented in *Gehring & Grigoletto (2025)* to their own research. By following the steps described in this repository, interested users will be able to identify the occurrence of political narratives in their data sources. 
+We provide you with the code to query the OpenAI API, the prompts that can be used (or adapted) to retrieve Political Narratives, and guidelines to adopt the Political Narrative framework.
+
 Moreover, at the link [Launch the Political Narratives App](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) you will find an interactive APP that guides you through the logic behind the Political Narrative Framework.
-
-
 The online APP allows you to navigate the steps to prepare your research. You can reflect on the main questions to ask yourself, check them, and annotate your progress. In addition, the APP provides clarifying examples taken from the paper of reference.
-The APP can be used online through the above link, or downloaded and run locally. The online version only uses OpenAI API queries and therefore requires an API key from the user’s OpenAI account. In the local version, you can decide whether to use an API key, or to use Ollama LLM (we provide the steps to download it in this guide). 
 
-## Requirements for the Political Narrative replication ​🗂️​
+Before diving to the instructions to run the code, here a detailed explanation of everything you find in this repository:
+- ````app```` folder: this folder contains the code for the online guideline that you can access [here](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/). This folder do not provide useful insights to the user.
+- ````data```` folder: here it is contained the paper by *Gehring & Grigoletto (2025)*. User can access it and get a deeper understanding on how to shape a research using the framework.
+- ````code and prompts```` folder: this is the core of the repository. Here the user can download the Python scripts and the prompts needed to perform the Political Narrative analysis.
+
+### How to Proceed? ✅
+There are two ways to approach this package:
+1) The first one is the independent approach, where users advanced in their research can simply download the Python code to perform the annotation and apply it to their data. The steps to follow are listed below.
+2) The second approach is useful for less expereinced users that needs to completely shape their research. Through the [online guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) they can organize their research from scraps thanks to a set of very useful instructions and best practices.
+
+## Instructions to adopt the Political Narrative framework ​🗂️​
 - The user needs to create an environment using the requirements in the ````replication_material/requirements/```` folder (preferred Anaconda for compliance with how the requirement file is written)
   ```bash
   conda env create -f acn_data_analysis.yml
