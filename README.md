@@ -3,8 +3,8 @@
 The **Political Narratives** Package allow users to adapt the Political Narratives framework presented in *Gehring & Grigoletto (2025)* to their own research. By following the steps described in this repository, interested users will be able to identify the occurrence of political narratives in their data sources. 
 We provide you with the code to query the OpenAI API, the prompts that can be used (or adapted) to retrieve Political Narratives, and guidelines to adopt the Political Narrative framework.
 
-Moreover, at the link [Launch the Political Narratives App](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) you will find an interactive APP that guides you through the logic behind the Political Narrative Framework.
-The online APP allows you to navigate the steps to prepare your research. You can reflect on the main questions to ask yourself, check them, and annotate your progress. In addition, the APP provides clarifying examples taken from the paper of reference.
+Moreover, at the link [Launch the Political Narratives App](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) you will find an interactive website that guides you through the logic behind the Political Narrative Framework.
+The online guide allows you to navigate the steps to prepare your research. You can reflect on the main questions to ask yourself, check them, and annotate your progress. In addition, the APP provides clarifying examples taken from the paper of reference.
 
 Before diving to the instructions to run the code, here a detailed explanation of everything you find in this repository:
 - ````app```` folder: this folder contains the code for the online guideline that you can access [here](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/). This folder do not provide useful insights to the user.
