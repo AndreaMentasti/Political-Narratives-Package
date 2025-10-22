@@ -95,7 +95,7 @@ checkpoint_path = os.path.join(run_partial_results_folder, "checkpoint.txt")
 
 # Path to your data and prompt
 csv_path = os.path.join(main, "data", "output", "your_data.csv")
-path_df = os.path.join(main, "data", "output", "opinion_question.feather")
+path_df = os.path.join(main, "data", "output", "your_data.feather")
 
 prompt_path = os.path.join(main, "code", "prompts", "system_message_stage1.json")
 
@@ -429,4 +429,5 @@ if __name__ == "__main__":
     run_classification_in_chunks(chunk_size=100)
 
     # 2) (Optional) Merge partial results into one final CSV
+
     merge_partial_results_into_final()
