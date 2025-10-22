@@ -163,8 +163,6 @@ IMPORTANT: the input ````.csv```` must contain a column called ````id```` and a 
                         "e": entry.get("e", 0),
                         "f": entry.get("f", 0)
 
-
-  
 ## Inputs - Output map
 Inputs:
 - dataset with text snippets and observation id (in the code ```your_code.csv```)
