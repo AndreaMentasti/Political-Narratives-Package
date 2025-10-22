@@ -53,10 +53,17 @@ def question_card(
                 )
                 st.session_state["guide"]["done"][cb_key] = checked
 
-def example_card(title: str, example_md: str, key_prefix: str):
+def example_card(title: str, example_md: str, key_prefix: str, figure: dict | None = None):
     """A simple markdown example block (no checkboxes)."""
     with st.container(border=True):
         st.markdown(f"**Example — {title}**")
+        # NEW: optional figure at the top of the example card
+        if figure and figure.get("src"):
+            st.image(
+                figure["src"],
+                caption=figure.get("caption", ""),
+                use_container_width=True
+            )
         st.markdown(example_md)
 
 def output_card(title: str, bullets: list[str] | None = None, body_md: str | None = None, key_prefix: str = ""):
@@ -243,6 +250,10 @@ def render_step(step: int):
                     "by the LLM thanks to precise descriptions in the prompt design step (Step 4)."
                 ),
                 key_prefix="s3_example"
+                figure={
+                    "src": "assets/dag_git.png",  # path or URL to your image
+                    "caption": "Example character map (human vs. instrument actors)."
+                }
             )
 
             output_card(
