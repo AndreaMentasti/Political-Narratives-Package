@@ -249,7 +249,7 @@ def render_step(step: int):
                     "good practices to avoid overloading the LLM in the annotation process. These characters are easily recognizable "
                     "by the LLM thanks to precise descriptions in the prompt design step (Step 4)."
                 ),
-                key_prefix="s3_example"
+                key_prefix="s3_example",
                 figure={
                     "src": "assets/dag_git.png",  # path or URL to your image
                     "caption": "Example character map (human vs. instrument actors)."
