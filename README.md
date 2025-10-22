@@ -56,16 +56,17 @@ This key is personal and directly linked to the user's wallet, so it's important
   ├─ data/
   │  ├─ raw/
   │  └─ output/
-  │     └─ your_data.csv              # <-- your input CSV
+  │     └─ your_data_stage1.csv              # <-- your input CSV
+  │     └─ your_data_stage2.csv              # <-- your input CSV
   ├─ output/
   │  └─ data/
   │     ├─ openai_output/             # partial batches will land here
   │     └─ openai_final/              # merged final file lands here
   └─ logs/
-According to this structure, the user needs to fill the ````prompts/```` folder with the system message of the stage, and the ````data/output/```` folder with the ````.csv```` dataset.  
+According to this structure, the user needs to fill the ````code/prompts/```` folder with the system message of the stage, and the ````data/output/```` folder with the ````.csv```` dataset.  
 IMPORTANT: the input ````.csv```` must contain a column called ````id```` and a column called ````text````.
 
-- Regarding the prompt, the user can adapt the prompt provided in the folder with his own instructions. The user can do this by accessing the "SYSTEM MESSAGE" in the prompt. To modify the task, the user must change the keys (in the example from a to f) to match the number of characters of his analysis. Moreover, descriptions of the characters are required in order for OpenAI to perform a meaningful classification. An example of the prompt is provided here:
+- Regarding the prompt, the user can adapt the prompt provided in the folder with his own instructions. The user can do this by accessing the "SYSTEM MESSAGE" in the prompt. To modify the task, the user must change the keys (in the example from a to j) to match the number of characters of his analysis. Moreover, descriptions of the characters are required in order for OpenAI to perform a meaningful classification. An example of the prompt is provided here:
   ````bash
   {
   "SYSTEM_MESSAGE": "You are an average US citizen. The user will provide a three-sentence US newspaper excerpt (2010–2021). 
@@ -92,12 +93,13 @@ IMPORTANT: the input ````.csv```` must contain a column called ````id```` and a 
   3. Final Output: Respond with a JSON object containing keys a–j. Each value must be 0 (not mentioned) or 1–4 (role as defined above)."
   }
 
-- Make minimal changes to the Python script: change the directory and insert your dataset:
+- Modify the input dataset: the user needs to provide in the ````/data/output```` folder his dataset named ````your_data_stage2```` (or ````your_data_stage1````). This dataset must contain a column called **id** with the unique identifiers and a column called **text** containing the text for the classification.
+
+- Once prepared the folder structure, the prompt, and the dataset, the user can make minimal changes to the Python script. First, changing the directory
   ````bash
   main = r"D:\your directory"
-  csv_path = os.path.join(main, "data", "output", "your_data.csv")
 
-- Change the JSON structure based on the number of characters: depending on your character selection, you might need to modify the structure of the ````.JSON```` file that is created by OpenAI. You can access it by changing the following part of the script:
+- Second, change the JSON structure based on the number of characters: depending on your character selection, you might need to modify the structure of the ````.JSON```` file that is created by OpenAI. You can access it by changing the properties in the following part of the script:
   ````bash
     JSON_SCHEMA = {
         "name": "ArticleClassification",
@@ -127,7 +129,41 @@ IMPORTANT: the input ````.csv```` must contain a column called ````id```` and a 
         },
         "strict": True
   }
- You can match your prompt by accessing the properties in this code.
+
+- Then, he needs to change the user content to adapt it to his number of characters, as done before: 
+  ````bash
+  def build_user_content(article_group):
+    
+    """
+    Build the user content for the OpenAI API.
+    You need each "article" to be a dictionary like {"id":1, ""headline": "bla bla bla...""}
+    """
+    
+    user_content = (
+        "Classify the following opinion(s) strictly per the system instructions. "
+        "Respond with **only** a JSON object of the form {\"items\": [ ... ]}, "
+        "where \"items\" is an array of objects (one per text, same order). "
+        "Each object must include keys: id, a, b, c, d, e, f (a–f in 0–4). "
+        "No extra text.\n\n"
+    )
+    for article in article_group:
+        user_content += f"ID: {article['id']}\n"
+        user_content += f"Tweet: {article['text']}\n"
+    return user_content
+
+- Lastly, he needs to adapt the `flatten_results()` function by changing this few lines of code: 
+  ````bash
+                          "request_id": result["request_id"],
+                        "article_id": result.get("article_id"),
+                        "id": entry_id,
+                        "a": entry.get("a", 0),
+                        "b": entry.get("b", 0),
+                        "c": entry.get("c", 0),
+                        "d": entry.get("d", 0),
+                        "e": entry.get("e", 0),
+                        "f": entry.get("f", 0)
+
+
   
 ## Inputs - Output map
 Inputs:
