@@ -228,11 +228,6 @@ def render_step(step: int):
                     "Prefer **clear, non-overlapping definitions** that an LLM can reliably identify across texts. "
                     "Record a **brief description for each character now**—you will reuse it in Step 4 prompts."
                 ),
-                # ↓ NEW: optional figure shown under the title (before “How to approach”)
-                figure={
-                    "src": "assets/dag_git.png",  # place your image file here
-                    "caption": "Example character map (human vs. instrument actors)."
-                }
             )
 
             example_card(
