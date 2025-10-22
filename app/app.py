@@ -252,7 +252,7 @@ def render_step(step: int):
                 key_prefix="s3_example",
                 figure={
                     "src": "assets/dag_git.png",  # path or URL to your image
-                    "caption": "Example character map (human vs. instrument actors)."
+                    "caption": "Characters as Nodes."
                 }
             )
 
