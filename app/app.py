@@ -230,7 +230,7 @@ def render_step(step: int):
                 ),
                 # ↓ NEW: optional figure shown under the title (before “How to approach”)
                 figure={
-                    "src": "assets/character_map.png",  # place your image file here
+                    "src": "assets/dag_git.png",  # place your image file here
                     "caption": "Example character map (human vs. instrument actors)."
                 }
             )
