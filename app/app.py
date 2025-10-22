@@ -16,9 +16,28 @@ def _init_guide_state():
         "registry": {}  # e.g., {"s1_scope_q1": True, "s1_scope_q2": True, ...}
     })
 
-def question_card(title: str, how_to: list[str], ask_yourself: list[str], key_prefix: str):
+def question_card(
+    title: str,
+    how_to: list[str],
+    ask_yourself: list[str],
+    key_prefix: str,
+    blurb_md: str | None = None,
+    figure: dict | None = None
+):
     with st.container(border=True):
         st.markdown(f"**{title}**")
+        # NEW: short description just under the title
+        if blurb_md:
+            st.markdown(blurb_md)
+
+        # NEW: optional figure (local path or URL)
+        if figure and figure.get("src"):
+            st.image(
+                figure["src"],
+                caption=figure.get("caption", ""),
+                use_container_width=True
+            )
+
         if how_to:
             st.markdown("**How to approach**")
             st.markdown("\n".join([f"- {p}" for p in how_to]))
@@ -26,9 +45,7 @@ def question_card(title: str, how_to: list[str], ask_yourself: list[str], key_pr
             st.markdown("**Ask yourself**")
             for i, q in enumerate(ask_yourself, start=1):
                 cb_key = f"{key_prefix}_q{i}"
-                # Register for totals
                 st.session_state["guide"]["registry"][cb_key] = True
-                # Render and store value
                 checked = st.checkbox(
                     q,
                     key=cb_key,
@@ -57,7 +74,7 @@ def render_intro():
         """
 The purpose of a political narrative is influencing perceptions, beliefs, and preferences about characters contained in the narrative.  **Political narratives** exert their influence by depicting characters in one of the three archetypal roles—**hero**, **villain**, or **victim**.  They are communicative devices that focus attention, encode roles and identities, and shape norms and behavior.
 
-Formally, fix a topic *T* and a universe of characters *K = H ∪ I*, partitioned into human characters *H* (individuals or collective actors such as corporations, parties, states, movements) and instrument characters *I* (policies, laws, technologies). For any text unit (tweet, paragraph, article), let *K′ ⊆ K* be the set of characters that appear.  
+Formally, fix a topic *T* and a universe of characters *K = H ∪ I*. For any text unit (tweet, paragraph, article), let *K′ ⊆ K* be the set of characters that appear.  
 A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing character to either a drama-triangle role or neutrality. We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, villain, or victim; if all characters are neutral, the text is about the topic but does not constitute a political narrative in this sense.  
 
 **How to use this guide**
@@ -96,7 +113,7 @@ def render_step(step: int):
             ],
             ask_yourself=[
                 "Does this topic surface enough distinct political narratives and public debate to analyze?",
-                "Is it likely there are enough identifiable characters (actors/organizations) within those narratives?",
+                "Is it likely there are enough identifiable characters within those narratives?",
                 "Which data sources are most informative for this topic, and do I have reliable access to them?",
                 "If those sources are available, can I obtain the essential metadata (dates, outlets, geography, language) needed for analysis?",
                 "Is the research question compelling and relevant to the scientific community (and/or practitioners)?",
@@ -111,7 +128,7 @@ def render_step(step: int):
             (
                 "In *Gehring & Grigoletto (2025)* we analyze the **political economy of climate change**. "
                 "From the literature we identify two dominant discussions—**scientific evidence** and **policy responses**—and, "
-                "given our focus on political economy, we restrict attention to **policy narratives**, explicitly excluding "
+                "given our focus on political economy, we restrict attention to the topic of **climate change policies**. We explicitly exclude "
                 "debates on the scientific reality and predictability of climate change."
             ),
             key_prefix="s1_example"
@@ -120,8 +137,7 @@ def render_step(step: int):
         output_card(
             "What you should have before Step 2 ⚠️",
             bullets=[
-                "A precise topic for the analysis of Political Narratives",
-                "Availability of a source for the data extraction"
+                "A precise topic for the analysis of Political Narratives"
             ],
             key_prefix="s1_output"
         )
@@ -142,15 +158,15 @@ def render_step(step: int):
                 "When selecting the data source, prioritize the media channels where narratives about your chosen topic are most prominent.",
                 "Evaluate trade-offs between coverage, accessibility, and quality (e.g., digitization errors, platform bias, sampling limits).",
                 "For data extraction, the chosen source will determine which methodologies can be applied—such as keyword-based queries, scraping, API pulls, or manual collection.",
-                "Consider the level of metadata you can preserve (dates, outlets, authors, geography, language) since these details will later be the basis of your analysis."
+                "Consider the level of metadata you can preserve (dates, outlets, authors, geography, language) since these details will later be the basis of your analysis.",
+                "What is the unit of analysis? Should I split the texts into smaller snippets, or can I work with the extracted texts as they are?"
             ],
             ask_yourself=[
                 "Do the chosen sources capture the main media where the political debate unfolds?",
                 "Are they sufficiently diverse to avoid bias toward one outlet, ideology, or demographic?",
-                "Is the extraction method able to produce snippets that are neither too short to lose context nor too long to become too complicated for the analysis?",
                 "Do I have legal and technical access to these data (e.g., archives, APIs, scraping permission)?",
                 "What extraction method is most reliable for my source—keyword queries, metadata filters, or transcript parsing?",
-                "How will I ensure that the collected snippets are relevant to the topic and not dominated by noise?",
+                "Is the extraction method able to produce snippets that are neither too short to lose context nor too long to become too complicated for the analysis? If needed, split the texts into smaller snippets.",
                 "Is the time window covered by the source appropriate for the research question?",
                 "Can I obtain essential metadata (dates, outlets, geography, language) for contextual analysis?"
             ],
@@ -162,7 +178,9 @@ def render_step(step: int):
             (
                 "In *Gehring & Grigoletto (2025)* our focus is on narratives about climate change policies in the United States, collected from the social media platform Twitter. "
                 "We specifically choose the U.S. due to the significant role Twitter plays in shaping and disseminating political narratives there. "
-                "The data collection process involves querying the **Twitter historical APIv2** with a set of **keywords** adapted from *Oehl, Schaffer, and Bernauer (2017)*"
+                "The data collection process involves querying the **Twitter historical APIv2** with a set of **keywords** adapted from *Oehl, Schaffer, and Bernauer (2017)*."
+                "In our main analysis, we define the tweet as our unit of observation, since its concise length aligns well with the requirements of the subsequent stages of the framework, including the GPT annotation process."
+                "We also extract newspaper articles, which we decided to split into smaller snippets to make them compatible with the framework’s next steps."
             ),
             key_prefix="s2_example"
         )
@@ -170,7 +188,7 @@ def render_step(step: int):
         output_card(
             "What you should have before Step 3 ⚠️",
             bullets=[
-                "A dataset with the extracted text snippets and other relevant information for your analysis.",
+                "A dataset with the extracted text snippets and other metadata, if you need them for your analysis.",
             ],
             key_prefix="s2_output"
         )
@@ -181,57 +199,69 @@ def render_step(step: int):
 
     # --- STEP 3 ---
     if step == 3:
-        st.subheader("Step 3 — Identify relevant characters")
-        st.caption("Map the topic into human and instrument actors with agency and claims.")
+            st.subheader("Step 3 — Identify relevant characters")
+            st.caption("Map the topic into human and instrument actors with agency and claims.")
 
-        question_card(
-            "Guide: character selection ✅",
-            how_to=[
-                "Identify relevant characters for the topic (human and instrument) — this is the core of Step 3.",
-                "Anchor selection in your research question and analytical focus; choose characters that speak to your hypotheses.",
-                "Balance scope with feasibility: too many characters can reduce precision and raise compute costs; a focused set improves reliability and interpretability.",
-                "Build the character list via literature review, exploratory tools (topic modeling, entity recognition/RELATIO), and domain reading; document your choices."
-            ],
-            ask_yourself=[
-                "Which entities matter most for the topic at hand?",
-                "Are these best understood as human actors (individuals, groups, organizations, states) or instrumental actors (policies, tools, institutions)?",
-                "What is the scope of my analysis (national, regional, global)? Which entities fall outside my scope?",
-                "Which characters recur most often in prior literature or theory on this topic?",
-                "Do exploratory tools (topic models, word clouds, entity recognition, RELATIO outputs) highlight additional frequently mentioned entities?",
-                "How many characters can I realistically track while keeping the coding interpretable and statistically useful?",
-                "Is the chosen character list feasible for LLM coding (not too long, not too ambiguous)?",
-                "Can each character plausibly appear in different roles (hero, villain, victim), or are some inherently neutral/instrumental?",
-            ],
-            key_prefix="s3_chars"
-        )
+            question_card(
+                "Guide: character selection ✅",
+                how_to=[
+                    "Identify relevant characters for the topic — this is the core of Step 3.",
+                    "Anchor selection in your research question and analytical focus; choose characters that speak to your hypotheses.",
+                    "Balance scope with feasibility: too many characters can reduce precision and raise compute costs; a focused set improves reliability and interpretability.",
+                    "Build the character list via literature review, exploratory tools (topic modeling, entity recognition/RELATIO), and domain reading; document your choices."
+                ],
+                ask_yourself=[
+                    "Which characters matter most for the topic at hand?",
+                    "What is the scope of my analysis (national, regional, global)? Which characters fall outside my scope?",
+                    "Which characters recur most often in prior literature or theory on this topic?",
+                    "Do exploratory tools (topic models, word clouds, entity recognition, RELATIO outputs) highlight additional entities? If so, how to aggregate these entities into some broader character definitions?",
+                    "Do the selected characters exhibit distinctions that are sufficiently clear for an LLM to recognize and differentiate them?",
+                    "Is the chosen character list feasible for LLM coding (not too long, not too ambiguous)?",
+                    "If interested in human vs instrument classification, are these best understood as human actors (individuals, groups, organizations, states) or instrumental actors (policies, tools, institutions)?",
+                    "How many characters can I realistically track while keeping the coding interpretable and statistically useful?",
+                    "Can each character plausibly appear in different roles (hero, villain, victim), or are some inherently neutral/instrumental?",
+                ],
+                key_prefix="s3_chars",
+                # ↓ NEW: short description appears above “How to approach”
+                blurb_md=(
+                    "Define a **small, distinctive set of characters** that directly reflect your research question. "
+                    "Prefer **clear, non-overlapping definitions** that an LLM can reliably identify across texts. "
+                    "Record a **brief description for each character now**—you will reuse it in Step 4 prompts."
+                ),
+                # ↓ NEW: optional figure shown under the title (before “How to approach”)
+                figure={
+                    "src": "assets/character_map.png",  # place your image file here
+                    "caption": "Example character map (human vs. instrument actors)."
+                }
+            )
 
-        example_card(
-            "Relevant characters for climate change political discourse 💡",
-            (
-                "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
-                "we pre-specify ten characters: five human characters (made of institutions and groups of individuals) "
-                "and five instrument characters (policy tools and instruments).\n\n"
-                "**Human Characters:** DEVELOPING ECONOMIES | US DEMOCRATS | US REPUBLICANS | CORPORATIONS | US PEOPLE\n\n"
-                "**Instrument Characters:** EMISSION PRICING | REGULATIONS | FOSSIL INDUSTRY | GREEN TECH | NUCLEAR TECH\n\n"
-                "We carefully decided to have ten character to balance the complexity of the analysis with "
-                "good practices to avoid overloading the LLM in the annotation process. These characters are easily recognizable "
-                "by the LLM thanks to precise descriptions in the prompt design step (Step 4)."
-            ),
-            key_prefix="s3_example"
-        )
+            example_card(
+                "Relevant characters for climate change political discourse 💡",
+                (
+                    "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
+                    "we pre-specify ten characters: five human characters (made of institutions and groups of individuals) "
+                    "and five instrument characters (policy tools and instruments).\n\n"
+                    "**Human Characters:** DEVELOPING ECONOMIES | US DEMOCRATS | US REPUBLICANS | CORPORATIONS | US PEOPLE\n\n"
+                    "**Instrument Characters:** EMISSION PRICING | REGULATIONS | FOSSIL INDUSTRY | GREEN TECH | NUCLEAR TECH\n\n"
+                    "We carefully decided to have ten character to balance the complexity of the analysis with "
+                    "good practices to avoid overloading the LLM in the annotation process. These characters are easily recognizable "
+                    "by the LLM thanks to precise descriptions in the prompt design step (Step 4)."
+                ),
+                key_prefix="s3_example"
+            )
 
-        output_card(
-            "Output - What you should have before Step 4 ⚠️",
-            bullets=[
-                "A contained list of relevant characters, both in human and instrument form",
-                "A set of descriptions for these characters is needed in the next step, so it's good practice to annotate these during this stage (useful, but not necessary now)"
-            ],
-            key_prefix="s3_output"
-        )
+            output_card(
+                "Output - What you should have before Step 4 ⚠️",
+                bullets=[
+                    "A contained list of relevant characters, both in human and instrument form if needed",
+                    "A brief description of each character should be included in the prompts at Stage 4. It is good practice to annotate these descriptions while selecting the characters."
+                ],
+                key_prefix="s3_output"
+            )
 
-        st.text_area("Annotations for Step 3 (optional)", key="notes_s3",
-                     value=st.session_state["guide"]["notes"][3], height=120)
-        st.session_state["guide"]["notes"][3] = st.session_state["notes_s3"]
+            st.text_area("Annotations for Step 3 (optional)", key="notes_s3",
+                         value=st.session_state["guide"]["notes"][3], height=120)
+            st.session_state["guide"]["notes"][3] = st.session_state["notes_s3"]
 
     # --- STEP 4 (restored) ---
     if step == 4:
