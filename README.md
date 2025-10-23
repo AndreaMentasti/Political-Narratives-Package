@@ -136,9 +136,13 @@ This key is personal and directly linked to the user's wallet, so it's important
                             "c": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
                             "d": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
                             "e": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
-                            "f": {"type": "integer", "enum": [0, 1, 2, 3, 4]}                   
+                            "f": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                            "g": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                            "h": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                            "i": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                            "j": {"type": "integer", "enum": [0, 1, 2, 3, 4]}                   
                             },
-                        "required": ["id","a","b","c","d","e","f"],
+                        "required": ["id","a","b","c","d","e","f", "g", "h", "i", "j"],
                         "additionalProperties": False
                     }
                 }
@@ -162,7 +166,7 @@ This key is personal and directly linked to the user's wallet, so it's important
         "Classify the following opinion(s) strictly per the system instructions. "
         "Respond with **only** a JSON object of the form {\"items\": [ ... ]}, "
         "where \"items\" is an array of objects (one per text, same order). "
-        "Each object must include keys: id, a, b, c, d, e, f (a–f in 0–4). "
+        "Each object must include keys: id, a, b, c, d, e, f, g, h, i, j (a–j in 0–4). "
         "No extra text.\n\n"
     )
     for article in article_group:
@@ -180,7 +184,11 @@ This key is personal and directly linked to the user's wallet, so it's important
                         "c": entry.get("c", 0),
                         "d": entry.get("d", 0),
                         "e": entry.get("e", 0),
-                        "f": entry.get("f", 0)
+                        "f": entry.get("f", 0),
+                        "g": entry.get("g", 0),
+                        "h": entry.get("h", 0),
+                        "i": entry.get("i", 0),
+                        "j": entry.get("j", 0)
 
 ## Inputs - Output map
 Inputs:
@@ -190,6 +198,8 @@ Inputs:
 - API key as Environmental variable
   
 Outputs:
+- The user can find the output dataset in the folder ````output/data/openai_final/```` in a folder called as the date and time when the code has been run. The dataset is saved as ````.csv```` named ````flattened_results_all.csv````.
+
 - Dataset with characther-role flags (if you run the second script):
   
   | id   | text               | dev | dem | rep | corp | ppl | pric | ban | fos | green | nuc |
