@@ -330,7 +330,7 @@ def render_step(step: int):
                 "complementing **Step 1** of this guide.\n\n"
                 "##### Step-by-Step instructions:\n"
                 "1) Access the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and download the `system_message_stage2` (or `system_message_stage1`) from the `code and prompts/` folder.\n\n "
-                "2) Modify the SYSTEM MESSAGE field with your instructions (describe how to behave when analyzing a text).\n\n"
+                "2) Open the json file and modify the SYSTEM MESSAGE field with your instructions (describe how to behave when analyzing a text).\n\n"
                 "3) Modify the names of the characters and their descriptions.\n\n"
                 "4) After each description, specify in which key to store the result. For example, if you have 8 characters your prompt will specify keys from a to f. As a result, the classification results for the first characters will be stored in column a (key - a), for the second character in column b (key - b), and so on. "
                 "Keys are nothing but the way the LLM stores the results according to the prompt. You don't need knowledge of JSON language to change these few letters in the prompt."
