@@ -252,14 +252,14 @@ def render_step(step: int):
             example_card(
                 "Relevant characters for climate change political discourse 💡",
                 (
-                    "#### Text Example: \n\n"
+                    "##### Text Example: \n\n"
                     "“Global greenhouse emissions are still on the rise, oil production is soaring and **energy companies** "
                     "are making sky-high profits while **countless people** struggle to pay their bills. [...] A critical mass of "
                     "people – especially **younger people** – are demanding change and will no longer tolerate the "
                     "procrastination, denial and complacency that created this state of emergency.”\n\n"
                     "In the text and figure above it is clear how the characters can be seen as nodes of DAGs. However, the diagram shows that assigning causal arrows between characters may often be ambiguous in real texts. "
                     "By contrast, assigning roles is typically clearer and can be coded directly:  in this example, corporations are cast as villain, the poor as victim, and civil society as hero.\n\n"
-                    "###### Political Narrative Characters for Climate Change Policy:\n\n"
+                    "##### Political Narrative Characters for Climate Change Policy:\n\n"
                     "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
                     "we pre-specify ten characters: five human characters (made of institutions and groups of individuals) "
                     "and five instrument characters (policy tools and instruments).\n\n"
@@ -320,7 +320,7 @@ def render_step(step: int):
                 "To further improve data quality, we also include a **relevance classification** component. "
                 "This allows each text to be labeled according to whether it is relevant to the topic of interest, "
                 "complementing **Step 1** of this guide.\n\n"
-                "#### Step-by-Step instructions:\n"
+                "##### Step-by-Step instructions:\n"
                 "1) Access the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and download the `system_message_stage2` (or `system_message_stage1`) from the `code and prompts/` folder.\n\n "
                 "2) Modify the SYSTEM MESSAGE field with your instructions (describe how to behave when analyzing a text).\n\n"
                 "3) Modify the names of the characters and their descriptions.\n\n"
@@ -333,13 +333,13 @@ def render_step(step: int):
         example_card(
             "Prompt design for the political narratives of climate change 💡",
             (
-                "##### (a) Relevance classifier (Stage 1)\n"
+                "###### (a) Relevance classifier (Stage 1)\n"
                 "Decide if a three-sentence newspaper excerpt is relevant to **US climate change discourse**.\n"
                 "- 0 = irrelevant (no meaningful climate discussion)\n"
                 "- 1 = assert (asserts existence of climate change)\n"
                 "- 2 = deny (denies or mocks climate change)\n"
                 "- 3 = relevant (substantive discussion of climate change policy)\n\n"
-                "##### (b) Character detection & role assignment (Stage 2)\n"
+                "###### (b) Character detection & role assignment (Stage 2)\n"
                 "Identify pre-specified characters and assign contextual roles:\n"
                 "- Villain (1) | Hero (2) | Victim (3) | No role (4)\n\n"
                 "Characters: Developing Economies, US Democrats, US Republicans, Corporations, US People, "
@@ -359,7 +359,7 @@ def render_step(step: int):
         )
 
         # ——— PROMPT PASTE AREAS (stores in session_state) ———
-        st.markdown("#### Examples of JSON prompts")
+        st.markdown("##### Examples of JSON prompts")
         st.caption("Provide machine-readable JSON specs for Stage 1 (relevance classification) and Stage 2 (character/role assignment). You can find the original prompts for *Gehring and Grigoletto (2025)* in the GitHub repository.")
 
         # Load defaults from uploaded JSON system messages
