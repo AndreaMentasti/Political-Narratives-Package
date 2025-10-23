@@ -454,21 +454,31 @@ Analyze it in the context of US political discourse on climate change and respon
             ],
             ask_yourself=[
                 "Is my dataset ready for the annotation (id, text, missing values, etc)?",
+                "The dataset contains a column called ''id'' and a column called ''text''?",
                 "Are my prompts correctly specified and specific enough?",
-                "Is my folder structure organised as expected?"
+                "Is my folder structure organised as expected?",
+                "Am I in the correct environment (Political_Narratives)?",
+                "Is the OpenAI API key set in the environment?"
             ],
             key_prefix="s5_outputs",
 
             blurb_md=(
-                "This "
+                "This is the last step of the pipeline. At this phase you should have all the ingredients to proceed with the GPT annotations. "
+                " This step consists in the application of the code to perform the classification.\n\n"
+                "##### Step-by-Step instructions:"
+                "1) Download the script ````annotation_openai_stage2```` (or ````annotation_openai_stage1```` for relevance classification) from the `code and prompts/`folder in the  [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main).\n\n"
+                "2) Set the environment and save the OpenAI API Key as an environmental variable. We suggest to follow the steps [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) if you are not familiar with this."
+                "3) Set the folder structure properly.\n\n"
+                "4) Make minimal changes in the code to match your path, the characters defined in the prompt, and your dataset.\n\n"
+                "All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). We suggest the user to check them.
+                
             ),
         )
 
         example_card(
             "Annotation output and relevant texts 💡",
             (
-                "A typical tidy output includes:\n"
-                "- Stage-1 flags (relevance of the text)\n"
+                "A typical output includes:\n"
                 "- Character presence (which characters appear)\n"
                 "- Role indicators (whether a character is assigned a role)\n\n"
                 "A text is a **political narrative** if at least one role assignment is present; otherwise it may still be relevant but neutral."
@@ -479,8 +489,15 @@ Analyze it in the context of US political discourse on climate change and respon
         output_card(
             "What you should have at the end 🎆",
             bullets=[
-                "A **clean annotations file** in .csv (or JSONL) matching your schema. 🎆",
+                "An annotated dataset in the following form: 🎆",
             ],
+            body_md="""
+                | id   | text               | c1 | c2 | c3 | c4 | c5 | c6 |...
+                |------|--------------------|----|----|----|----|----|----|----
+                | 1_1  | If you listen…     |1   | 4  |0   | 0  | 0  | 0  |      
+                | 1_2  | But is it po…      |0   | 4  |0   |2   | 2  | 0  |
+                | 1_3  | In fact, on…       |3   | 1  |0   | 0  | 0  | 0  |       
+                """,
             key_prefix="s5_output"
         )
 
