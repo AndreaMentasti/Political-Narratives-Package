@@ -321,7 +321,7 @@ def render_step(step: int):
                 "To further improve data quality, we also include a **relevance classification** component. "
                 "This allows each text to be labeled according to whether it is relevant to the topic of interest, "
                 "complementing **Step 1** of this guide.\n\n"
-                "####Step-by-Step instructions:"
+                "#### Step-by-Step instructions:"
                 "1) Access the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and download the `system_message_stage2` (or `system_message_stage1`) from the `code and prompts/` folder.\n\n "
                 "2) Modify the SYSTEM MESSAGE field with your instructions (describe how to behave when analyzing a text).\n\n"
                 "3) Modify the names of the characters and their descriptions.\n\n"
