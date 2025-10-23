@@ -47,7 +47,7 @@ We provide here a step-by-step explanation on how to adapt the code and run it o
   │     └─ openai_final/              
   └─ logs/
   └─ environment.yml                         # <-- your environment requiremnts
-According to this structure, the user needs to fill the ````code/prompts/```` folder with the system message of the stage, and the ````data/output/```` folder with the ````.csv```` dataset.  
+According to this structure, the user needs to fill the ````code/prompts/```` folder with the system message of the stage, and the ````data/output/```` folder with the ````.csv```` dataset. Put the ````environment.yml```` in the main project folder.  
 IMPORTANT: the input ````.csv```` must contain a column called ````id```` and a column called ````text````.
 
 - Open Anaconda Prompt and move into the main project folder:
@@ -149,7 +149,7 @@ This key is personal and directly linked to the user's wallet, so it's important
     
     """
     Build the user content for the OpenAI API.
-    You need each "article" to be a dictionary like {"id":1, ""headline": "bla bla bla...""}
+    You need each "article" to be a dictionary like {"id":1, ""text": "bla bla bla...""}
     """
     
     user_content = (
@@ -161,7 +161,7 @@ This key is personal and directly linked to the user's wallet, so it's important
     )
     for article in article_group:
         user_content += f"ID: {article['id']}\n"
-        user_content += f"Tweet: {article['text']}\n"
+        user_content += f"Text: {article['text']}\n"
     return user_content
 
 - Lastly, he needs to adapt the `flatten_results()` function by changing this few lines of code: 
