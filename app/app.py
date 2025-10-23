@@ -282,6 +282,13 @@ def render_step(step: int):
                     "A contained list of relevant characters, both in human and instrument form if needed",
                     "A brief description of each character should be included in the prompts at Stage 4. It is good practice to annotate these descriptions while selecting the characters."
                 ],
+                body_md="""
+            | id   | text               | ...
+            |------|--------------------|----
+            | 1_1  | If you listen…     |      
+            | 1_2  | But is it po…      |      
+            | 1_3  | In fact, on…       |      
+            """,
                 key_prefix="s3_output"
             )
 
