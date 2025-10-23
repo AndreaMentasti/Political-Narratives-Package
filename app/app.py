@@ -458,6 +458,10 @@ Analyze it in the context of US political discourse on climate change and respon
                 "Is my folder structure organised as expected?"
             ],
             key_prefix="s5_outputs"
+
+            blurb_md=(
+                "This "
+            ),
         )
 
         example_card(
