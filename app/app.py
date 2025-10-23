@@ -249,10 +249,11 @@ def render_step(step: int):
             example_card(
                 "Relevant characters for climate change political discourse 💡",
                 (
+                    "**Text Example**\n"
                     "“Global greenhouse emissions are still on the rise, oil production is soaring and energy companies "
                     "are making sky-high profits while countless people struggle to pay their bills. [...] A critical mass of "
                     "people – especially younger people – are demanding change and will no longer tolerate the "
-                    "procrastination, denial and complacency that created this state of emergency.\n\n”"
+                    "procrastination, denial and complacency that created this state of emergency.”\n\n"
                     "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
                     "we pre-specify ten characters: five human characters (made of institutions and groups of individuals) "
                     "and five instrument characters (policy tools and instruments).\n\n"
