@@ -85,7 +85,7 @@ least one character cast in a drama triangle role: hero, villain, or victim.*
 
 The definition and measurement of political narratives,  therefore, reduce to specifying the topic and characters, and coding for each character whether
 it appears as neutral or cast as hero, villain, or victim.
-Its purpose is influencing perceptions, beliefs, and preferences about characters contained in the narrative.  **Political narratives** exert their influence by depicting characters in one of the three archetypal roles—**hero**, **villain**, or **victim**.  They are communicative devices that focus attention, encode roles and identities, and shape norms and behavior.
+Its purpose is influencing perceptions, beliefs, and preferences about characters contained in the narrative.  Political narratives exert their influence by depicting characters in one of the three archetypal roles—**hero**, **villain**, or **victim**.  They are communicative devices that focus attention, encode roles and identities, and shape norms and behavior.
 
 Formally, fix a topic *T* and a universe of characters *K = H ∪ I*. For any text unit (tweet, paragraph, article), let *K′ ⊆ K* be the set of characters that appear.  
 A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing character to either a drama-triangle role or neutrality. We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, villain, or victim; if all characters are neutral, the text is about the topic but does not constitute a political narrative in this sense.  
@@ -191,8 +191,8 @@ def render_step(step: int):
             (
                 "In *Gehring & Grigoletto (2025)* our focus is on narratives about climate change policies in the United States, collected from the social media platform Twitter. "
                 "We specifically choose the U.S. due to the significant role Twitter plays in shaping and disseminating political narratives there. "
-                "The data collection process involves querying the **Twitter historical APIv2** with a set of **keywords** adapted from *Oehl, Schaffer, and Bernauer (2017)*."
-                "In our main analysis, we define the tweet as our unit of observation, since its concise length aligns well with the requirements of the subsequent stages of the framework, including the GPT annotation process."
+                "The data collection process involves querying the **Twitter historical APIv2** with a set of **keywords** adapted from *Oehl, Schaffer, and Bernauer (2017)*. "
+                "In our main analysis, we define the tweet as our unit of observation, since its concise length aligns well with the requirements of the subsequent stages of the framework, including the GPT annotation process. "
                 "We also extract newspaper articles, which we decided to split into smaller snippets to make them compatible with the framework’s next steps."
             ),
             key_prefix="s2_example"
@@ -201,14 +201,17 @@ def render_step(step: int):
         output_card(
             "What you should have before Step 3 ⚠️",
             bullets=[
-                "A dataset with the extracted text snippets and other metadata, if you need them for your analysis.",
+                "A dataset with the extracted text snippets and other metadata, if you need them for your analysis."
             ],
+            body_md="""
+        | id   | text               | dev | dem | rep | corp | ppl | pric | ban | fos | green | nuc |
+        |------|--------------------|-----|-----|-----|------|-----|------|-----|-----|-------|-----|
+        | 1_1  | If you listen…     |  0  |  0  |  2  |  0   |  0  |  0   |  0  |  1  |   0   |  0  |
+        | 1_2  | But is it po…      |  0  |  0  |  0  |  0   |  0  |  0   |  0  |  0  |   0   |  0  |
+        | 1_3  | In fact, on…       |  0  |  1  |  0  |  0   |  0  |  2   |  0  |  0  |   0   |  0  |
+        """,
             key_prefix="s2_output"
         )
-
-        st.text_area("Annotations for Step 2 (optional)", key="notes_s2",
-                     value=st.session_state["guide"]["notes"][2], height=120)
-        st.session_state["guide"]["notes"][2] = st.session_state["notes_s2"]
 
     # --- STEP 3 ---
     if step == 3:
