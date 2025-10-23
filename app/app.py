@@ -298,7 +298,6 @@ def render_step(step: int):
         question_card(
             "Guide: prepare the prompt(s) ✅",
             how_to=[
-                "Choose ONE main task (classify / extract / summarize / compare / generate) and one input unit (headline / paragraph / article / tweet).",
                 "Define a **JSON schema** (keys, allowed labels, brief rationale) and **guardrails** (e.g., cite spans, no external knowledge, be concise).",
                 "Add **2–4 worked examples** (cover easy + tricky edge cases).",
                 "Co-design prompts with the same model you will use for annotation (e.g., GPT-4o-mini via OpenAI) to align capabilities and outputs.",
@@ -313,6 +312,17 @@ def render_step(step: int):
                 "Have I specified guardrails (no external knowledge, cite spans, be concise)?"
             ],
             key_prefix="s4_prompt"
+            blurb_md=(
+            "This step is crucial for achieving **accurate classification**. The researcher must provide "
+            "**precise instructions** to the LLM to ensure that characters are correctly annotated with their respective roles. "
+            "To do so, you need to create a **SYSTEM MESSAGE** in `.json` format that clearly specifies the task, "
+            "the set of characters to be identified, and the possible roles they can assume.\n\n "
+            "Below, we provide key guidance for constructing the SYSTEM MESSAGE. A ready-to-use example prompt is available "
+            "in the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and can be easily adapted by following these instructions. "
+            "To further improve data quality, we also include a **relevance classification** component. "
+            "This allows each text to be labeled according to whether it is relevant to the topic of interest, "
+            "complementing **Step 1** of this guide."
+            ),
         )
 
         # 2) EXAMPLE
