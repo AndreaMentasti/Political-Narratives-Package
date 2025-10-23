@@ -182,7 +182,7 @@ def render_step(step: int):
                 "Is the extraction method able to produce snippets that are neither too short to lose context nor too long to become too complicated for the analysis? If needed, split the texts into smaller snippets.",
                 "Is the time window covered by the source appropriate for the research question?",
                 "Can I obtain essential metadata (dates, outlets, geography, language) for contextual analysis?",
-                "Basic preprocessing (removing duplicates, non-textual artifacts) ensures better results in later steps. If texts are multilingual, is good to consider filtering or adding a ‘language’ column for clarity.
+                "Basic preprocessing (removing duplicates, non-textual artifacts) ensures better results in later steps. If texts are multilingual, is good to consider filtering or adding a ‘language’ column for clarity."
             ],
             key_prefix="s2_sources"
         )
