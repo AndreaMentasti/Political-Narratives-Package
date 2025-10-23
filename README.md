@@ -37,7 +37,6 @@ We provide here a step-by-step explanation on how to adapt the code and run it o
   │     └─ system_message_stage1.json        # <-- your input message
   │     └─ system_message_stage2.json        # <-- your input message
   ├─ data/
-  │  ├─ raw/
   │  └─ output/
   │     └─ your_data_stage1.csv              # <-- your input CSV
   │     └─ your_data_stage2.csv              # <-- your input CSV
@@ -66,7 +65,6 @@ IMPORTANT: the input ````.csv```` must contain a column called ````id```` and a 
   ````bash
   pip install "openai==2.4.0"
 
-
 - Set the ````OPENAI_API_KEY```` as an environmental variable in your current environment:
     ````bash
     conda env config vars set OPENAI_API_KEY="sk-your-key-here"
@@ -76,8 +74,9 @@ IMPORTANT: the input ````.csv```` must contain a column called ````id```` and a 
 This step is crucial for the success of the annotation process. This code requires an individual OpenAI API key, that the user can retrieve in his [OpenAI personal page](https://platform.openai.com/api-keys). 
 This key is personal and directly linked to the user's wallet, so it's important to keep it personal and hidden in the machine and not in the script.
 
-- Open Anaconda Prompt and activate Spyder (or your preferred Python IDE) by running the command
+- Open Anaconda Prompt and activate Spyder or your preferred Python IDE by running the commands:
   ````bash
+  conda install spyder
   spyder
   
 - Open the script of interest directly in spyder using the top left command bar. Here the user can choose one of the two Python scripts depending on the task that he needs to perform:
