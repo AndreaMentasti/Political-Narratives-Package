@@ -62,6 +62,11 @@ IMPORTANT: the input ````.csv```` must contain a column called ````id```` and a 
   ````bash
   conda activate political_narrative
 
+- Install the correct version of ````openai````
+  ````bash
+  pip install "openai==2.4.0"
+
+
 - Set the ````OPENAI_API_KEY```` as an environmental variable in your current environment:
     ````bash
     conda env config vars set OPENAI_API_KEY="sk-your-key-here"
@@ -107,6 +112,8 @@ This key is personal and directly linked to the user's wallet, so it's important
   }
 
 - Modify the input dataset: the user needs to provide in the ````/data/output```` folder his dataset named ````your_data_stage2```` (or ````your_data_stage1````). This dataset must contain a column called **id** with the unique identifiers and a column called **text** containing the text for the classification.
+
+- - Your ````.csv```` file must be UTF-8 encoded. If you see errors such ````unicodeDecodeError```` try saving again your file in UTF-8, or the script will automatically fall back to latin-1 encoding.
 
 - Once prepared the folder structure, the prompt, and the dataset, the user can make minimal changes to the Python script. First, changing the directory
   ````bash
