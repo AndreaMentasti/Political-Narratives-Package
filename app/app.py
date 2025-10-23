@@ -240,7 +240,10 @@ def render_step(step: int):
                 key_prefix="s3_chars",
                 # ↓ NEW: short description appears above “How to approach”
                 blurb_md=(
-                    "Define a **small, distinctive set of characters** that directly reflect your research question. "
+                    "In the context of Political Narratives, a **character** is identified as an actor taking part in the discourse about the topic of interest. "
+                    "They can be represented as **nodes in a directed acyclic graph (DAG)**, where edges capture causal or relational dependencies among actors. "
+                    "While DAGs illustrate structure, narrative coding focuses on how each character is framed through roles such as hero, villain, or victim.\n\n" 
+                    "In this step, define a **small, distinctive set of characters** that directly reflect your research question. "
                     "Prefer **clear, non-overlapping definitions** that an LLM can reliably identify across texts. "
                     "Record a **brief description for each character now**—you will reuse it in Step 4 prompts."
                 ),
