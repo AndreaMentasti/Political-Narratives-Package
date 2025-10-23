@@ -249,11 +249,13 @@ def render_step(step: int):
             example_card(
                 "Relevant characters for climate change political discourse 💡",
                 (
-                    "**Text Example**\n"
-                    "“Global greenhouse emissions are still on the rise, oil production is soaring and energy companies "
-                    "are making sky-high profits while countless people struggle to pay their bills. [...] A critical mass of "
-                    "people – especially younger people – are demanding change and will no longer tolerate the "
+                    "**Text Example**\n\n"
+                    "“Global greenhouse emissions are still on the rise, oil production is soaring and **energy companies** "
+                    "are making sky-high profits while **countless people** struggle to pay their bills. [...] A critical mass of "
+                    "people – especially **younger people** – are demanding change and will no longer tolerate the "
                     "procrastination, denial and complacency that created this state of emergency.”\n\n"
+                    "In the text and figure above it is clear how the characters can be seen as nodes of DAGs. However, the diagram shows that assigning causal arrows between characters may often be ambiguous in real texts. ""
+                    "By contrast, assigning roles is typically clearer and can be coded directly:  in this example, corporations are cast as villain, the poor as victim, and civil society as hero.\n\n"
                     "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
                     "we pre-specify ten characters: five human characters (made of institutions and groups of individuals) "
                     "and five instrument characters (policy tools and instruments).\n\n"
