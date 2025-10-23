@@ -467,7 +467,7 @@ Analyze it in the context of US political discourse on climate change and respon
                 " This step consists in the application of the code to perform the classification.\n\n"
                 "##### Step-by-Step instructions:\n"
                 "1) Download the script ````annotation_openai_stage2```` (or ````annotation_openai_stage1```` for relevance classification) from the `code and prompts/`folder in the  [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main).\n\n"
-                "2) Set the environment and save the OpenAI API Key as an environmental variable. We suggest to follow the steps [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) if you are not familiar with this."
+                "2) Set the environment and save the OpenAI API Key as an environmental variable. We suggest to follow the steps [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) if you are not familiar with this.\n\n"
                 "3) Set the folder structure properly.\n\n"
                 "4) Make minimal changes in the code to match your path, the characters defined in the prompt, and your dataset.\n\n"
                 "All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). We suggest the user to check them."
