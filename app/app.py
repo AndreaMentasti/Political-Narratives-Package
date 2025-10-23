@@ -298,7 +298,7 @@ def render_step(step: int):
         question_card(
             "Guide: prepare the prompt(s) ✅",
             how_to=[
-                "Define a **JSON schema** (keys, allowed labels, brief rationale) and **guardrails** (e.g., cite spans, no external knowledge, be concise).",
+                "Define a **JSON schema** (keys, allowed labels, brief rationale).",
                 "Co-design prompts with the same model you will use for annotation (e.g., GPT-4o-mini via OpenAI) to align capabilities and outputs.",
                 "This package supports two tasks: (a) topic relevance classification and (b) character detection + role assignment."
             ],
@@ -307,7 +307,6 @@ def render_step(step: int):
                 "Is the chosen input unit appropriate for context vs. speed constraints?",
                 "Is the schema unambiguous, machine-readable, and easy to parse?",
                 "Do I provide a description of the selected characters?",
-                "Have I specified guardrails (no external knowledge, cite spans, be concise)?"
             ],
             key_prefix="s4_prompt",
             
@@ -354,14 +353,14 @@ def render_step(step: int):
         output_card(
             "What you should have before Step 5 ⚠️",
             bullets=[
-                "A finalized **prompt** for your task (relevance or character/role), including schema and guardrails.",
+                "A finalized **prompt** for your task (relevance or character/role).",
             ],
             key_prefix="s4_output"
         )
 
         # ——— PROMPT PASTE AREAS (stores in session_state) ———
-        st.markdown("### Paste your JSON prompts")
-        st.caption("Provide machine-readable JSON specs for Stage 1 (relevance classification) and Stage 2 (character/role assignment). You can find the original prompts for *Gehring and Grigoletto (2025) in the GitHub repository.")
+        st.markdown("#### Examples of JSON prompts")
+        st.caption("Provide machine-readable JSON specs for Stage 1 (relevance classification) and Stage 2 (character/role assignment). You can find the original prompts for *Gehring and Grigoletto (2025)* in the GitHub repository.")
 
         # Load defaults from uploaded JSON system messages
         default_relevance_json = """{
