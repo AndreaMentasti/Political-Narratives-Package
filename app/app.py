@@ -213,6 +213,10 @@ def render_step(step: int):
             key_prefix="s2_output"
         )
 
+        st.text_area("Annotations for Step 2 (optional)", key="notes_s2",
+                     value=st.session_state["guide"]["notes"][2], height=120)
+        st.session_state["guide"]["notes"][2] = st.session_state["notes_s2"]
+
     # --- STEP 3 ---
     if step == 3:
             st.subheader("Step 3 — Identify relevant characters")
