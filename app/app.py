@@ -223,7 +223,7 @@ def render_step(step: int):
                 how_to=[
                     "Identify relevant characters for the topic — this is the core of Step 3.",
                     "Anchor selection in your research question and analytical focus; choose characters that speak to your hypotheses.",
-                    "Balance scope with feasibility: too many characters can reduce precision and raise compute costs; a focused set improves reliability and interpretability.",
+                    "Balance scope with feasibility: too many characters can reduce precision and raise compute costs; a focused set improves reliability and interpretability. The list of characters doesn't need to include the whole universe of character relevant for the topic, it just needs to be consistent with the scope of your research.",
                     "Build the character list via literature review, exploratory tools (topic modeling, entity recognition/RELATIO), and domain reading; document your choices."
                 ],
                 ask_yourself=[
@@ -235,7 +235,7 @@ def render_step(step: int):
                     "Is the chosen character list feasible for LLM coding (not too long, not too ambiguous)?",
                     "If interested in human vs instrument classification, are these best understood as human actors (individuals, groups, organizations, states) or instrumental actors (policies, tools, institutions)?",
                     "How many characters can I realistically track while keeping the coding interpretable and statistically useful?",
-                    "Can each character plausibly appear in different roles (hero, villain, victim), or are some inherently neutral/instrumental?",
+                    "Can each character plausibly appear in different roles (hero, villain, victim), or are some inherently neutral?",
                 ],
                 key_prefix="s3_chars",
                 # ↓ NEW: short description appears above “How to approach”
@@ -249,6 +249,12 @@ def render_step(step: int):
             example_card(
                 "Relevant characters for climate change political discourse 💡",
                 (
+
+                    "*“Global greenhouse emissions are still on the rise, oil production is soaring and energy companies
+                    are making sky-high profits while countless people struggle to pay their bills. [...] A critical mass of
+                    people – especially younger people – are demanding change and will no longer tolerate the
+                    procrastination, denial and complacency that created this state of emergency.”*"
+                    
                     "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
                     "we pre-specify ten characters: five human characters (made of institutions and groups of individuals) "
                     "and five instrument characters (policy tools and instruments).\n\n"
