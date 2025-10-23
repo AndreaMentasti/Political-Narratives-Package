@@ -249,9 +249,9 @@ def render_step(step: int):
             example_card(
                 "Relevant characters for climate change political discourse 💡",
                 (
-                    "*“Global greenhouse emissions are still on the rise, oil production is soaring and energy companies"
-                    "*are making sky-high profits while countless people struggle to pay their bills. [...] A critical mass of*"
-                    "*people – especially younger people – are demanding change and will no longer tolerate the*"
+                    "*“Global greenhouse emissions are still on the rise, oil production is soaring and energy companies *"
+                    "*are making sky-high profits while countless people struggle to pay their bills. [...] A critical mass of *"
+                    "*people – especially younger people – are demanding change and will no longer tolerate the *"
                     "*procrastination, denial and complacency that created this state of emergency.”*"
                     
                     "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
