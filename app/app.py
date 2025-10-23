@@ -470,7 +470,7 @@ Analyze it in the context of US political discourse on climate change and respon
                 "2) Set the environment and save the OpenAI API Key as an environmental variable. We suggest to follow the steps [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) if you are not familiar with this."
                 "3) Set the folder structure properly.\n\n"
                 "4) Make minimal changes in the code to match your path, the characters defined in the prompt, and your dataset.\n\n"
-                "All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). We suggest the user to check them.
+                "All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). We suggest the user to check them."
                 
             ),
         )
