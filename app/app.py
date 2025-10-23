@@ -252,14 +252,14 @@ def render_step(step: int):
             example_card(
                 "Relevant characters for climate change political discourse 💡",
                 (
-                    "**Text Example:**\n\n"
+                    "####Text Example: \n\n"
                     "“Global greenhouse emissions are still on the rise, oil production is soaring and **energy companies** "
                     "are making sky-high profits while **countless people** struggle to pay their bills. [...] A critical mass of "
                     "people – especially **younger people** – are demanding change and will no longer tolerate the "
                     "procrastination, denial and complacency that created this state of emergency.”\n\n"
                     "In the text and figure above it is clear how the characters can be seen as nodes of DAGs. However, the diagram shows that assigning causal arrows between characters may often be ambiguous in real texts. "
                     "By contrast, assigning roles is typically clearer and can be coded directly:  in this example, corporations are cast as villain, the poor as victim, and civil society as hero.\n\n"
-                    "**Political Narrative Characters for Climate Change Policy:**\n\n"
+                    "####Political Narrative Characters for Climate Change Policy:\n\n"
                     "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
                     "we pre-specify ten characters: five human characters (made of institutions and groups of individuals) "
                     "and five instrument characters (policy tools and instruments).\n\n"
@@ -299,7 +299,6 @@ def render_step(step: int):
             "Guide: prepare the prompt(s) ✅",
             how_to=[
                 "Define a **JSON schema** (keys, allowed labels, brief rationale) and **guardrails** (e.g., cite spans, no external knowledge, be concise).",
-                "Add **2–4 worked examples** (cover easy + tricky edge cases).",
                 "Co-design prompts with the same model you will use for annotation (e.g., GPT-4o-mini via OpenAI) to align capabilities and outputs.",
                 "This package supports two tasks: (a) topic relevance classification and (b) character detection + role assignment."
             ],
@@ -307,7 +306,6 @@ def render_step(step: int):
                 "Is the task singular and clear (avoid mixing multiple tasks in one prompt)?",
                 "Is the chosen input unit appropriate for context vs. speed constraints?",
                 "Is the schema unambiguous, machine-readable, and easy to parse?",
-                "Do my few-shot examples include near-miss/edge cases?",
                 "Do I provide a description of the selected characters?",
                 "Have I specified guardrails (no external knowledge, cite spans, be concise)?"
             ],
@@ -316,13 +314,19 @@ def render_step(step: int):
             blurb_md=(
                 "This step is crucial for achieving **accurate classification**. The researcher must provide "
                 "**precise instructions** to the LLM to ensure that characters are correctly annotated with their respective roles. "
-                "To do so, you need to create a **SYSTEM MESSAGE** in `.json` format that clearly specifies the task, "
+                "To do so, you need to create a **SYSTEM MESSAGE** in JSON format that clearly specifies the task, "
                 "the set of characters to be identified, and the possible roles they can assume.\n\n "
                 "Below, we provide key guidance for constructing the SYSTEM MESSAGE. A ready-to-use example prompt is available "
                 "in the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and can be easily adapted by following these instructions. "
                 "To further improve data quality, we also include a **relevance classification** component. "
                 "This allows each text to be labeled according to whether it is relevant to the topic of interest, "
-                "complementing **Step 1** of this guide."
+                "complementing **Step 1** of this guide.\n\n"
+                "####Step-by-Step instructions:"
+                "1) Access the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and download the `system_message_stage2` (or `system_message_stage1`) from the `code and prompts/` folder.\n\n "
+                "2) Modify the SYSTEM MESSAGE field with your instructions (describe how to behave when analyzing a text).\n\n"
+                "3) Modify the names of the characters and their descriptions.\n\n"
+                "4) After each description, specify in which key to store the result. For example, if you have 8 characters your prompt will specify keys from a to f. As a result, the classification results for the first characters will be stored in column a (key - a), for the second character in column b (key - b), and so on. "
+                "Keys are nothing but the way the LLM stores the results according to the prompt. You don't need knowledge of JSON language to change these few letters in the prompt."
             ),
         )
 
@@ -350,9 +354,7 @@ def render_step(step: int):
         output_card(
             "What you should have before Step 5 ⚠️",
             bullets=[
-                "A finalized **prompt** for both tasks (relevance + character/role), including schema and guardrails.",
-                "A set of **few-shot examples** (both positive and near-miss).",
-                "Consistent key names to enable parsing into (M, R) downstream."
+                "A finalized **prompt** for your task (relevance or character/role), including schema and guardrails.",
             ],
             key_prefix="s4_output"
         )
