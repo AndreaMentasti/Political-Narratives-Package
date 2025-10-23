@@ -173,7 +173,7 @@ Inputs:
 Outputs:
 - Dataset with characther-role flags (if you run the second script):
   
-  | id   | content            | dev | dem | rep | corp | ppl | pric | ban | fos | green | nuc |
+  | id   | text               | dev | dem | rep | corp | ppl | pric | ban | fos | green | nuc |
   |------|--------------------|-----|-----|-----|------|-----|------|-----|-----|-------|-----|
   | 1_1  | If you listen…     |  0  |  0  |  2  |  0   |  0  |  0   |  0  |  1  |   0   |  0  |
   | 1_2  | But is it po…      |  0  |  0  |  0  |  0   |  0  |  0   |  0  |  0  |   0   |  0  |
