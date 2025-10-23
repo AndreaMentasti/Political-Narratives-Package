@@ -130,7 +130,7 @@ IMPORTANT: the input ````.csv```` must contain a column called ````id```` and a 
         "strict": True
   }
 
-- Then, he needs to change the user content to adapt it to his number of characters, as done before: 
+- Then, the user needs to change the user content to adapt it to his number of characters, as done before: 
   ````bash
   def build_user_content(article_group):
     
@@ -165,18 +165,18 @@ IMPORTANT: the input ````.csv```` must contain a column called ````id```` and a 
 
 ## Inputs - Output map
 Inputs:
-- dataset with text snippets and observation id (in the code ```your_code.csv```)
+- dataset with text snippets and observation id (in the code ```your_code_stage1.csv``` and ```your_code_stage2.csv```)
 - prompt for stage 1 (in the code ```system_message_stage1.json```)
 - prompt for stage 2 (in the code ```system_message_stage2.json```)
 - API key as Environmental variable
   
 Outputs:
-- Dataset with relevance (if you run the stage 1 script) or characther-role flags (if you run the second script):
+- Dataset with characther-role flags (if you run the second script):
   
-  | id   | content            | relevance | dev | dem | rep | corp | ppl | pric | ban | fos | green | nuc |
-  |------|--------------------|-----------|-----|-----|-----|------|-----|------|-----|-----|-------|-----|
-  | 1_1  | If you listen…     |     3     |  0  |  0  |  2  |  0   |  0  |  0   |  0  |  1  |   0   |  0  |
-  | 1_2  | But is it po…      |     3     |  0  |  0  |  0  |  0   |  0  |  0   |  0  |  0  |   0   |  0  |
-  | 1_3  | In fact, on…       |     3     |  0  |  1  |  0  |  0   |  0  |  2   |  0  |  0  |   0   |  0  |
+  | id   | content            | dev | dem | rep | corp | ppl | pric | ban | fos | green | nuc |
+  |------|--------------------|-----|-----|-----|------|-----|------|-----|-----|-------|-----|
+  | 1_1  | If you listen…     |  0  |  0  |  2  |  0   |  0  |  0   |  0  |  1  |   0   |  0  |
+  | 1_2  | But is it po…      |  0  |  0  |  0  |  0   |  0  |  0   |  0  |  0  |   0   |  0  |
+  | 1_3  | In fact, on…       |  0  |  1  |  0  |  0   |  0  |  2   |  0  |  0  |   0   |  0  |
 
 
