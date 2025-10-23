@@ -204,11 +204,11 @@ def render_step(step: int):
                 "A dataset with the extracted text snippets and other metadata, if you need them for your analysis."
             ],
             body_md="""
-        | id   | text               | ...
-        |------|--------------------|----
-        | 1_1  | If you listen…     |      
-        | 1_2  | But is it po…      |      
-        | 1_3  | In fact, on…       |      
+        | id   | text               | c1 | c2 | c3 | c4 | c5 | c6 |...
+        |------|--------------------|----|----|----|----|----|----|----
+        | 1_1  | If you listen…     |    |    |    |    |    |    |      
+        | 1_2  | But is it po…      |    |    |    |    |    |    |
+        | 1_3  | In fact, on…       |    |    |    |    |    |    |    
         """,
             key_prefix="s2_output"
         )
