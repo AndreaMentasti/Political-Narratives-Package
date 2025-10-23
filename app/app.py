@@ -284,7 +284,7 @@ def render_step(step: int):
                 "Output - What you should have before Step 4 ⚠️",
                 bullets=[
                     "A contained list of relevant characters, both in human and instrument form if needed",
-                    "A brief description of each character should be included in the prompts at Stage 4. It is good practice to annotate these descriptions while selecting the characters."
+                    "A brief description of each character should be included in the prompts at Stage 4. It is good practice to annotate these descriptions while selecting the characters.",
                     "Graphically, the table below show how in the next steps these characters will enter the final dataset (NOW YOU DON'T NEED THIS TABLE)."
                 ],
                 body_md="""
