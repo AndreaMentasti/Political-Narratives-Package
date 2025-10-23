@@ -27,11 +27,46 @@ We provide here a step-by-step explanation on how to adapt the code and run it o
 
 - (For beginner Python users) Then, we suggest you to download Anaconda and Anaconda Prompt at the [link](https://www.anaconda.com/docs/getting-started/anaconda/install).
 
--  Open Anaconda Prompt and set the ````OPENAI_API_KEY```` as an environmental variable in your current environment (likely ````base````):
+- Download the files in ````code and prompts```` and the ````environment.yml````. Then, the user must build the following folder structure locally:
+  ```bash
+  <main>/
+  ├─ code/
+  │  ├─ annotation_openai_stage1.py
+  │  ├─ annotation_openai_stage2.py
+  │  └─ prompts/
+  │     └─ system_message_stage1.json        # <-- your input message
+  │     └─ system_message_stage2.json        # <-- your input message
+  ├─ data/
+  │  ├─ raw/
+  │  └─ output/
+  │     └─ your_data_stage1.csv              # <-- your input CSV
+  │     └─ your_data_stage2.csv              # <-- your input CSV
+  ├─ output/
+  │  └─ data/
+  │     ├─ openai_output/             
+  │     └─ openai_final/              
+  └─ logs/
+  └─ environment.yml                         # <-- your environment requiremnts
+According to this structure, the user needs to fill the ````code/prompts/```` folder with the system message of the stage, and the ````data/output/```` folder with the ````.csv```` dataset.  
+IMPORTANT: the input ````.csv```` must contain a column called ````id```` and a column called ````text````.
+
+- Open Anaconda Prompt and move into the main project folder:
+  ````bash
+  cd C:\Users\YourName\Documents\political_narrative_project
+
+- Then, create the environment where the code will run:
+  ````bash
+  conda env create -f environment.yml
+
+- Activate the environment
+  ````bash
+  conda activate political_narrative
+
+- Set the ````OPENAI_API_KEY```` as an environmental variable in your current environment:
     ````bash
     conda env config vars set OPENAI_API_KEY="sk-your-key-here"
     conda deactivate
-    conda activate base
+    conda activate political_narrative
 
 This step is crucial for the success of the annotation process. This code requires an individual OpenAI API key, that the user can retrieve in his [OpenAI personal page](https://platform.openai.com/api-keys). 
 This key is personal and directly linked to the user's wallet, so it's important to keep it personal and hidden in the machine and not in the script.
@@ -40,33 +75,11 @@ This key is personal and directly linked to the user's wallet, so it's important
   ````bash
   spyder
   
-- Download the python script from the folder ````code and prompts\````, and open it directly in spyder using the top left command bar. Here the user can choose one of the two Python scripts depending on the task that he needs to perform:
+- Open the script of interest directly in spyder using the top left command bar. Here the user can choose one of the two Python scripts depending on the task that he needs to perform:
   - The **stage 1 script**  ````annotation_openai_stage1```` allows the user tho classify a text based on its relevance to the topic selected. This code returns an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant).
   - The **stage 2 script** ````annotation_openai_stage2```` is the core of the Political Narrative Package, and it allows the user to retrieve the character-role classification. The code returns a dataset with a column for each specified character taking values from 0 to 4, where 0 is no-mention of the character, 1 is Villain role, 2 is Hero role, 3 is Victim role, and 4 for appearence of the character in none of these roles (Neutral).
- 
-- Once selected the script, the user must build the following folder structure locally:
-  ```bash
-  <main>/
-  ├─ code/
-  │  ├─ annotation_openai_stage1.py
-  │  ├─ annotation_openai_stage2.py
-  │  └─ prompts/
-  │     └─ system_message_stage1.json
-  │     └─ system_message_stage2.json
-  ├─ data/
-  │  ├─ raw/
-  │  └─ output/
-  │     └─ your_data_stage1.csv              # <-- your input CSV
-  │     └─ your_data_stage2.csv              # <-- your input CSV
-  ├─ output/
-  │  └─ data/
-  │     ├─ openai_output/             # partial batches will land here
-  │     └─ openai_final/              # merged final file lands here
-  └─ logs/
-According to this structure, the user needs to fill the ````code/prompts/```` folder with the system message of the stage, and the ````data/output/```` folder with the ````.csv```` dataset.  
-IMPORTANT: the input ````.csv```` must contain a column called ````id```` and a column called ````text````.
 
-- Regarding the prompt, the user can adapt the prompt provided in the folder with his own instructions. The user can do this by accessing the "SYSTEM MESSAGE" in the prompt. To modify the task, the user must change the keys (in the example from a to j) to match the number of characters of his analysis. Moreover, descriptions of the characters are required in order for OpenAI to perform a meaningful classification. An example of the prompt is provided here:
+- Regarding the prompt, the user can adapt the prompt in the folder ````code/prompts/```` with his own instructions. The user can do this by accessing the "SYSTEM MESSAGE" in the prompt. To modify the task, the user must change the keys (in the example from a to j) to match the number of characters of his analysis. Moreover, descriptions of the characters are required in order for OpenAI to perform a meaningful classification. An example of the prompt is provided here:
   ````bash
   {
   "SYSTEM_MESSAGE": "You are an average US citizen. The user will provide a three-sentence US newspaper excerpt (2010–2021). 
