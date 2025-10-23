@@ -478,7 +478,7 @@ Analyze it in the context of US political discourse on climate change and respon
         example_card(
             "Annotation output and relevant texts 💡",
             (
-                "A typical output includes:\n"
+                "In the paper, our output includes:\n"
                 "- Character presence (which characters appear)\n"
                 "- Role indicators (whether a character is assigned a role)\n\n"
                 "A text is a **political narrative** if at least one role assignment is present; otherwise it may still be relevant but neutral."
