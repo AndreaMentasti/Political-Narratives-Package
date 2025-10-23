@@ -159,7 +159,7 @@ This key is personal and directly linked to the user's wallet, so it's important
     
     """
     Build the user content for the OpenAI API.
-    You need each "article" to be a dictionary like {"id":1, ""text": "bla bla bla...""}
+    You need each "article" to be a dictionary like {"id":1, "text": "bla bla bla..."}
     """
     
     user_content = (
@@ -176,7 +176,7 @@ This key is personal and directly linked to the user's wallet, so it's important
 
 - Lastly, he needs to adapt the `flatten_results()` function by changing this few lines of code: 
   ````bash
-                          "request_id": result["request_id"],
+                        "request_id": result["request_id"],
                         "article_id": result.get("article_id"),
                         "id": entry_id,
                         "a": entry.get("a", 0),
