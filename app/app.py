@@ -87,8 +87,8 @@ The definition and measurement of political narratives,  therefore, reduce to sp
 it appears as neutral or cast as hero, villain, or victim.
 Its purpose is influencing perceptions, beliefs, and preferences about characters contained in the narrative.  Political narratives exert their influence by depicting characters in one of the three archetypal roles—**hero**, **villain**, or **victim**.  They are communicative devices that focus attention, encode roles and identities, and shape norms and behavior.
 
-Formally, fix a topic *T* and a universe of characters *K = H ∪ I*. For any text unit (tweet, paragraph, article), let *K′ ⊆ K* be the set of characters that appear.  
-A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing character to either a drama-triangle role or neutrality. We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, villain, or victim; if all characters are neutral, the text is about the topic but does not constitute a political narrative in this sense.  
+Formally, choose a topic *T* and a universe of characters *K = H ∪ I*, where H and I represent Human and Instrument characters. For any text unit (tweet, paragraph, article), let *K′ ⊆ K* be the set of characters that appear.  
+A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing character to either a drama-triangle role or neutrality. We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, villain, or victim. If all characters are neutral, the text is about the topic but does not constitute a political narrative in this sense.  
 
 **How to use this guide**
 - Use the step selector above to move from **1 → 5**.
@@ -126,7 +126,7 @@ def render_step(step: int):
             ],
             ask_yourself=[
                 "Does this topic surface enough distinct political narratives and public debate to analyze?",
-                "Is it likely there are enough identifiable characters within those narratives?",
+                "Is it likely there are enough identifiable characters within those narratives? Characters can be individuals, parties, institutions, or groups appearing in the discourse.",
                 "Which data sources are most informative for this topic, and do I have reliable access to them?",
                 "If those sources are available, can I obtain the essential metadata (dates, outlets, geography, language) needed for analysis?",
                 "Is the research question compelling and relevant to the scientific community (and/or practitioners)?",
@@ -150,7 +150,7 @@ def render_step(step: int):
         output_card(
             "What you should have before Step 2 ⚠️",
             bullets=[
-                "A precise topic for the analysis of Political Narratives"
+                "A precise topic for the analysis of political narratives"
             ],
             key_prefix="s1_output"
         )
@@ -172,7 +172,7 @@ def render_step(step: int):
                 "Evaluate trade-offs between coverage, accessibility, and quality (e.g., digitization errors, platform bias, sampling limits).",
                 "For data extraction, the chosen source will determine which methodologies can be applied—such as keyword-based queries, scraping, API pulls, or manual collection.",
                 "Consider the level of metadata you can preserve (dates, outlets, authors, geography, language) since these details will later be the basis of your analysis.",
-                "What is the unit of analysis? Should I split the texts into smaller snippets, or can I work with the extracted texts as they are?"
+                "What is the unit of analysis (for instance, a tweet, paragraph, or newspaper snippet.)? Should I split the texts into smaller snippets, or can I work with the extracted texts as they are? For example, long texts (e.g., articles) can be segmented into paragraphs or 3-sentence chunks to fit LLM input limits and maintain focus."
             ],
             ask_yourself=[
                 "Do the chosen sources capture the main media where the political debate unfolds?",
@@ -181,7 +181,8 @@ def render_step(step: int):
                 "What extraction method is most reliable for my source—keyword queries, metadata filters, or transcript parsing?",
                 "Is the extraction method able to produce snippets that are neither too short to lose context nor too long to become too complicated for the analysis? If needed, split the texts into smaller snippets.",
                 "Is the time window covered by the source appropriate for the research question?",
-                "Can I obtain essential metadata (dates, outlets, geography, language) for contextual analysis?"
+                "Can I obtain essential metadata (dates, outlets, geography, language) for contextual analysis?",
+                "Basic preprocessing (removing duplicates, non-textual artifacts) ensures better results in later steps. If texts are multilingual, is good to consider filtering or adding a ‘language’ column for clarity.
             ],
             key_prefix="s2_sources"
         )
@@ -201,7 +202,8 @@ def render_step(step: int):
         output_card(
             "What you should have before Step 3 ⚠️",
             bullets=[
-                "A dataset with the extracted text snippets and other metadata, if you need them for your analysis."
+                "A dataset with the extracted text snippets and other metadata, if you need them for your analysis.",
+                "Store your extracted data in a UTF-8 CSV with at least two columns: id and text, plus optional metadata (date, outlet, etc.)."
             ],
             body_md="""
         | id   | text               |...
@@ -225,10 +227,11 @@ def render_step(step: int):
             question_card(
                 "Guide: character selection ✅",
                 how_to=[
-                    "Identify relevant characters for the topic — this is the core of Step 3.",
+                    "Identify relevant characters for the topic — this is the core of Step 3. As a rule, a character is considered relevant if it appears repeatedly across texts and is meaningful to the narrative framing of the topic.",
                     "Anchor selection in your research question and analytical focus; choose characters that speak to your hypotheses.",
                     "Balance scope with feasibility: too many characters can reduce precision and raise compute costs; a focused set improves reliability and interpretability. The list of characters doesn't need to include the whole universe of character relevant for the topic, it just needs to be consistent with the scope of your research.",
-                    "Build the character list via literature review, exploratory tools (topic modeling, entity recognition/RELATIO), and domain reading; document your choices."
+                    "Build the character list via literature review, exploratory tools (topic modeling, entity recognition/RELATIO), and domain reading; document your choices. You can identify characters manually by reading and noting recurring actors. Automated tools can help, but they’re optional.",
+                    "Merge near-synonyms if they play similar narrative roles; distinguish only when their roles differ significantly."
                 ],
                 ask_yourself=[
                     "Which characters matter most for the topic at hand?",
@@ -248,7 +251,7 @@ def render_step(step: int):
                     "They can be represented as **nodes in a directed acyclic graph (DAG)**, where edges capture causal or relational dependencies among actors. "
                     "While DAGs illustrate structure, narrative coding focuses on how each character is framed through roles such as hero, villain, or victim.\n\n" 
                     "In this step, define a **small, distinctive set of characters** that directly reflect your research question. "
-                    "Prefer **clear, non-overlapping definitions** that an LLM can reliably identify across texts. "
+                    "Prefer **clear, non-overlapping definitions** that an LLM can reliably identify across texts. To manage this, ask whether an outsider could tell these characters apart from their descriptions alone. "
                     "Record a **brief description for each character now**—you will reuse it in Step 4 prompts."
                 ),
             )
@@ -285,7 +288,7 @@ def render_step(step: int):
                 bullets=[
                     "A contained list of relevant characters, both in human and instrument form if needed",
                     "A brief description of each character should be included in the prompts at Stage 4. It is good practice to annotate these descriptions while selecting the characters.",
-                    "Graphically, the table below show how in the next steps these characters will enter the final dataset (NOW YOU DON'T NEED THIS TABLE)."
+                    "Graphically, the table below shows how in the next steps these characters will enter the final dataset (NOW YOU DON'T NEED THIS TABLE)."
                 ],
                 body_md="""
             | id   | text               | c1 | c2 | c3 | c4 | c5 | c6 |...
@@ -304,13 +307,13 @@ def render_step(step: int):
     # --- STEP 4 (restored) ---
     if step == 4:
         st.subheader("Step 4 — Prepare the prompt(s)")
-        st.caption("Specify the mapping from raw text to (M, R) with a simple, consistent schema.")
+        st.caption("Specify the mapping from raw text to character columns with a simple, consistent schema.")
 
         # 1) GUIDE
         question_card(
             "Guide: prepare the prompt(s) ✅",
             how_to=[
-                "Define a **JSON schema** (keys, allowed labels, brief rationale).",
+                "Define a **JSON schema** (keys, allowed labels, brief explanation of the task).",
                 "Co-design prompts with the same model you will use for annotation (e.g., GPT-4o-mini via OpenAI) to align capabilities and outputs.",
                 "This package supports two tasks: (a) topic relevance classification and (b) character detection + role assignment."
             ],
@@ -325,7 +328,7 @@ def render_step(step: int):
             blurb_md=(
                 "This step is crucial for achieving **accurate classification**. The researcher must provide "
                 "**precise instructions** to the LLM to ensure that characters are correctly annotated with their respective roles. "
-                "To do so, you need to create a **SYSTEM MESSAGE** in JSON format that clearly specifies the task, "
+                "To do so, you need to create a **SYSTEM MESSAGE** in a JSON file that clearly specifies the task, "
                 "the set of characters to be identified, and the possible roles they can assume.\n\n "
                 "Below, we provide key guidance for constructing the SYSTEM MESSAGE. A ready-to-use example prompt is available "
                 "in the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and can be easily adapted by following these instructions. "
@@ -336,7 +339,7 @@ def render_step(step: int):
                 "1) Access the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and download the `system_message_stage2` (or `system_message_stage1`) from the `code and prompts/` folder.\n\n "
                 "2) Open the json file and modify the SYSTEM MESSAGE field with your instructions (describe how to behave when analyzing a text).\n\n"
                 "3) Modify the names of the characters and their descriptions.\n\n"
-                "4) After each description, specify in which key to store the result. For example, if you have 8 characters your prompt will specify keys from a to f. As a result, the classification results for the first characters will be stored in column a (key - a), for the second character in column b (key - b), and so on. "
+                "4) After each description, specify in which key to store the result. For example, if you have 8 characters your prompt will specify keys from a to j. As a result, the classification results for the first characters will be stored in column a (key - a), for the second character in column b (key - b), and so on. "
                 "Keys are nothing but the way the LLM stores the results according to the prompt. You don't need knowledge of JSON language to change these few letters in the prompt."
             ),
         )
@@ -492,7 +495,7 @@ Analyze it in the context of US political discourse on climate change and respon
                 "An annotated dataset in the following form: 🎆",
             ],
             body_md="""
-                | id   | text               | c1 | c2 | c3 | c4 | c5 | c6 |...
+                | id   | text               | a  | b  | c  | d  | e | f |...
                 |------|--------------------|----|----|----|----|----|----|----
                 | 1_1  | If you listen…     |1   | 4  |0   | 0  | 0  | 0  |      
                 | 1_2  | But is it po…      |0   | 4  |0   |2   | 2  | 0  |
