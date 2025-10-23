@@ -454,7 +454,7 @@ Analyze it in the context of US political discourse on climate change and respon
             ],
             ask_yourself=[
                 "Is my dataset ready for the annotation (id, text, missing values, etc)?",
-                "The dataset contains a column called ''id'' and a column called ''text''?",
+                "Does the dataset contain a column called ''id'' and a column called ''text''?",
                 "Are my prompts correctly specified and specific enough?",
                 "Is my folder structure organised as expected?",
                 "Am I in the correct environment (Political_Narratives)?",
