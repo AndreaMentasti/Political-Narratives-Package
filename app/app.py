@@ -79,7 +79,13 @@ def render_intro():
     st.subheader("Political Narratives guide")
     st.markdown(
         """
-The purpose of a political narrative is influencing perceptions, beliefs, and preferences about characters contained in the narrative.  **Political narratives** exert their influence by depicting characters in one of the three archetypal roles—**hero**, **villain**, or **victim**.  They are communicative devices that focus attention, encode roles and identities, and shape norms and behavior.
+
+*A political narrative is identified by (i) its topic, (ii) its characters, and (iii) by having at
+least one character cast in a drama triangle role: hero, villain, or victim.*
+
+The definition and measurement of political narratives,  therefore, reduce to specifying the topic and characters, and coding for each character whether
+it appears as neutral or cast as hero, villain, or victim.
+Its purpose is influencing perceptions, beliefs, and preferences about characters contained in the narrative.  **Political narratives** exert their influence by depicting characters in one of the three archetypal roles—**hero**, **villain**, or **victim**.  They are communicative devices that focus attention, encode roles and identities, and shape norms and behavior.
 
 Formally, fix a topic *T* and a universe of characters *K = H ∪ I*. For any text unit (tweet, paragraph, article), let *K′ ⊆ K* be the set of characters that appear.  
 A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing character to either a drama-triangle role or neutrality. We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, villain, or victim; if all characters are neutral, the text is about the topic but does not constitute a political narrative in this sense.  
