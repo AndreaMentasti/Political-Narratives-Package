@@ -250,9 +250,8 @@ def render_step(step: int):
                 key_prefix="s3_chars",
                 # ↓ NEW: short description appears above “How to approach”
                 blurb_md=(
-                    
                     "In the context of Political Narratives, a **character** is identified as narrative category that brings together specific entities mentioned in the text (people, groups, institutions, or technologies) that share the same identity. "
-                    "For example, mentions of *Biden*, *the Senate,* or *Democrats* are all grouped under the broader character **The U.S. Democrats**.
+                    "For example, mentions of *Biden*, *the Senate,* or *Democrats* are all grouped under the broader character **The U.S. Democrats**. "
                     "Characters can be represented as **nodes in a directed acyclic graph (DAG)**, where edges capture causal or relational dependencies. "
                     "While DAGs illustrate structure, narrative coding focuses on how each character is framed through roles such as hero, villain, or victim.\n\n" 
                     "In this step, define a **small, distinctive set of characters** that directly reflect your research question. "
