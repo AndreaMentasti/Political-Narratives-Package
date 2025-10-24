@@ -430,8 +430,12 @@ Analyze it in the context of US political discourse on climate change and respon
 }"""
 
         # Initialize session storage
-        st.session_state.setdefault("s4_relevance_json", default_relevance_json)
-        st.session_state.setdefault("s4_roles_json", default_roles_json)
+        # --- initialize once ---
+        if "s4_relevance_json" not in st.session_state:
+            st.session_state["s4_relevance_json"] = default_relevance_json
+
+        if "s4_roles_json" not in st.session_state:
+            st.session_state["s4_roles_json"] = default_roles_json
 
         st.text_area(
             "🧩 (a) Stage 1 — Relevance prompt JSON",
