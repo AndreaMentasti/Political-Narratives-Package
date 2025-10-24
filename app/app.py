@@ -472,7 +472,7 @@ Analyze it in the context of US political discourse on climate change and respon
                 "1) A dataset with observation id and text snippets.",
                 "2) The two prompts, one for each task for the model.",
                 "Before running, check the local folder structure and configuration.",
-                "Chose which script to run based on the task that is performed (relevance or character-roles classification).
+                "Chose which script to run based on the task that is performed (relevance or character-roles classification)."
             ],
             ask_yourself=[
                 "Is my dataset ready for the annotation (id, text, missing values, etc)?",
@@ -514,11 +514,11 @@ Analyze it in the context of US political discourse on climate change and respon
                 "An annotated dataset in the following form: 🎆",
             ],
             body_md="""
-                | id   | text               | a  | b  | c  | d  | e | f |...
-                |------|--------------------|----|----|----|----|----|----|----
-                | 1_1  | If you listen…     |1   | 4  |0   | 0  | 0  | 0  |      
-                | 1_2  | But is it po…      |0   | 4  |0   |2   | 2  | 0  |
-                | 1_3  | In fact, on…       |3   | 1  |0   | 0  | 0  | 0  |       
+                | id   | text               | a  | b  | c  | d  | e | f |...|z
+                |------|--------------------|----|----|----|----|----|----|----|---
+                | 1_1  | If you listen…     |1   | 4  |0   | 0  | 0  | 0  |    |  
+                | 1_2  | But is it po…      |0   | 4  |0   |2   | 2  | 0  |    |
+                | 1_3  | In fact, on…       |3   | 1  |0   | 0  | 0  | 0  |    |   
                 """,
             key_prefix="s5_output"
         )
