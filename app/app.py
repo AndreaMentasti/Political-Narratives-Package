@@ -250,9 +250,6 @@ def render_step(step: int):
                 key_prefix="s3_chars",
                 # ↓ NEW: short description appears above “How to approach”
                 blurb_md=(
-
-
-For example, mentions of “Biden,” “the Senate,” or “Democrats” are all grouped under the character “The U.S. Democrats.”
                     
                     "In the context of Political Narratives, a **character** is identified as narrative category that brings together specific entities mentioned in the text (people, groups, institutions, or technologies) that share the same identity. "
                     "For example, mentions of *Biden*, *the Senate,* or *Democrats* are all grouped under the broader character **The U.S. Democrats**.
