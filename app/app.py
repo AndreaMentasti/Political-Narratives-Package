@@ -516,9 +516,9 @@ Analyze it in the context of US political discourse on climate change and respon
             body_md="""
                 | id   | text               | a  | b  | c  | d  | e | f |...|z
                 |------|--------------------|----|----|----|----|----|----|----|---
-                | 1_1  | If you listen…     |1   | 4  |0   | 0  | 0  | 0  |    |  
-                | 1_2  | But is it po…      |0   | 4  |0   |2   | 2  | 0  |    |
-                | 1_3  | In fact, on…       |3   | 1  |0   | 0  | 0  | 0  |    |   
+                | 1_1  | If you listen…     |1   | 4  |0   | 0  | 0  | 0  |    |  0
+                | 1_2  | But is it po…      |0   | 4  |0   |2   | 2  | 0  |    |0
+                | 1_3  | In fact, on…       |3   | 1  |0   | 0  | 0  | 0  |    |  0 
                 """,
             key_prefix="s5_output"
         )
