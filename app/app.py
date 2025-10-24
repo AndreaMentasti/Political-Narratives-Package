@@ -296,7 +296,7 @@ def render_step(step: int):
                 bullets=[
                     "A contained list of relevant characters, both in human and instrument form if needed",
                     "A brief description of each character should be included in the prompts at Stage 4. It is good practice to annotate these descriptions while selecting the characters.",
-                    "Graphically, the table below shows how in the next steps these characters will enter the final dataset in the keys going from a to z depending on the number of characters selected (NOW YOU DON'T NEED THIS TABLE). "
+                    "Graphically, the table below shows how in the next steps these characters will enter the final dataset in the keys going from a to z depending on the number of characters selected. "
                 ],
                 body_md="""
             | id   | text               | a  | b  | c  | d  | e  | f  |...| z |
