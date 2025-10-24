@@ -351,8 +351,8 @@ def render_step(step: int):
                 "To adapt the prompt, the user have to modify these few instructions.\n\n "
                 "Then, by following the next steps he will be able to modify the character keys by adding the topic-specific characters.\n\n"
                 "4) Next, for `system_message_stage2` the user can modify the names of the characters and their descriptions.\n\n"
-                "5) After each description, specify in which key to store the result. For example, if you have 8 characters your prompt will specify keys from a to j. As a result, the classification results for the first characters will be stored in column a (key - a), for the second character in column b (key - b), and so on. "
-                "Keys are nothing but the way the LLM stores the results according to the prompt. You don't need knowledge of JSON language to change these few letters in the prompt.\n\n"
+                "5) After each description, the user must specify in which key to store the result. For example, if there are eight characters, the prompt will define keys from a to j. As a result, the classification output for the first character will be stored in column a (key a), for the second character in column b (key b), and so on. "
+                "Keys simply indicate how the LLM stores the results according to the prompt. The user does not need any knowledge of JSON syntax to modify these few letters in the prompt.\n\n"
 
             ),
         )
