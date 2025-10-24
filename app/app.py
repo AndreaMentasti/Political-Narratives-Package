@@ -125,13 +125,13 @@ def render_step(step: int):
                 "restrict analysis to a manageable set. Make explicit what is in and what is out."
             ],
             ask_yourself=[
+                "Is the topic sufficiently specific to be analyzable, without being so narrow that it lacks variation?",
                 "Does this topic surface enough distinct political narratives and public debate to analyze?",
                 "Is it likely there are enough identifiable characters within those narratives? Characters can be individuals, parties, institutions, or groups appearing in the discourse.",
-                "Which data sources are most informative for this topic, and do I have reliable access to them?",
-                "If those sources are available, can I obtain the essential metadata (dates, outlets, geography, language) needed for analysis?",
                 "Is the research question compelling and relevant to the scientific community (and/or practitioners)?",
                 "Could any actors or communities be harmed by this analysis, and how will I mitigate that risk?",
-                "Is the topic sufficiently specific to be analyzable, without being so narrow that it lacks variation?"
+                "Which data sources are most informative for this topic, and do I have reliable access to them?",
+                "If those sources are available, can I obtain the essential metadata (dates, outlets, geography, language) needed for analysis?"
             ],
             key_prefix="s1_scope"
         )
@@ -172,7 +172,7 @@ def render_step(step: int):
                 "Evaluate trade-offs between coverage, accessibility, and quality (e.g., digitization errors, platform bias, sampling limits).",
                 "For data extraction, the chosen source will determine which methodologies can be applied—such as keyword-based queries, scraping, API pulls, or manual collection.",
                 "Consider the level of metadata you can preserve (dates, outlets, authors, geography, language) since these details will later be the basis of your analysis.",
-                "What is the unit of analysis (for instance, a tweet, paragraph, or newspaper snippet.)? Should I split the texts into smaller snippets, or can I work with the extracted texts as they are? For example, long texts (e.g., articles) can be segmented into paragraphs or 3-sentence chunks to fit LLM input limits and maintain focus."
+                "What is the unit of analysis (for instance, a tweet, paragraph, or newspaper snippet)? Should I split the texts into smaller snippets, or can I work with the extracted texts as they are? For example, long texts (e.g., articles) can be segmented into paragraphs or 3-sentence chunks to fit LLM input limits and maintain focus."
             ],
             ask_yourself=[
                 "Do the chosen sources capture the main media where the political debate unfolds?",
@@ -194,7 +194,10 @@ def render_step(step: int):
                 "We specifically choose the U.S. due to the significant role Twitter plays in shaping and disseminating political narratives there. "
                 "The data collection process involves querying the **Twitter historical APIv2** with a set of **keywords** adapted from *Oehl, Schaffer, and Bernauer (2017)*. "
                 "In our main analysis, we define the tweet as our unit of observation, since its concise length aligns well with the requirements of the subsequent stages of the framework, including the GPT annotation process. "
-                "We also extract newspaper articles, which we decided to split into smaller snippets to make them compatible with the framework’s next steps."
+                "We also extract newspaper articles and TV transcripts, which we decided to split into smaller snippets to make them compatible with the framework’s next steps.\n\n"
+                "- **Tweets:** Tweets have been extracted through a keyword based search using the historical API of Twitter"
+                "- **Newspaper Articles:** Newspaper articles are downloaded from Factiva. We use the three most widely circulated newspapers in the US; The New York Times, The Wall Street Journal, and USA Today. Each article has been split into more manageable text snippets for OpenAI classification."
+                "- **TV Transcripts:** TV transcripts have been downloaded from the GDELT database. These TV transcripts from MSNBC and Fox News have been also split into smaller text snippets."
             ),
             key_prefix="s2_example"
         )
