@@ -346,14 +346,14 @@ def render_step(step: int):
                 "##### Step-by-Step instructions:\n"
                 "1) Access the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and download the or `system_message_stage1` for the relevance classification and the `system_message_stage2` for the character-role classification from the `code and prompts/` folder.\n\n "
                 "2) For the relevance classification with `system_message_stage1`, users must adjust the instructions to ensure they reflect the particular topic under analysis. Nothing else is needed in this prompt.\n\n"
-                "2) For the character-role classification with ´system_message_stage2´, user must open the json file and modify the SYSTEM MESSAGE field with your instructions (describe how to behave when analyzing a text).\n\n"
-                "3) Next, modify the names of the characters and their descriptions.\n\n"
-                "4) After each description, specify in which key to store the result. For example, if you have 8 characters your prompt will specify keys from a to j. As a result, the classification results for the first characters will be stored in column a (key - a), for the second character in column b (key - b), and so on.\n\n "
+                "3) For the character-role classification with ´system_message_stage2´, user must open the json file and modify the SYSTEM MESSAGE field with your instructions (describe how to behave when analyzing a text).\n\n"
+                - "**How to modify the two system messages?** In the prompts ´system_message_stage1´ and ´system_message_stage2´ the user will find the following text: *You are an average US citizen. The user will provide the content of a tweet posted from the US between 2010 and 2021. \nYour task is to analyze it within the context of US political discourse, particularly in relation to climate change and related policies.* "
+                "To adapt the prompt, the user have to modify these few instructions.\n\n "
+                "Then, by following the next steps he will be able to modify the character keys by adding the topic-specific characters."
+                "4) Next, modify the names of the characters and their descriptions.\n\n"
+                "5) After each description, specify in which key to store the result. For example, if you have 8 characters your prompt will specify keys from a to j. As a result, the classification results for the first characters will be stored in column a (key - a), for the second character in column b (key - b), and so on. "
                 "Keys are nothing but the way the LLM stores the results according to the prompt. You don't need knowledge of JSON language to change these few letters in the prompt.\n\n"
-                "##### How to modify the Prompts:\n"
-                "In the prompts ´system_message_stage1´ and ´system_message_stage2´ the user will find the following text: *You are an average US citizen. The user will provide the content of a tweet posted from the US between 2010 and 2021. \nYour task is to analyze it within the context of US political discourse, particularly in relation to climate change and related policies.* "
-                "To adapt the prompt, the user have to modify these few instructions. "
-                "Then, by following the above steps he will be able to modify the character keys by adding the topic-specifc characters."
+
             ),
         )
 
