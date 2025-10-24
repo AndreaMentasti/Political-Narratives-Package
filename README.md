@@ -83,7 +83,7 @@ This key is personal and directly linked to the user's wallet, so it's important
   - The **stage 1 script**  ````annotation_openai_stage1```` allows the user tho classify a text based on its relevance to the topic selected. This code returns an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant).
   - The **stage 2 script** ````annotation_openai_stage2```` is the core of the Political Narrative Package, and it allows the user to retrieve the character-role classification. The code returns a dataset with a column for each specified character taking values from 0 to 4, where 0 is no-mention of the character, 1 is Villain role, 2 is Hero role, 3 is Victim role, and 4 for appearence of the character in none of these roles (Neutral).
 
-- Regarding the prompt, the user can adapt the prompt in the folder ````code/prompts/```` with his own instructions. The user can do this by accessing the "SYSTEM MESSAGE" in the prompt. To modify the task, the user must change the keys (in the example from a to j) to match the number of characters of his analysis. Moreover, descriptions of the characters are required in order for OpenAI to perform a meaningful classification. An example of the prompt is provided here:
+- Regarding the prompt, the user can adapt the prompt in the folder ````code/prompts/```` with his own instructions. The user can do this by accessing the "SYSTEM MESSAGE" in the prompt. To modify the task, the user can change the instructions at the beginning of the prompt. Then, the user must change the keys (in the example from a to j) to match the number of characters of his analysis. Moreover, descriptions of the characters are required in order for OpenAI to perform a meaningful classification. An example of the prompt is provided here:
   ````bash
   {
   "SYSTEM_MESSAGE": "You are an average US citizen. The user will provide a three-sentence US newspaper excerpt (2010–2021). 
@@ -110,6 +110,8 @@ This key is personal and directly linked to the user's wallet, so it's important
   3. Final Output: Respond with a JSON object containing keys a–j. Each value must be 0 (not mentioned) or 1–4 (role as defined above)."
   }
 
+If the user wants to perform the relevance classification, the only part of the prompt that has to be modified is the initial instruction. No changes to the keys are required.
+
 - Modify the input dataset: the user needs to provide in the ````/data/output```` folder his dataset named ````your_data_stage2```` (or ````your_data_stage1````). This dataset must contain a column called **id** with the unique identifiers and a column called **text** containing the text for the classification.
 
 - - Your ````.csv```` file must be UTF-8 encoded. If you see errors such ````unicodeDecodeError```` try saving again your file in UTF-8, or the script will automatically fall back to latin-1 encoding.
@@ -117,6 +119,8 @@ This key is personal and directly linked to the user's wallet, so it's important
 - Once prepared the folder structure, the prompt, and the dataset, the user can make minimal changes to the Python script. First, changing the directory
   ````bash
   main = r"D:\your directory"
+
+If the user is running the ````annotation_openai_stage1```` code, no other changes are needed and you can directly run the script.
 
 - Second, change the JSON structure based on the number of characters: depending on your character selection, you might need to modify the structure of the ````.JSON```` file that is created by OpenAI. You can access it by changing the properties in the following part of the script:
   ````bash
