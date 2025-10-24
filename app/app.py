@@ -234,7 +234,7 @@ def render_step(step: int):
                     "Anchor selection to your research question and analytical focus; choose characters that speak to your hypotheses.",
                     "Balance scope with feasibility: too many characters can reduce precision and raise compute costs; a focused set improves reliability and interpretability. The list of characters doesn't need to include the whole universe of characters relevant for the topic, it just needs to be consistent with the scope of your research.",
                     "Build the character list via literature review, exploratory tools (topic modeling, entity recognition/RELATIO), and domain reading; document your choices. You can identify characters manually by reading and noting recurring entities. Automated tools can help, but they’re optional.",
-                    "Merge near-synonyms if they play similar narrative roles; distinguish only when their roles differ significantly."
+                    "Merge near-synonyms if they play similar narrative roles; distinguish only when their roles differ significantly. "
                 ],
                 ask_yourself=[
                     "Which characters recur most often in prior literature or theory on this topic?",
@@ -245,7 +245,7 @@ def render_step(step: int):
                     "Is the chosen character list feasible for LLM coding (not too long, not too ambiguous)?",
                     "If interested in human vs instrument classification, are these best understood as human actors (individuals, groups, organizations, states) or instrumental actors (policies, tools, institutions)?",
                     "How many characters can I realistically track while keeping the coding interpretable and statistically useful?",
-                    "Can each character plausibly appear in different roles (hero, villain, victim), or are some inherently neutral?",
+                    "Remember that characters may take on roles within the Drama Triangle, but they can also appear neutrally, without being assigned any specific role."
                 ],
                 key_prefix="s3_chars",
                 # ↓ NEW: short description appears above “How to approach”
@@ -296,14 +296,14 @@ def render_step(step: int):
                 bullets=[
                     "A contained list of relevant characters, both in human and instrument form if needed",
                     "A brief description of each character should be included in the prompts at Stage 4. It is good practice to annotate these descriptions while selecting the characters.",
-                    "Graphically, the table below shows how in the next steps these characters will enter the final dataset (NOW YOU DON'T NEED THIS TABLE)."
+                    "Graphically, the table below shows how in the next steps these characters will enter the final dataset in the keys going from a to z depending on the number of characters selected (NOW YOU DON'T NEED THIS TABLE). "
                 ],
                 body_md="""
-            | id   | text               | c1 | c2 | c3 | c4 | c5 | c6 |...
-            |------|--------------------|----|----|----|----|----|----|----
-            | 1_1  | If you listen…     |    |    |    |    |    |    |      
-            | 1_2  | But is it po…      |    |    |    |    |    |    |
-            | 1_3  | In fact, on…       |    |    |    |    |    |    |       
+            | id   | text               | a  | b  | c  | d  | e  | f  |...| z |
+            |------|--------------------|----|----|----|----|----|----|---|---|
+            | 1_1  | If you listen…     |    |    |    |    |    |    |   |   |
+            | 1_2  | But is it po…      |    |    |    |    |    |    |   |   |
+            | 1_3  | In fact, on…       |    |    |    |    |    |    |   |   |  
             """,
                 key_prefix="s3_output"
             )
