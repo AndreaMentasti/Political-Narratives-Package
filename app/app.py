@@ -436,12 +436,14 @@ Analyze it in the context of US political discourse on climate change and respon
         st.text_area(
             "🧩 (a) Stage 1 — Relevance prompt JSON",
             key="s4_relevance_json",
+            value=st.session_state["s4_relevance_json"],
             height=320
         )
 
         st.text_area(
             "🧩 (b) Stage 2 — Character & role prompt JSON",
             key="s4_roles_json",
+            value=st.session_state["s4_roles_json"],
             height=500
         )
 
