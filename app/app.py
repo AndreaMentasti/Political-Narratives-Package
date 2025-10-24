@@ -272,7 +272,7 @@ def render_step(step: int):
                     "are making sky-high profits while **countless people** struggle to pay their bills. [...] A critical mass of "
                     "people – especially **younger people** – are demanding change and will no longer tolerate the "
                     "procrastination, denial and complacency that created this state of emergency.”\n\n"
-                    "In the text and figure above it is clear how the characters can be seen as nodes of DAGs. The different entities in the text are identified within broader characters: orporations (*energy companies*), the poor (*countless people*), and civil society (*younger people*).  However, the diagram shows that assigning causal arrows between characters may often be ambiguous in real texts. "
+                    "In the text and figure above it is clear how the characters can be seen as nodes of DAGs. The different entities in the text are identified within broader characters: corporations (*energy companies*), the poor (*countless people*), and civil society (*younger people*).  However, the diagram shows that assigning causal arrows between characters may often be ambiguous in real texts. "
                     "By contrast, assigning roles is typically clearer and can be coded directly:  in this example, corporations are cast as villain, the poor as victim, and civil society as hero.\n\n"
                     "##### Political Narrative Characters for Climate Change Policy:\n\n"
                     "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
