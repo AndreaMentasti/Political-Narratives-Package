@@ -230,17 +230,17 @@ def render_step(step: int):
             question_card(
                 "Guide: character selection ✅",
                 how_to=[
-                    "Identify relevant characters for the topic — this is the core of Step 3. As a rule, a character is considered relevant if it appears repeatedly across texts and is meaningful to the narrative framing of the topic.",
-                    "Anchor selection in your research question and analytical focus; choose characters that speak to your hypotheses.",
-                    "Balance scope with feasibility: too many characters can reduce precision and raise compute costs; a focused set improves reliability and interpretability. The list of characters doesn't need to include the whole universe of character relevant for the topic, it just needs to be consistent with the scope of your research.",
-                    "Build the character list via literature review, exploratory tools (topic modeling, entity recognition/RELATIO), and domain reading; document your choices. You can identify characters manually by reading and noting recurring actors. Automated tools can help, but they’re optional.",
+                    "Identify relevant characters for the topic — this is the core of Step 3. ",
+                    "Anchor selection to your research question and analytical focus; choose characters that speak to your hypotheses.",
+                    "Balance scope with feasibility: too many characters can reduce precision and raise compute costs; a focused set improves reliability and interpretability. The list of characters doesn't need to include the whole universe of characters relevant for the topic, it just needs to be consistent with the scope of your research.",
+                    "Build the character list via literature review, exploratory tools (topic modeling, entity recognition/RELATIO), and domain reading; document your choices. You can identify characters manually by reading and noting recurring entities. Automated tools can help, but they’re optional.",
                     "Merge near-synonyms if they play similar narrative roles; distinguish only when their roles differ significantly."
                 ],
                 ask_yourself=[
-                    "Which characters matter most for the topic at hand?",
-                    "What is the scope of my analysis (national, regional, global)? Which characters fall outside my scope?",
                     "Which characters recur most often in prior literature or theory on this topic?",
                     "Do exploratory tools (topic models, word clouds, entity recognition, RELATIO outputs) highlight additional entities? If so, how to aggregate these entities into some broader character definitions?",
+                    "Which characters matter most for the topic at hand?",
+                    "What is the scope of my analysis (national, regional, global)? Which characters fall outside my scope?",
                     "Do the selected characters exhibit distinctions that are sufficiently clear for an LLM to recognize and differentiate them?",
                     "Is the chosen character list feasible for LLM coding (not too long, not too ambiguous)?",
                     "If interested in human vs instrument classification, are these best understood as human actors (individuals, groups, organizations, states) or instrumental actors (policies, tools, institutions)?",
@@ -250,8 +250,13 @@ def render_step(step: int):
                 key_prefix="s3_chars",
                 # ↓ NEW: short description appears above “How to approach”
                 blurb_md=(
-                    "In the context of Political Narratives, a **character** is identified as an actor taking part in the discourse about the topic of interest. "
-                    "They can be represented as **nodes in a directed acyclic graph (DAG)**, where edges capture causal or relational dependencies among actors. "
+
+
+For example, mentions of “Biden,” “the Senate,” or “Democrats” are all grouped under the character “The U.S. Democrats.”
+                    
+                    "In the context of Political Narratives, a **character** is identified as narrative category that brings together specific entities mentioned in the text (people, groups, institutions, or technologies) that share the same identity. "
+                    "For example, mentions of “Biden,” “the Senate,” or “Democrats” are all grouped under the broader character **The U.S. Democrats**.
+                    "Characters can be represented as **nodes in a directed acyclic graph (DAG)**, where edges capture causal or relational dependencies. "
                     "While DAGs illustrate structure, narrative coding focuses on how each character is framed through roles such as hero, villain, or victim.\n\n" 
                     "In this step, define a **small, distinctive set of characters** that directly reflect your research question. "
                     "Prefer **clear, non-overlapping definitions** that an LLM can reliably identify across texts. To manage this, ask whether an outsider could tell these characters apart from their descriptions alone. "
@@ -262,6 +267,9 @@ def render_step(step: int):
             example_card(
                 "Relevant characters for climate change political discourse 💡",
                 (
+                    "##### Examples of Characters: \n\n"
+                    "A character is a general label used to group different people, organizations, or technologies that are presented in a similar way or take the same stance in the discussion. As an example, you can think of all the different entities that can be grouped under the more general character ''The US Democrats''. "
+                    "''Biden'', ''Barack Obama'', ''The Democratic Party'', and ''Blue States'' fall under the more general character definition **The US Democrats**. "
                     "##### Text Example: \n\n"
                     "“Global greenhouse emissions are still on the rise, oil production is soaring and **energy companies** "
                     "are making sky-high profits while **countless people** struggle to pay their bills. [...] A critical mass of "
