@@ -468,11 +468,11 @@ Analyze it in the context of US political discourse on climate change and respon
         question_card(
             "Guide - GPT Annotation with provided code ✅",
             how_to=[
-                "After the design of the prompts, it's time to run your annotation code against the chosen model.",
-                "Inputs required:",
+                "After the design of the prompts, it's time to run the annotation code against the chosen model. The following two inputs are required:",
                 "1) A dataset with observation id and text snippets.",
                 "2) The two prompts, one for each task for the model.",
-                "Before running, check your local folder structure and configuration."
+                "Before running, check the local folder structure and configuration.",
+                "Chose which script to run based on the task that is performed (relevance or character-roles classification).
             ],
             ask_yourself=[
                 "Is my dataset ready for the annotation (id, text, missing values, etc)?",
@@ -491,7 +491,7 @@ Analyze it in the context of US political discourse on climate change and respon
                 "1) Download the script ````annotation_openai_stage2```` (or ````annotation_openai_stage1```` for relevance classification) from the `code and prompts/`folder in the  [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main).\n\n"
                 "2) Set the environment and save the OpenAI API Key as an environmental variable. We suggest to follow the steps [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) if you are not familiar with this.\n\n"
                 "3) Set the folder structure properly.\n\n"
-                "4) Make minimal changes in the code to match your path, the characters defined in the prompt, and your dataset.\n\n"
+                "4) Make minimal changes in the code to match the user's path, the characters defined in the prompt, and the dataset. If the user wants to perform relevance classification, he just needs to change the path.\n\n"
                 "All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). We suggest the user to check them."
                 
             ),
