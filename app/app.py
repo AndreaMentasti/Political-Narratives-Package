@@ -264,8 +264,9 @@ def render_step(step: int):
                 "Relevant characters for climate change political discourse 💡",
                 (
                     "##### Examples of Characters: \n\n"
-                    "A character is a general label used to group different people, organizations, or technologies that are presented in a similar way or take the same stance in the discussion. As an example, you can think of all the different entities that can be grouped under the more general character **The US Democrats**. "
-                    "*Biden*, *Barack Obama*, *The Democratic Party*, and *Blue States* fall under the more general character definition **The US Democrats**. "
+                    "A character is a general label used to group different people, organizations, or technologies that are presented in a similar way or take the same stance in the discussion. You can think of all the different entities that can be grouped under the more general character ''The US Democrats''. "
+                    "*Biden*, *Barack Obama*, *The Democratic Party*, and *Blue States* will all fall under this more general character definition. "
+                    "Again, the character **Green Tecnologies** contains *clean tech sector*, *bioenergy*, *solar energy*, and similar entities.\n\n" 
                     "##### Text Example: \n\n"
                     "“Global greenhouse emissions are still on the rise, oil production is soaring and **energy companies** "
                     "are making sky-high profits while **countless people** struggle to pay their bills. [...] A critical mass of "
