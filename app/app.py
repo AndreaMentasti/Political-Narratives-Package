@@ -270,9 +270,9 @@ def render_step(step: int):
                 "Relevant characters for climate change political discourse 💡",
                 (
                     "##### Examples of Characters: \n\n"
-                    "A character is a general label used to group different people, organizations, or technologies that are presented in a similar way or take the same stance in the discussion. You can think of all the different entities that can be grouped under the more general character **The US Democrats**. "
-                    "*Biden*, *Barack Obama*, *The Democratic Party*, and *Blue States* will all fall under this more general character definition. "
-                    "Again, the character **Green Tecnologies** contains *clean tech sector*, *bioenergy*, *solar energy*, and similar entities.\n\n" 
+                    "In our application, we were not interested in individual politicians, but in the distinction in democrats and republicans. The means one of our characters was **US Democrats**. This is then a cluster of the many different humans and the organization, e.g. members of parliament, executive members, governors, etc., but also the democratic party itself. "
+                    "It also includes many different ways of referring to these more specific characters. We do not need to specify all of these, a couple of examples are sufficient for modern LLMs. "
+                    "Another example is the character **Green Tecnologies**. We were not interested in specific technologies, so this contains *clean tech sector*, *bioenergy*, *solar energy*, and similar entities. We noted some examples of technologies to provide them to the LLM in the next stages.\n\n" 
                     "##### Text Example: \n\n"
                     "“Global greenhouse emissions are still on the rise, oil production is soaring and **energy companies** "
                     "are making sky-high profits while **countless people** struggle to pay their bills. [...] A critical mass of "
@@ -288,7 +288,7 @@ def render_step(step: int):
                     "**Instrument Characters:** EMISSION PRICING | REGULATIONS | FOSSIL INDUSTRY | GREEN TECH | NUCLEAR TECH\n\n"
                     "We carefully decided to have ten character to balance the complexity of the analysis with "
                     "good practices to avoid overloading the LLM in the annotation process. These characters are easily recognizable "
-                    "by the LLM thanks to precise descriptions in the prompt design step (Step 4)."
+                    "by the LLM thanks to precise descriptions that include positive examples and partly negative distinctions to related concepts. (Step 4)."
                 ),
                 key_prefix="s3_example",
                 figure={
@@ -304,13 +304,7 @@ def render_step(step: int):
                     "A brief description of each character should be included in the prompts at Stage 4. It is good practice to annotate these descriptions while selecting the characters.",
                     "Graphically, the table below shows how in the next steps these characters will enter the final dataset in the keys going from a to z depending on the number of characters selected. "
                 ],
-                body_md="""
-            | id   | text               | a  | b  | c  | d  | e  | f  |...| z |
-            |------|--------------------|----|----|----|----|----|----|---|---|
-            | 1_1  | If you listen…     |    |    |    |    |    |    |   |   |
-            | 1_2  | But is it po…      |    |    |    |    |    |    |   |   |
-            | 1_3  | In fact, on…       |    |    |    |    |    |    |   |   |  
-            """,
+                
                 key_prefix="s3_output"
             )
 
