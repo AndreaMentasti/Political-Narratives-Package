@@ -172,15 +172,17 @@ def render_step(step: int):
                 "Evaluate trade-offs between coverage, accessibility, and quality (e.g., digitization errors, platform bias, sampling limits).",
                 "For data extraction, the chosen source will determine which methodologies can be applied—such as keyword-based queries, scraping, API pulls, or manual collection.",
                 "Consider the level of metadata you can preserve (dates, outlets, authors, geography, language) since these details will later be the basis of your analysis.",
-                "What is the unit of analysis (for instance, a tweet, paragraph, or newspaper snippet)? Should I split the texts into smaller snippets, or can I work with the extracted texts as they are? For example, long texts (e.g., articles) can be segmented into paragraphs or 3-sentence chunks to fit LLM input limits and maintain focus."
+                "What is the unit of analysis (for instance, a tweet, paragraph, or newspaper snippet)? Should I split the texts into smaller snippets, or can I work with the extracted texts as they are? For example, long texts (e.g., articles) can be segmented into paragraphs or 3-sentence chunks to fit LLM input limits and maintain focus.",
+                "If text snippets are too short, you will not capture more complex narratives with multiple character-roles, but mostly narrative fragments. If it is too long, the LLM will struggle to assign a role to a character with our current prompts, for instance if the character is portrayed in different ways in a long article. For example, long texts (e.g., long newspaper articles or TV segments) should be segmented into smaller text snippets. From experience, something along the length of a single tweet, a paragraphs or 3-sentence chunks are a useful compromises. If the text is too short, you will not capture more complex narratives with multiple character-roles, but mostly narrative fragments. If it is too long, the LLM will struggle to assign a role to a character with our current prompts. Generally we advise users to pick units that have a natural meaning in an article, .e.g. a sentence or a paragraph usually follow a structure, whereas taking a certain number of words before and after a keyword breaks sentence and characters that might have had a meaning.",
+                "If very long texts cannot be avoided, one should consider specifying in the prompts that in Step 4 how to cope with contradictory or changing roles over the course of the text"
             ],
             ask_yourself=[
                 "Do the chosen sources capture the main media where the political debate unfolds?",
+                "Is the time window covered by the source appropriate for the research question?",
                 "Are they sufficiently diverse to avoid bias toward one outlet, ideology, or demographic?",
                 "Do I have legal and technical access to these data (e.g., archives, APIs, scraping permission)?",
                 "What extraction method is most reliable for my source—keyword queries, metadata filters, or transcript parsing?",
                 "Is the extraction method able to produce snippets that are neither too short to lose context nor too long to become too complicated for the analysis? If needed, split the texts into smaller snippets.",
-                "Is the time window covered by the source appropriate for the research question?",
                 "Can I obtain essential metadata (dates, outlets, geography, language) for contextual analysis?",
                 "Basic preprocessing (removing duplicates, non-textual artifacts) ensures better results in later steps. If texts are multilingual, is good to consider filtering or adding a ‘language’ column for clarity."
             ],
@@ -230,22 +232,26 @@ def render_step(step: int):
             question_card(
                 "Guide: character selection ✅",
                 how_to=[
-                    "Identify relevant characters for the topic — this is the core of Step 3. ",
-                    "Anchor selection to your research question and analytical focus; choose characters that speak to your hypotheses.",
-                    "Balance scope with feasibility: too many characters can reduce precision and raise compute costs; a focused set improves reliability and interpretability. The list of characters doesn't need to include the whole universe of characters relevant for the topic, it just needs to be consistent with the scope of your research.",
+                    "Identify relevant characters for the topic. The basis for the selection can be the relevant literature, your own interests as a researcher, or be approached in a more data driven way. ",
+                    "Characters can be human (individuals or collective actors such as corporations, parties, states, movements) but also instruments/instrumental (policies, laws, technologies). This means that the term **character** should be seen as a category and not be mistaken with *actors*; it does not need to be human or an individual, but can also be groups of people, policy areas or individual policies, or more abstract categories like science, a technology or technology class. In any case, the necessary first step is domain reading: you need to read the text snippets that you want to encoded later. The tasks of the LLM later is to encode at scale, but any choices should also be plausible for a human reader. ",
+                    "Traditional text tools like word clouds or topic models can help, or using entity recognition of the more advanced RELATIO package (LINK). However, all these tools require a dimensions reduction at some point. From the full set of possible characters, you need to decide how to aggregate to a feasible and usable number of chosen characters. In contrast to topic models or RELATIO, this choice comes before the encoding at scale. ",
+                    "Entity recognition is very useful for thinking about the necessary aggregation, as it can tell you which entities appear how often. This provides a good basis for thinking which entitites should be aggregated into one character. For example, in real text the character **US president Trump** might appear as *Trump*, *Donald J. Trump*, *POTUS*, *US president*, etc. , but conceptually clearly represents just one character.",
+                    "A different aggregation tasks is to cluster different smaller characters into a bigger character category. For instance, you could have three characters *solar technology*, *wind technology*, and *geothermic technology* if you are interested in understanding specific narratives about the specific technologies. Or you can decide to aggregate all up into one character **green technology**, if your goal is to capture the narrative roles of green technology as a combined category. Similar examples would be looking at *primary education*, *secondary education*, and *tertiary education* separately, or having one character **education**. Hence one can think of a character a an aggregation of different words for the same clearly defined character, or of a larger character as a cluster aggregating several more specific characters.",
+                    "For a precise prediction, Characters should be internally as homogenous as possible, and as heterogenous and clearly differentiated compared to other characters as possible",
+                    "Balance scope with feasibility: too many characters can raise compute costs and prediction complexity; a focused set improves reliability and interpretability. However, aggregating too many entities into one character will make a prediction more noisy, unless the mapping into the character is always obvious and clear. It can make sense to start with a larger set of characters which could be aggregated later for regression analysis, but be aware it comes at these monetary costs and with a potential loss in precision.",
+                    "Document your choices and motivations for later. Also for each character, it helps to have both a short positive list of the key entities or more specific characters that it includes, as well as potentially a negative distinction of things that it does not comprise.",
                     "Build the character list via literature review, exploratory tools (topic modeling, entity recognition/RELATIO), and domain reading; document your choices. You can identify characters manually by reading and noting recurring entities. Automated tools can help, but they’re optional.",
-                    "Merge near-synonyms if they play similar narrative roles; distinguish only when their roles differ significantly. "
+                    "Go back and read a sufficient number of text snippets manually to validate your choices.",
+                    "Key is to anchor the selection to your research question and analytical focus; choose characters that speak to your hypotheses and that you want to use in your descriptives or regressions later.",
+                    "The list of characters doesn't need to include the whole universe of characters relevant for the topic, it just needs to be consistent with the scope of your research."
                 ],
                 ask_yourself=[
                     "Which characters recur most often in prior literature or theory on this topic?",
+                    "Do your characters appear in at least one drama triangle role (hero, villain or victim)? Or even in several? It can be interesting to observe if they only appear as neutral, but often more interesting if they can take on more roles",
                     "Do exploratory tools (topic models, word clouds, entity recognition, RELATIO outputs) highlight additional entities? If so, how to aggregate these entities into some broader character definitions?",
                     "Which characters matter most for the topic at hand?",
                     "What is the scope of my analysis (national, regional, global)? Which characters fall outside my scope?",
-                    "Do the selected characters exhibit distinctions that are sufficiently clear for an LLM to recognize and differentiate them?",
-                    "Is the chosen character list feasible for LLM coding (not too long, not too ambiguous)?",
-                    "If interested in human vs instrument classification, are these best understood as human actors (individuals, groups, organizations, states) or instrumental actors (policies, tools, institutions)?",
-                    "How many characters can I realistically track while keeping the coding interpretable and statistically useful?",
-                    "Remember that characters may take on roles within the Drama Triangle, but they can also appear neutrally, without being assigned any specific role."
+                    "Do the selected characters exhibit distinctions that are sufficiently clear for an LLM to recognize and differentiate them?"
                 ],
                 key_prefix="s3_chars",
                 # ↓ NEW: short description appears above “How to approach”
