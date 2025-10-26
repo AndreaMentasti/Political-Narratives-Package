@@ -366,7 +366,7 @@ def render_step(step: int):
                 "- 1 = assert (asserts existence of climate change)\n"
                 "- 2 = deny (denies or mocks climate change)\n"
                 "- 3 = relevant (substantive discussion of climate change policy)\n\n"
-                "We used this script to filter the downloaded tweets and to keep only those that are actually relevant for the climate change policy discourse. This step can be seen as complementary to the topic selection step, meaning that this increases data quality and relevance to the topic. This is useful to avoid useless classification of irrelevant tweets and hence save money and time."
+                "We used this script to filter the downloaded tweets and to keep only those that are actually relevant for the climate change policy discourse. This step can be seen as complementary to the topic selection step, meaning that this increases data quality and relevance to the topic. This is useful to avoid useless classification of irrelevant tweets and hence save money and time.\n\n"
                 "###### (b) Character detection & role assignment (Stage 2)\n"
                 "Identify pre-specified characters and assign contextual roles:\n"
                 "- Villain (1) | Hero (2) | Victim (3) | No role (4)\n\n"
