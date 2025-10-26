@@ -350,7 +350,7 @@ def render_step(step: int):
                 "To adapt the prompt, you have to modify these few instructions with their specific task.\n\n "
                 "Then, by following the next steps you will be able to modify the character keys by adding the topic-specific characters.\n\n"
                 "4) Next, for `system_message_stage2` the user can modify the names of the characters and their descriptions. In the example that we provide, we specified 10 character that are stored in the keys from a to j. Moreover, we included also descriptions and examples of each character.\n\n"
-                "5) After each description, you must specify in which key to store the result. For example, if there are eight characters, the prompt will define keys from a to h. As a result, the classification output for the first character will be stored in column a (key a), for the second character in column b (key b), and so on. "
+                "5) After each description, you must specify in which key to store the result. The alphabetical keys are important to enter in non-capitalized form, always starting from a, then b, then c, running until X, which depends on the number of characters selected: with six characters, X=f, and the columns run from a-f.For example, if there are eight characters, the prompt will define keys from a to h. As a result, the classification output for the first character will be stored in column a (key a), for the second character in column b (key b), and so on. "
                 "Keys simply indicate how the LLM stores the results according to the prompt. The user does not need any knowledge of JSON syntax to modify these few letters in the prompt.\n\n"
 
             ),
@@ -476,11 +476,11 @@ Analyze it in the context of US political discourse on climate change and respon
                 "Chose which script to run based on the task that is performed (relevance or character-roles classification)."
             ],
             ask_yourself=[
-                "Is my dataset ready for the annotation (id, text, missing values, etc)?",
+                "Is your dataset ready for the annotation (id, text, missing values, etc)?",
                 "Does the dataset contain a column called ''id'' and a column called ''text''?",
-                "Are my prompts correctly specified and specific enough?",
-                "Is my folder structure organised as expected?",
-                "Am I in the correct environment (Political_Narratives)?",
+                "Are your prompts correctly specified and specific enough?",
+                "Is your folder structure organised as expected?",
+                "Are you in the correct environment (Political_Narratives)?",
                 "Is the OpenAI API key set in the environment?"
             ],
             key_prefix="s5_outputs",
@@ -492,7 +492,7 @@ Analyze it in the context of US political discourse on climate change and respon
                 "1) Download the script ````annotation_openai_stage2```` (or ````annotation_openai_stage1```` for relevance classification) from the `code and prompts/`folder in the  [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main).\n\n"
                 "2) Set the environment and save the OpenAI API Key as an environmental variable. We suggest to follow the steps [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) if you are not familiar with this.\n\n"
                 "3) Set the folder structure properly.\n\n"
-                "4) Make minimal changes in the code to match the user's path, the characters defined in the prompt, and the dataset. If the user wants to perform relevance classification, he just needs to change the path.\n\n"
+                "4) Make minimal changes in the code to match your path, the characters defined in the prompt, and the dataset. If you want to perform relevance classification, you just need to change the path.\n\n"
                 "All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). We suggest the user to check them."
                 
             ),
@@ -512,13 +512,13 @@ Analyze it in the context of US political discourse on climate change and respon
         output_card(
             "What you should have at the end 🎆",
             bullets=[
-                "An annotated dataset in the following form: 🎆",
+                "An annotated dataset with columns matching the number of characters. X depends on the number of characters selected: with six characters, X=f, and the columns run from a-f.: 🎆",
             ],
             body_md="""
-                | id   | text               | a  | b  | c  | d  | e | f |...|z
+                | id   | text               | a  | b  | c  | d  | e | f |...|X
                 |------|--------------------|----|----|----|----|----|----|----|---
                 | 1_1  | If you listen…     |1   | 4  |0   | 0  | 0  | 0  |    |  0
-                | 1_2  | But is it po…      |0   | 4  |0   |2   | 2  | 0  |    |0
+                | 1_2  | But is it po…      |0   | 4  |0   |2   | 2  | 0  |    |  0
                 | 1_3  | In fact, on…       |3   | 1  |0   | 0  | 0  | 0  |    |  0 
                 """,
             key_prefix="s5_output"
