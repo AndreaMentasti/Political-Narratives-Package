@@ -3,16 +3,13 @@
 The **Political Narratives** Package allows users to adapt the Political Narratives framework presented in *Gehring & Grigoletto (2025)* to their own research. By following the steps described in this repository, interested users will be able to identify the occurrence of political narratives in their data sources. 
 
 **What is a Political Narrative?** A political narrative is identified by (i) its topic, (ii) its characters, and (iii) by having at
-least one character cast in a drama triangle role: hero, villain, or victim.
-
-The definition and measurement of political narratives,  therefore, reduce to specifying the topic and characters, and coding for each character whether
-it appears as neutral or cast as hero, villain, or victim.
+least one character cast in a drama triangle role: hero, villain, or victim. The definition and measurement of political narratives,  therefore, reduce to specifying the topic and characters, and coding for each character whether it appears as neutral or cast as hero, villain, or victim.
 Its purpose is influencing perceptions, beliefs, and preferences about characters contained in the narrative.  Political narratives exert their influence by depicting characters in one of the three archetypal roles—**hero**, **villain**, or **victim**.  They are communicative devices that focus attention, encode roles and identities, and shape norms and behavior.
 
 Formally, choose a topic *T* and a universe of characters *K = H ∪ I*, where H and I represent Human and Instrument characters. For any text unit (tweet, paragraph, article), let *K′ ⊆ K* be the set of characters that appear.  
 A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing character to either a drama-triangle role or neutrality. We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, villain, or victim. If all characters are neutral, the text is about the topic but does not constitute a political narrative in this sense.
 
-We provide you with the code to query the OpenAI API, the prompts that can be used (or adapted) to retrieve Political Narratives, and guidelines to adopt the Political Narrative framework.  
+**How does this repository work?** We provide you with the code to query the OpenAI API, the prompts that can be used (or adapted) to retrieve Political Narratives, and guidelines to adopt the Political Narrative framework.  
 Moreover, at the link [Launch the Political Narratives Guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) you will find an interactive website that guides you through the logic behind the Political Narrative Framework.
 This guide allows you to navigate the steps to prepare your research: you can reflect on the main questions to ask yourself, check them, and annotate your progress. In addition, this interactive resource provides clarifying examples taken from the paper of reference.
 
@@ -87,11 +84,11 @@ This key is personal and directly linked to the user's wallet, so it's important
   conda install spyder
   spyder
   
-- Open the script of interest directly in spyder using the top left command bar. Here the user can choose one of the two Python scripts depending on the task that he needs to perform:
-  - The **stage 1 script**  ````annotation_openai_stage1```` allows the user tho classify a text based on its relevance to the topic selected. This code returns an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant).
-  - The **stage 2 script** ````annotation_openai_stage2```` is the core of the Political Narrative Package, and it allows the user to retrieve the character-role classification. The code returns a dataset with a column for each specified character taking values from 0 to 4, where 0 is no-mention of the character, 1 is Villain role, 2 is Hero role, 3 is Victim role, and 4 for appearence of the character in none of these roles (Neutral).
+- Open the script of interest directly in spyder using the top left command bar. Here you can choose one of the two Python scripts depending on the task that you need to perform:
+  - The **stage 1 script**  ````annotation_openai_stage1```` allows the user tho classify a text based on its relevance to the topic selected. This code returns an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant). This script is not strictly necessary for the character-roles annotation, but it can be useful to assess the relevance of a specific text to the topic at hand. For example, in *Gehring and Grigoletto (2025)* we use this script to filter the tweets and keep only those relevant to the topic of climate change policy.
+  - The **stage 2 script** ````annotation_openai_stage2```` is the core of the Political Narrative Package, and it allows to retrieve the character-role classification. The code returns a dataset with a column for each specified character taking values from 0 to 4, where 0 is no-mention of the character, 1 is Villain role, 2 is Hero role, 3 is Victim role, and 4 for appearence of the character in none of these roles (Neutral).
 
-- Regarding the prompt, the user can adapt the prompt in the folder ````code/prompts/```` with his own instructions. The user can do this by accessing the "SYSTEM MESSAGE" in the prompt. To modify the task, the user can change the instructions at the beginning of the prompt. Then, the user must change the keys (in the example from a to j) to match the number of characters of his analysis. Moreover, descriptions of the characters are required in order for OpenAI to perform a meaningful classification. An example of the prompt is provided here:
+- Regarding the prompt, you can adapt the prompt in the folder ````code/prompts/```` with your own instructions. You can do this by accessing the "SYSTEM MESSAGE" in the prompt. To modify the task, you need to change the instructions at the beginning of the prompt. Then, you must change the character names, the descriptions, and the keys (in the example from a to j) to match the number of characters of your analysis. Moreover, descriptions of the characters are required in order for OpenAI to perform a meaningful classification. For clearer instructions we suggest visiting the Step 4 of the [online guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/). An example of the prompt is provided here:
   ````bash
   {
   "SYSTEM_MESSAGE": "You are an average US citizen. The user will provide a three-sentence US newspaper excerpt (2010–2021). 
@@ -118,19 +115,19 @@ This key is personal and directly linked to the user's wallet, so it's important
   3. Final Output: Respond with a JSON object containing keys a–j. Each value must be 0 (not mentioned) or 1–4 (role as defined above)."
   }
 
-If the user wants to perform the relevance classification, the only part of the prompt that has to be modified is the initial instruction. No changes to the keys are required.
+If you want to perform the relevance classification, the only part of the prompt that has to be modified is the initial instruction. No changes to the keys are required.
 
-- Modify the input dataset: the user needs to provide in the ````/data/output```` folder his dataset named ````your_data_stage2```` (or ````your_data_stage1````). This dataset must contain a column called **id** with the unique identifiers and a column called **text** containing the text for the classification.
+- Modify the input dataset: you need to provide in the ````/data/output```` folder your dataset named ````your_data_stage2```` (or ````your_data_stage1````). This dataset must contain a column called **id** with the unique identifiers and a column called **text** containing the text for the classification.
 
-- - Your ````.csv```` file must be UTF-8 encoded. If you see errors such ````unicodeDecodeError```` try saving again your file in UTF-8, or the script will automatically fall back to latin-1 encoding.
+- - The ````.csv```` file must be UTF-8 encoded. If you see errors such ````unicodeDecodeError```` try saving again your file in UTF-8, or the script will automatically fall back to latin-1 encoding.
 
-- Once prepared the folder structure, the prompt, and the dataset, the user can make minimal changes to the Python script. First, changing the directory
+- Once prepared the folder structure, the prompt, and the dataset, you can make minimal changes to the Python script. First, changing the directory
   ````bash
   main = r"D:\your directory"
 
-If the user is running the ````annotation_openai_stage1```` code, no other changes are needed and you can directly run the script.
+If you are running the ````annotation_openai_stage1```` code, no other changes are needed and you can directly run the script.
 
-- Second, change the JSON structure based on the number of characters: depending on your character selection, you might need to modify the structure of the ````.JSON```` file that is created by OpenAI. You can access it by changing the properties in the following part of the script:
+- Second, change the JSON structure based on the number of characters: depending on your character selection, you might need to modify the structure of the ````.JSON```` file that is created by OpenAI. Here, you just need to adapt the number of keys to your number of characters. You can access it by changing the properties in the following part of the script:
   ````bash
     JSON_SCHEMA = {
         "name": "ArticleClassification",
@@ -165,7 +162,7 @@ If the user is running the ````annotation_openai_stage1```` code, no other chang
         "strict": True
   }
 
-- Then, the user needs to change the user content to adapt it to his number of characters, as done before: 
+- Then, you need to change the user content to adapt it to your number of characters, as done before: 
   ````bash
   def build_user_content(article_group):
     
@@ -186,7 +183,7 @@ If the user is running the ````annotation_openai_stage1```` code, no other chang
         user_content += f"Text: {article['text']}\n"
     return user_content
 
-- Lastly, he needs to adapt the `flatten_results()` function by changing this few lines of code: 
+- Lastly, you need to adapt the `flatten_results()` function by changing this few lines of code: 
   ````bash
                         "request_id": result["request_id"],
                         "article_id": result.get("article_id"),
@@ -210,7 +207,7 @@ Inputs:
 - API key as Environmental variable
   
 Outputs:
-- The user can find the output dataset in the folder ````output/data/openai_final/```` in a folder called as the date and time when the code has been run. The dataset is saved as ````.csv```` named ````flattened_results_all.csv````.
+- Once run the code, you will find the output dataset in the folder ````output/data/openai_final/```` in a folder called as the date and time when the code has been run. The dataset is saved as ````.csv```` named ````flattened_results_all.csv````.
 
 - Dataset with characther-role flags (if you run the second script):
   
