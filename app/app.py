@@ -129,9 +129,9 @@ def render_step(step: int):
                 "Does this topic surface enough distinct political narratives and public debate to analyze?",
                 "Is it likely there are enough identifiable characters within those narratives? Characters can be individuals, parties, institutions, or groups appearing in the discourse.",
                 "Is the research question compelling and relevant to the scientific community (and/or practitioners)?",
-                "Could any actors or communities be harmed by this analysis, and how will I mitigate that risk?",
-                "Which data sources are most informative for this topic, and do I have reliable access to them?",
-                "If those sources are available, can I obtain the essential metadata (dates, outlets, geography, language) needed for analysis?"
+                "Could any actors or communities be harmed by this analysis, and how would you mitigate that risk?",
+                "Which data sources are most informative for this topic, and do you have reliable access to them?",
+                "If those sources are available, can you obtain the essential metadata (dates, outlets, geography, language) needed for analysis?"
             ],
             key_prefix="s1_scope"
         )
@@ -180,10 +180,10 @@ def render_step(step: int):
                 "Do the chosen sources capture the main media where the political debate unfolds?",
                 "Is the time window covered by the source appropriate for the research question?",
                 "Are they sufficiently diverse to avoid bias toward one outlet, ideology, or demographic?",
-                "Do I have legal and technical access to these data (e.g., archives, APIs, scraping permission)?",
-                "What extraction method is most reliable for my source—keyword queries, metadata filters, or transcript parsing?",
+                "Do you have legal and technical access to these data (e.g., archives, APIs, scraping permission)?",
+                "What extraction method is most reliable for your source—keyword queries, metadata filters, or transcript parsing?",
                 "Is the extraction method able to produce snippets that are neither too short to lose context nor too long to become too complicated for the analysis? If needed, split the texts into smaller snippets.",
-                "Can I obtain essential metadata (dates, outlets, geography, language) for contextual analysis?",
+                "Can you obtain essential metadata (dates, outlets, geography, language) for contextual analysis?",
                 "Basic preprocessing (removing duplicates, non-textual artifacts) ensures better results in later steps. If texts are multilingual, is good to consider filtering or adding a ‘language’ column for clarity."
             ],
             key_prefix="s2_sources"
@@ -233,12 +233,12 @@ def render_step(step: int):
                 "Guide: character selection ✅",
                 how_to=[
                     "Identify relevant characters for the topic. The basis for the selection can be the relevant literature, your own interests as a researcher, or be approached in a more data driven way. ",
-                    "Characters can be human (individuals or collective actors such as corporations, parties, states, movements) but also instruments/instrumental (policies, laws, technologies). This means that the term **character** should be seen as a category and not be mistaken with *actors*; it does not need to be human or an individual, but can also be groups of people, policy areas or individual policies, or more abstract categories like science, a technology or technology class. In any case, the necessary first step is domain reading: you need to read the text snippets that you want to encoded later. The tasks of the LLM later is to encode at scale, but any choices should also be plausible for a human reader. ",
-                    "Traditional text tools like word clouds or topic models can help, or using entity recognition of the more advanced RELATIO package (LINK). However, all these tools require a dimensions reduction at some point. From the full set of possible characters, you need to decide how to aggregate to a feasible and usable number of chosen characters. In contrast to topic models or RELATIO, this choice comes before the encoding at scale. ",
+                    "As said above, each **character** should be seen as a category and not be mistaken with *actors*. The necessary first step is domain reading: you need to read the text snippets that you want to encoded later. The tasks of the LLM later is to encode at scale, but any choices should also be plausible for a human reader. ",
+                    "Traditional text tools like word clouds or topic models can help, or using entity recognition of the more advanced RELATIO package. However, all these tools require a dimensions reduction at some point. From the full set of possible characters, you need to decide how to aggregate to a feasible and usable number of chosen characters. In contrast to topic models or RELATIO, this choice comes before the encoding at scale. ",
                     "Entity recognition is very useful for thinking about the necessary aggregation, as it can tell you which entities appear how often. This provides a good basis for thinking which entitites should be aggregated into one character. For example, in real text the character **US president Trump** might appear as *Trump*, *Donald J. Trump*, *POTUS*, *US president*, etc. , but conceptually clearly represents just one character.",
                     "A different aggregation tasks is to cluster different smaller characters into a bigger character category. For instance, you could have three characters *solar technology*, *wind technology*, and *geothermic technology* if you are interested in understanding specific narratives about the specific technologies. Or you can decide to aggregate all up into one character **green technology**, if your goal is to capture the narrative roles of green technology as a combined category. Similar examples would be looking at *primary education*, *secondary education*, and *tertiary education* separately, or having one character **education**. Hence one can think of a character a an aggregation of different words for the same clearly defined character, or of a larger character as a cluster aggregating several more specific characters.",
                     "For a precise prediction, Characters should be internally as homogenous as possible, and as heterogenous and clearly differentiated compared to other characters as possible",
-                    "Balance scope with feasibility: too many characters can raise compute costs and prediction complexity; a focused set improves reliability and interpretability. However, aggregating too many entities into one character will make a prediction more noisy, unless the mapping into the character is always obvious and clear. It can make sense to start with a larger set of characters which could be aggregated later for regression analysis, but be aware it comes at these monetary costs and with a potential loss in precision.",
+                    "Balance scope with feasibility: too many characters can raise computational costs and prediction complexity; a focused set improves reliability and interpretability. However, aggregating too many entities into one character will make a prediction more noisy, unless the mapping into the character is always obvious and clear. It can make sense to start with a larger set of characters which could be aggregated later for regression analysis, but be aware it comes at these monetary costs and with a potential loss in precision.",
                     "Document your choices and motivations for later. Also for each character, it helps to have both a short positive list of the key entities or more specific characters that it includes, as well as potentially a negative distinction of things that it does not comprise.",
                     "Build the character list via literature review, exploratory tools (topic modeling, entity recognition/RELATIO), and domain reading; document your choices. You can identify characters manually by reading and noting recurring entities. Automated tools can help, but they’re optional.",
                     "Go back and read a sufficient number of text snippets manually to validate your choices.",
@@ -250,14 +250,14 @@ def render_step(step: int):
                     "Do your characters appear in at least one drama triangle role (hero, villain or victim)? Or even in several? It can be interesting to observe if they only appear as neutral, but often more interesting if they can take on more roles",
                     "Do exploratory tools (topic models, word clouds, entity recognition, RELATIO outputs) highlight additional entities? If so, how to aggregate these entities into some broader character definitions?",
                     "Which characters matter most for the topic at hand?",
-                    "What is the scope of my analysis (national, regional, global)? Which characters fall outside my scope?",
+                    "What is the scope of your analysis (national, regional, global)? Which characters fall outside your scope?",
                     "Do the selected characters exhibit distinctions that are sufficiently clear for an LLM to recognize and differentiate them?"
                 ],
                 key_prefix="s3_chars",
                 # ↓ NEW: short description appears above “How to approach”
                 blurb_md=(
-                    "In the context of Political Narratives, a **character** is identified as narrative category that brings together specific entities mentioned in the text (people, groups, institutions, or technologies) that share the same identity. "
-                    "For example, mentions of *Biden*, *the Senate,* or *Democrats* are all grouped under the broader character **The U.S. Democrats**. "
+                    "Characters can be human (individuals or collective actors such as corporations, parties, states, movements) but also instruments/instrumental (policies, laws, technologies). "
+                    "This means that the term **character** should be seen as a category and not be mistaken with *actors*; it does not need to be human or an individual, but can also be groups of people, policy areas or individual policies, or more abstract categories like science, a technology or technology class. "
                     "Characters can be represented as **nodes in a directed acyclic graph (DAG)**, where edges capture causal or relational dependencies. "
                     "While DAGs illustrate structure, narrative coding focuses on how each character is framed through roles such as hero, villain, or victim.\n\n" 
                     "In this step, define a **small, distinctive set of characters** that directly reflect your research question. "
