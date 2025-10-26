@@ -234,7 +234,7 @@ def render_step(step: int):
                 how_to=[
                     "Identify relevant characters for the topic. The basis for the selection can be the relevant literature, your own interests as a researcher, or be approached in a more data driven way. ",
                     "As said above, each **character** should be seen as a category and not be mistaken with *actors*. The necessary first step is domain reading: you need to read the text snippets that you want to encoded later. The tasks of the LLM later is to encode at scale, but any choices should also be plausible for a human reader. ",
-                    "Traditional text tools like word clouds or topic models can help, or using entity recognition of the more advanced RELATIO package. However, all these tools require a dimensions reduction at some point. From the full set of possible characters, you need to decide how to aggregate to a feasible and usable number of chosen characters. In contrast to topic models or RELATIO, this choice comes before the encoding at scale. ",
+                    "Traditional text tools like word clouds or topic models can help, or using entity recognition of the more advanced [RELATIO package](https://github.com/relatio-nlp/relatio). However, all these tools require a dimensions reduction at some point. From the full set of possible characters, you need to decide how to aggregate to a feasible and usable number of chosen characters. In contrast to topic models or RELATIO, this choice comes before the encoding at scale. ",
                     "Entity recognition is very useful for thinking about the necessary aggregation, as it can tell you which entities appear how often. This provides a good basis for thinking which entitites should be aggregated into one character. For example, in real text the character **US president Trump** might appear as *Trump*, *Donald J. Trump*, *POTUS*, *US president*, etc. , but conceptually clearly represents just one character.",
                     "A different aggregation tasks is to cluster different smaller characters into a bigger character category. For instance, you could have three characters *solar technology*, *wind technology*, and *geothermic technology* if you are interested in understanding specific narratives about the specific technologies. Or you can decide to aggregate all up into one character **green technology**, if your goal is to capture the narrative roles of green technology as a combined category. Similar examples would be looking at *primary education*, *secondary education*, and *tertiary education* separately, or having one character **education**. Hence one can think of a character a an aggregation of different words for the same clearly defined character, or of a larger character as a cluster aggregating several more specific characters.",
                     "For a precise prediction, Characters should be internally as homogenous as possible, and as heterogenous and clearly differentiated compared to other characters as possible",
@@ -262,7 +262,7 @@ def render_step(step: int):
                     "While DAGs illustrate structure, narrative coding focuses on how each character is framed through roles such as hero, villain, or victim.\n\n" 
                     "In this step, define a **small, distinctive set of characters** that directly reflect your research question. "
                     "Prefer **clear, non-overlapping definitions** that an LLM can reliably identify across texts. To manage this, ask whether an outsider could tell these characters apart from their descriptions alone. "
-                    "Record a **brief description for each character now**—you will reuse it in Step 4 prompts."
+                    "Record a **brief description for each character now**—you will reuse it in Step 4 Prompts."
                 ),
             )
 
@@ -333,10 +333,10 @@ def render_step(step: int):
             key_prefix="s4_prompt",
             
             blurb_md=(
-                "This step is crucial for achieving **accurate classification**. The researcher must provide "
+                "This step is crucial for achieving **accurate classification**. You must provide "
                 "**precise instructions** to the LLM to ensure that characters are correctly annotated with their respective roles. "
-                "To do so, you need to create a **SYSTEM MESSAGE** in a JSON file that clearly specifies the task, "
-                "the set of characters to be identified, and the possible roles they can assume.\n\n "
+                "To do so, you need to create a **SYSTEM MESSAGE** in a JSON file that clearly specifies three aspects: first, the task that the LLM has to perform on each text snippet; "
+                "second, the set of characters to be identified, together with a brief description of them, and with clarifying examples; lastly, the set of possible roles they can assume, which in this case are set to Hero, Villain, and Victim.\n\n "
                 "Below, we provide key guidance for constructing the SYSTEM MESSAGE. A ready-to-use example prompt is available "
                 "in the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and can be easily adapted by following these instructions. "
                 "To further improve data quality, we also include a **relevance classification** prompt, which helps assess how closely each text snippet relates to the topic. "
@@ -344,13 +344,13 @@ def render_step(step: int):
                 "complementing **Step 1** of this guide.\n\n"
                 "##### Step-by-Step instructions:\n"
                 "1) Access the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and download the or `system_message_stage1` for the relevance classification and the `system_message_stage2` for the character-role classification from the `code and prompts/` folder.\n\n "
-                "2) For the relevance classification with `system_message_stage1`, users must adjust the instructions to ensure they reflect the particular topic under analysis. Nothing else is needed in this prompt.\n\n"
-                "3) For the character-role classification with `system_message_stage2`, user must open the json file and modify the SYSTEM MESSAGE field with your instructions (describe how to behave when analyzing a text).\n\n"
-                "**How to modify the two system messages?** In the prompts the user will find the following text: *You are an average US citizen. The user will provide the content of a tweet posted from the US between 2010 and 2021. \nYour task is to analyze it within the context of US political discourse, particularly in relation to climate change and related policies.* "
-                "To adapt the prompt, the user have to modify these few instructions.\n\n "
-                "Then, by following the next steps he will be able to modify the character keys by adding the topic-specific characters.\n\n"
-                "4) Next, for `system_message_stage2` the user can modify the names of the characters and their descriptions.\n\n"
-                "5) After each description, the user must specify in which key to store the result. For example, if there are eight characters, the prompt will define keys from a to j. As a result, the classification output for the first character will be stored in column a (key a), for the second character in column b (key b), and so on. "
+                "2) For the relevance classification with `system_message_stage1`, you just need to adjust the instructions to ensure they reflect the particular topic under analysis. Nothing else is needed in this prompt.\n\n"
+                "3) For the character-role classification with `system_message_stage2`, open the json file and modify the SYSTEM MESSAGE field with your instructions (describe how to behave when analyzing a text).\n\n"
+                "**How to modify the two system messages?** In the prompts you will find the following text: *You are an average US citizen. The user will provide the content of a tweet posted from the US between 2010 and 2021. \nYour task is to analyze it within the context of US political discourse, particularly in relation to climate change and related policies.* "
+                "To adapt the prompt, you have to modify these few instructions with their specific task.\n\n "
+                "Then, by following the next steps you will be able to modify the character keys by adding the topic-specific characters.\n\n"
+                "4) Next, for `system_message_stage2` the user can modify the names of the characters and their descriptions. In the example that we provide, we specified 10 character that are stored in the keys from a to j. Moreover, we included also descriptions and examples of each character.\n\n"
+                "5) After each description, you must specify in which key to store the result. For example, if there are eight characters, the prompt will define keys from a to h. As a result, the classification output for the first character will be stored in column a (key a), for the second character in column b (key b), and so on. "
                 "Keys simply indicate how the LLM stores the results according to the prompt. The user does not need any knowledge of JSON syntax to modify these few letters in the prompt.\n\n"
 
             ),
@@ -366,12 +366,14 @@ def render_step(step: int):
                 "- 1 = assert (asserts existence of climate change)\n"
                 "- 2 = deny (denies or mocks climate change)\n"
                 "- 3 = relevant (substantive discussion of climate change policy)\n\n"
+                "We used this script to filter the downloaded tweets and to keep only those that are actually relevant for the climate change policy discourse. This step can be seen as complementary to the topic selection step, meaning that this increases data quality and relevance to the topic. This is useful to avoid useless classification of irrelevant tweets and hence save money and time."
                 "###### (b) Character detection & role assignment (Stage 2)\n"
                 "Identify pre-specified characters and assign contextual roles:\n"
                 "- Villain (1) | Hero (2) | Victim (3) | No role (4)\n\n"
                 "Characters: Developing Economies, US Democrats, US Republicans, Corporations, US People, "
                 "Emission Pricing Tools, Regulation Policies, Fossil Fuels, Green Technologies, Nuclear Energy.\n"
-                "Output JSON contains keys a–j (one per character)."
+                "Output JSON contains keys a–j (one per character).\n\n"
+                "In the prompt, for each character we give a brief description and some positive examples to look for in the text."
             ),
             key_prefix="s4_example"
         )
