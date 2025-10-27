@@ -186,8 +186,8 @@ If you are running the ````annotation_openai_stage1```` code, no other changes a
 - Lastly, you need to adapt the `flatten_results()` function by changing this few lines of code: 
   ````bash
                         "request_id": result["request_id"],
-                        "article_id": result.get("article_id"),
                         "id": entry_id,
+                        "text": result.get("article_text", None),
                         "a": entry.get("a", 0),
                         "b": entry.get("b", 0),
                         "c": entry.get("c", 0),
