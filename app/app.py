@@ -258,10 +258,7 @@ def render_step(step: int):
                     "With your data collected, you can now identify the characters in your texts. "
                     "Characters can be human (individuals or collective actors such as corporations, parties, states, movements) but also instruments/instrumental (policies, laws, technologies). "
                     "This means that the term **character** should be seen as a category and not be mistaken with *actors*; it does not need to be human or an individual, but can also be groups of people, policy areas or individual policies, or more abstract categories like science, a technology or technology class.\n\n "
-
-                    "Define a set of 
-                    
-                    "In this step, define a **small, distinctive set of characters** that directly reflect your research question.\n\n "
+                    "In this step, define a **small, distinctive set of characters** that directly reflect your research question. "
                     "Prefer **clear, non-overlapping definitions** that an LLM can reliably identify across texts. To manage this, ask whether an outsider could tell these characters apart from their descriptions alone. "
                     "Record a **brief description for each character now**—you will reuse it in Step 4 Prompts."
                 ),
