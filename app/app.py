@@ -246,9 +246,9 @@ def render_step(step: int):
                 ],
                 ask_yourself=[
                     "Which characters recur most often in prior literature or theory on this topic?",
+                    "Which characters matter most for the topic at hand?",
                     "Do your characters appear in at least one drama triangle role (hero, villain or victim)? Or even in several? It can be interesting to observe if they only appear as neutral, but often more interesting if they can take on more roles",
                     "Do exploratory tools (topic models, word clouds, entity recognition, RELATIO outputs) highlight additional entities? If so, how to aggregate these entities into some broader character definitions?",
-                    "Which characters matter most for the topic at hand?",
                     "What is the scope of your analysis (national, regional, global)? Which characters fall outside your scope?",
                     "Do the selected characters exhibit distinctions that are sufficiently clear for an LLM to recognize and differentiate them?"
                 ],
@@ -312,7 +312,7 @@ def render_step(step: int):
     # --- STEP 4 (restored) ---
     if step == 4:
         st.subheader("Step 4 — Prepare the prompt(s)")
-        st.caption("Specify the mapping from raw text to character columns with a simple, consistent schema.")
+        st.caption("After defining your characters in Step 3, you now need to instruct the model on how to detect them. Step 4 translates your conceptual framework into an operational prompt that the LLM can understand.")
 
         # 1) GUIDE
         question_card(
@@ -341,12 +341,12 @@ def render_step(step: int):
                 "This allows each text to be labeled according to whether it is relevant to the topic of interest, "
                 "complementing **Step 1** of this guide.\n\n"
                 "##### Step-by-Step instructions:\n"
-                "1) Access the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and download the or `system_message_stage1` for the relevance classification and the `system_message_stage2` for the character-role classification from the `code and prompts/` folder.\n\n "
-                "2) For the relevance classification with `system_message_stage1`, you just need to adjust the instructions to ensure they reflect the particular topic under analysis. Nothing else is needed in this prompt.\n\n"
-                "3) For the character-role classification with `system_message_stage2`, open the json file and modify the SYSTEM MESSAGE field with your instructions (describe how to behave when analyzing a text).\n\n"
-                "**How to modify the two system messages?** In the prompts you will find the following text: *You are an average US citizen. The user will provide the content of a tweet posted from the US between 2010 and 2021. \nYour task is to analyze it within the context of US political discourse, particularly in relation to climate change and related policies.* "
-                "To adapt the prompt, you have to modify these few instructions with their specific task.\n\n "
-                "Then, by following the next steps you will be able to modify the character keys by adding the topic-specific characters.\n\n"
+                "1) Access the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and download the `system_message_stage1` for the relevance classification and the `system_message_stage2` for the character-role classification from the `code and prompts/` folder.\n\n "
+                "2) For the relevance classification with `system_message_stage1`, you just need to adjust the instructions in the SYSTEM MESSAGE to ensure they reflect the particular topic under analysis. Nothing else is needed in this prompt.\n\n"
+                "3) For the character-role classification with `system_message_stage2`, you need to modify the instructions, the list of characters, and their descriptions.\n\n"
+                "**How to modify the two system messages?** In the prompts you will find the following text: *You are an average US citizen. The user will provide the content of a tweet posted from the US between 2010 and 2021. \nYour task is to analyze it within the context of US political discourse, particularly in relation to climate change and related policies.*\n\n "
+                "To adapt the prompts, you have to modify these few instructions with their specific task. Then, if you are working on the character-role classification you can continue following these instructions. For the relevance classification, you don't need other changes to the prompt and you are ready to proceed to Step 5.\n\n "
+                "By following the next steps you will be able to modify the character keys by adding the topic-specific characters.\n\n"
                 "4) Next, for `system_message_stage2` the user can modify the names of the characters and their descriptions. In the example that we provide, we specified 10 character that are stored in the keys from a to j. Moreover, we included also descriptions and examples of each character.\n\n"
                 "5) After each description, you must specify in which key to store the result. The alphabetical keys are important to enter in non-capitalized form, always starting from a, then b, then c, running until X, which depends on the number of characters selected: with six characters, X=f, and the columns run from a-f. For example, if there are eight characters, the prompt will define keys from a to h. As a result, the classification output for the first character will be stored in column a (key a), for the second character in column b (key b), and so on. "
                 "Keys simply indicate how the LLM stores the results according to the prompt. The user does not need any knowledge of JSON syntax to modify these few letters in the prompt.\n\n"
@@ -380,7 +380,7 @@ def render_step(step: int):
         output_card(
             "What you should have before Step 5 ⚠️",
             bullets=[
-                "A finalized **prompt** for your task (relevance or character/role).",
+                "A finalized **prompt** for your task (relevance or character/role). The prompt ´system_message_stage1´ for the relevance classification contains the system message with the instructions and the categories in which a text can be classified (coded from 0 to 3). The ´system_message_stage2´ contains the system message with the instructions, the list of characters that you selected in Step 3, and the description of each character.",
             ],
             key_prefix="s4_output"
         )
