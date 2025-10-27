@@ -32,7 +32,7 @@ We provide here a step-by-step explanation on how to adapt the code and run it o
 
 - (For beginner Python users) Then, we suggest you to download Anaconda and Anaconda Prompt at the [link](https://www.anaconda.com/docs/getting-started/anaconda/install).
 
-- Download the files in ````code and prompts```` and the ````environment.yml````. Then, the user must build the following folder structure locally:
+- Download the files in ````code and prompts```` and the ````environment.yml````. Then, you must build the following folder structure locally:
   ```bash
   <main>/
   ├─ code/
@@ -51,7 +51,7 @@ We provide here a step-by-step explanation on how to adapt the code and run it o
   │     └─ openai_final/              
   └─ logs/
   └─ environment.yml                         # <-- your environment requiremnts
-According to this structure, the user needs to fill the ````code/prompts/```` folder with the system message of the stage, and the ````data/output/```` folder with the ````.csv```` dataset. Put the ````environment.yml```` in the main project folder.  
+According to this structure, you need to fill the ````code/prompts/```` folder with the system message of the stage, and the ````data/output/```` folder with the ````.csv```` dataset. Put the ````environment.yml```` in the main project folder.  
 IMPORTANT: the input ````.csv```` must contain a column called ````id```` and a column called ````text````.
 
 - Open Anaconda Prompt and move into the main project folder:
@@ -85,7 +85,7 @@ This key is personal and directly linked to the user's wallet, so it's important
   spyder
   
 - Open the script of interest directly in spyder using the top left command bar. Here you can choose one of the two Python scripts depending on the task that you need to perform:
-  - The **stage 1 script**  ````annotation_openai_stage1```` allows the user tho classify a text based on its relevance to the topic selected. This code returns an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant). This script is not strictly necessary for the character-roles annotation, but it can be useful to assess the relevance of a specific text to the topic at hand. For example, in *Gehring and Grigoletto (2025)* we use this script to filter the tweets and keep only those relevant to the topic of climate change policy.
+  - The **stage 1 script**  ````annotation_openai_stage1```` allows to classify a text based on its relevance to the topic selected. This code returns an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant). This script is not strictly necessary for the character-roles annotation, but it can be useful to assess the relevance of a specific text to the topic at hand. For example, in *Gehring and Grigoletto (2025)* we use this script to filter the tweets and keep only those relevant to the topic of climate change policy.
   - The **stage 2 script** ````annotation_openai_stage2```` is the core of the Political Narrative Package, and it allows to retrieve the character-role classification. The code returns a dataset with a column for each specified character taking values from 0 to 4, where 0 is no-mention of the character, 1 is Villain role, 2 is Hero role, 3 is Victim role, and 4 for appearence of the character in none of these roles (Neutral).
 
 - Regarding the prompt, you can adapt the prompt in the folder ````code/prompts/```` with your own instructions. You can do this by accessing the "SYSTEM MESSAGE" in the prompt. To modify the task, you need to change the instructions at the beginning of the prompt. Then, you must change the character names, the descriptions, and the keys (in the example from a to j) to match the number of characters of your analysis. Moreover, descriptions of the characters are required in order for OpenAI to perform a meaningful classification. For clearer instructions we suggest visiting the Step 4 of the [online guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/). An example of the prompt is provided here:
