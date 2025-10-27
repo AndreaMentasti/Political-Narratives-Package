@@ -336,7 +336,7 @@ def render_step(step: int):
                 "To do so, you need to create a **SYSTEM MESSAGE** in a JSON file that clearly specifies three aspects: first, the task that the LLM has to perform on each text snippet; "
                 "second, the set of characters to be identified, together with a brief description of them, and with clarifying examples; lastly, the set of possible roles they can assume, which in this case are set to Hero, Villain, and Victim.\n\n "
                 "Below, we provide key guidance for constructing the SYSTEM MESSAGE. A ready-to-use example prompt is available "
-                "in the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and can be easily adapted by following these instructions. "
+                "in the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and can be easily adapted by following these instructions.\n\n "
                 "To further improve data quality, we also include a **relevance classification** prompt, which helps assess how closely each text snippet relates to the topic. "
                 "This allows each text to be labeled according to whether it is relevant to the topic of interest, "
                 "complementing **Step 1** of this guide.\n\n"
