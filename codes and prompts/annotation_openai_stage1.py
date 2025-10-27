@@ -145,13 +145,13 @@ def send_request(request_id, article_group, system_message):
     user_content = build_user_content(article_group)
 
     body = {
-        "model": "gpt-4o-mini",
+        "model": "gpt-4o",
         "messages": [
             {"role": "system", "content": system_message},
             {"role": "user", "content": user_content}
         ],
-        "max_tokens": 4096,
-        "temperature": 0.2,
+        "max_tokens": 300,
+        "temperature": 0.1,
         "response_format": {
             "type": "json_schema",
             "json_schema": JSON_SCHEMA
@@ -432,4 +432,5 @@ if __name__ == "__main__":
     run_classification_in_chunks(chunk_size=100)
 
     # 2) (Optional) Merge partial results into one final CSV
+
     merge_partial_results_into_final()
