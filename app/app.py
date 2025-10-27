@@ -380,7 +380,7 @@ def render_step(step: int):
         output_card(
             "What you should have before Step 5 ⚠️",
             bullets=[
-                "A finalized **prompt** for your task (relevance or character/role). The prompt ´system_message_stage1´ for the relevance classification contains the system message with the instructions and the categories in which a text can be classified (coded from 0 to 3). The ´system_message_stage2´ contains the system message with the instructions, the list of characters that you selected in Step 3, and the description of each character.",
+                "A finalized **prompt** for your task (relevance or character/role). The prompt `system_message_stage1` for the relevance classification contains the system message with the instructions and the categories in which a text can be classified (coded from 0 to 3). The `system_message_stage2` contains the system message with the instructions, the list of characters that you selected in Step 3, and the description of each character.",
             ],
             key_prefix="s4_output"
         )
