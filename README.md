@@ -119,7 +119,7 @@ If you want to perform the relevance classification, the only part of the prompt
 
 - Modify the input dataset: you need to provide in the ````/data/output```` folder your dataset named ````your_data_stage2```` (or ````your_data_stage1````). This dataset must contain a column called **id** with the unique identifiers and a column called **text** containing the text for the classification.
 
-- - The ````.csv```` file must be UTF-8 encoded. If you see errors such ````unicodeDecodeError```` try saving again your file in UTF-8, or the script will automatically fall back to latin-1 encoding.
+  The ````.csv```` file must be UTF-8 encoded. If you see errors such ````unicodeDecodeError```` try saving again your file in UTF-8, or the script will automatically fall back to latin-1 encoding.
 
 - Once prepared the folder structure, the prompt, and the dataset, you can make minimal changes to the Python script. First, changing the directory
   ````bash
