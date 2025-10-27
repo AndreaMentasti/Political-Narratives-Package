@@ -320,12 +320,12 @@ def render_step(step: int):
             how_to=[
                 "Define a **JSON schema** (keys, allowed labels, brief explanation of the task).",
                 "Co-design prompts with the same model you will use for annotation (e.g., GPT-4o-mini via OpenAI) to align capabilities and outputs.",
-                "This package supports two tasks: (a) topic relevance classification and (b) character detection + role assignment."
+                "This package supports two tasks: (a) topic relevance classification and (b) character detection + role assignment. Choose which task perform, and consider applying prompt 1 to increase the quality of your data."
             ],
             ask_yourself=[
-                "Is the task singular and clear (avoid mixing multiple tasks in one prompt)?",
-                "Is the chosen input unit appropriate for context vs. speed constraints?",
-                "Is the schema unambiguous, machine-readable, and easy to parse?",
+                "Is the task singular and clear (avoid mixing multiple tasks in one prompt)? Use the correct prompt for the task that you need to perform.",
+                "Is the chosen input unit appropriate for context vs. speed constraints? Remember, shorter text snippets are handled better by the OpenAI API.",
+                "Is the schema unambiguous, machine-readable, and easy to parse? Are the keys correctly specified and the roles defined properly?",
                 "Do I provide a description of the selected characters?",
             ],
             key_prefix="s4_prompt",
@@ -337,7 +337,7 @@ def render_step(step: int):
                 "second, the set of characters to be identified, together with a brief description of them, and with clarifying examples; lastly, the set of possible roles they can assume, which in this case are set to Hero, Villain, and Victim.\n\n "
                 "Below, we provide key guidance for constructing the SYSTEM MESSAGE. A ready-to-use example prompt is available "
                 "in the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and can be easily adapted by following these instructions.\n\n "
-                "To further improve data quality, we also include a **relevance classification** prompt, which helps assess how closely each text snippet relates to the topic. "
+                "To further improve data quality, we also include a **relevance classification** prompt, which helps assessing how closely each text snippet relates to the topic. "
                 "This allows each text to be labeled according to whether it is relevant to the topic of interest, "
                 "complementing **Step 1** of this guide.\n\n"
                 "##### Step-by-Step instructions:\n"
@@ -347,7 +347,7 @@ def render_step(step: int):
                 "**How to modify the two system messages?** In the prompts you will find the following text: *You are an average US citizen. The user will provide the content of a tweet posted from the US between 2010 and 2021. \nYour task is to analyze it within the context of US political discourse, particularly in relation to climate change and related policies.*\n\n "
                 "To adapt the prompts, you have to modify these few instructions with their specific task. Then, if you are working on the character-role classification you can continue following these instructions. For the relevance classification, you don't need other changes to the prompt and you are ready to proceed to Step 5.\n\n "
                 "By following the next steps you will be able to modify the character keys by adding the topic-specific characters.\n\n"
-                "4) Next, for `system_message_stage2` the user can modify the names of the characters and their descriptions. In the example that we provide, we specified 10 character that are stored in the keys from a to j. Moreover, we included also descriptions and examples of each character.\n\n"
+                "4) Next, for `system_message_stage2` you can modify the names of the characters and their descriptions. In the example that we provide, we specified 10 character that are stored in the keys from a to j. Moreover, we included also descriptions and examples of each character. Paste your characters and descriptions in place of the examples in the prompt.\n\n"
                 "5) After each description, you must specify in which key to store the result. The alphabetical keys are important to enter in non-capitalized form, always starting from a, then b, then c, running until X, which depends on the number of characters selected: with six characters, X=f, and the columns run from a-f. For example, if there are eight characters, the prompt will define keys from a to h. As a result, the classification output for the first character will be stored in column a (key a), for the second character in column b (key b), and so on. "
                 "Keys simply indicate how the LLM stores the results according to the prompt. The user does not need any knowledge of JSON syntax to modify these few letters in the prompt.\n\n"
 
