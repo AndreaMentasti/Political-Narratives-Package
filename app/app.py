@@ -122,16 +122,16 @@ def render_step(step: int):
                 "and the exploration of the research question. Topic choice should weigh the research question, "
                 "data availability, and available resources, while balancing specificity vs. generalizability. "
                 "Over-narrow topics risk too few characters or narratives; over-broad topics make it difficult to "
-                "restrict analysis to a manageable set. Make explicit what is in and what is out."
+                "restrict analysis to a manageable set. Clearly document what aspects of the topic are included and excluded from the analysis."
             ],
             ask_yourself=[
                 "Is the topic sufficiently specific to be analyzable, without being so narrow that it lacks variation?",
                 "Does this topic surface enough distinct political narratives and public debate to analyze?",
                 "Is it likely there are enough identifiable characters within those narratives? Characters can be individuals, parties, institutions, or groups appearing in the discourse.",
                 "Is the research question compelling and relevant to the scientific community (and/or practitioners)?",
-                "Could any actors or communities be harmed by this analysis, and how would you mitigate that risk?",
                 "Which data sources are most informative for this topic, and do you have reliable access to them?",
-                "If those sources are available, can you obtain the essential metadata (dates, outlets, geography, language) needed for analysis?"
+                "If those sources are available, can you obtain the essential metadata (dates, outlets, geography, language) needed for analysis?",
+                "Could any actors or communities be harmed by this analysis, and how would you mitigate that risk?"
             ],
             key_prefix="s1_scope"
         )
@@ -150,7 +150,7 @@ def render_step(step: int):
         output_card(
             "What you should have before Step 2 ⚠️",
             bullets=[
-                "A precise topic for the analysis of political narratives"
+                "A precise topic for the analysis of political narratives. This topic defines where to look and what kind of material to collect, hence is the basis for Step 2 Sources and Extraction."
             ],
             key_prefix="s1_output"
         )
@@ -173,14 +173,14 @@ def render_step(step: int):
                 "For data extraction, the chosen source will determine which methodologies can be applied—such as keyword-based queries, scraping, API pulls, or manual collection.",
                 "Consider the level of metadata you can preserve (dates, outlets, authors, geography, language) since these details will later be the basis of your analysis.",
                 "What is the unit of analysis (for instance, a tweet, paragraph, or newspaper snippet)? Should I split the texts into smaller snippets, or can I work with the extracted texts as they are? For example, long texts (e.g., articles) can be segmented into paragraphs or 3-sentence chunks to fit LLM input limits and maintain focus.",
-                "If text snippets are too short, you will not capture more complex narratives with multiple character-roles, but mostly narrative fragments. If it is too long, the LLM will struggle to assign a role to a character with our current prompts, for instance if the character is portrayed in different ways in a long article. For example, long texts (e.g., long newspaper articles or TV segments) should be segmented into smaller text snippets. From experience, something along the length of a single tweet, a paragraphs or 3-sentence chunks are a useful compromises. If the text is too short, you will not capture more complex narratives with multiple character-roles, but mostly narrative fragments. If it is too long, the LLM will struggle to assign a role to a character with our current prompts. Generally we advise users to pick units that have a natural meaning in an article, .e.g. a sentence or a paragraph usually follow a structure, whereas taking a certain number of words before and after a keyword breaks sentence and characters that might have had a meaning.",
+                "If text snippets are too short, you will not capture more complex narratives with multiple character-roles, but mostly narrative fragments. If it is too long, the LLM will struggle to assign a role to a character with our current prompts, for instance if the character is portrayed in different ways in a long article. For example, long texts (e.g., long newspaper articles or TV segments) should be segmented into smaller text snippets. From experience, something along the length of a single tweet, a paragraph or 3-sentence chunks are a useful compromises. If the text is too short, you will not capture more complex narratives with multiple character-roles, but mostly narrative fragments. If it is too long, the LLM will struggle to assign a role to a character with our current prompts. Generally we advise users to pick units that have a natural meaning in an article, .e.g. a sentence or a paragraph usually follow a structure, whereas taking a certain number of words before and after a keyword breaks sentence and characters that might have had a meaning.",
                 "If very long texts cannot be avoided, one should consider specifying in the prompts that in Step 4 how to cope with contradictory or changing roles over the course of the text"
             ],
             ask_yourself=[
                 "Do the chosen sources capture the main media where the political debate unfolds?",
                 "Is the time window covered by the source appropriate for the research question?",
                 "Are they sufficiently diverse to avoid bias toward one outlet, ideology, or demographic?",
-                "Do you have legal and technical access to these data (e.g., archives, APIs, scraping permission)?",
+                "Do you have legal and technical access to these data (e.g., archives, APIs, scraping permission)? Ensure compliance with copyright and platform terms when extracting data.",
                 "What extraction method is most reliable for your source—keyword queries, metadata filters, or transcript parsing?",
                 "Is the extraction method able to produce snippets that are neither too short to lose context nor too long to become too complicated for the analysis? If needed, split the texts into smaller snippets.",
                 "Can you obtain essential metadata (dates, outlets, geography, language) for contextual analysis?",
@@ -227,20 +227,19 @@ def render_step(step: int):
     # --- STEP 3 ---
     if step == 3:
             st.subheader("Step 3 — Identify relevant characters")
-            st.caption("Map the topic into human and instrument actors with agency and claims.")
+            st.caption("Map the topic into relevant human and instrument characters.")
 
             question_card(
                 "Guide: character selection ✅",
                 how_to=[
-                    "Identify relevant characters for the topic. The basis for the selection can be the relevant literature, your own interests as a researcher, or be approached in a more data driven way. ",
-                    "As said above, each **character** should be seen as a category and not be mistaken with *actors*. The necessary first step is domain reading: you need to read the text snippets that you want to encoded later. The tasks of the LLM later is to encode at scale, but any choices should also be plausible for a human reader. ",
-                    "Traditional text tools like word clouds or topic models can help, or using entity recognition of the more advanced [RELATIO package](https://github.com/relatio-nlp/relatio). However, all these tools require a dimensions reduction at some point. From the full set of possible characters, you need to decide how to aggregate to a feasible and usable number of chosen characters. In contrast to topic models or RELATIO, this choice comes before the encoding at scale. ",
-                    "Entity recognition is very useful for thinking about the necessary aggregation, as it can tell you which entities appear how often. This provides a good basis for thinking which entitites should be aggregated into one character. For example, in real text the character **US president Trump** might appear as *Trump*, *Donald J. Trump*, *POTUS*, *US president*, etc. , but conceptually clearly represents just one character.",
-                    "A different aggregation tasks is to cluster different smaller characters into a bigger character category. For instance, you could have three characters *solar technology*, *wind technology*, and *geothermic technology* if you are interested in understanding specific narratives about the specific technologies. Or you can decide to aggregate all up into one character **green technology**, if your goal is to capture the narrative roles of green technology as a combined category. Similar examples would be looking at *primary education*, *secondary education*, and *tertiary education* separately, or having one character **education**. Hence one can think of a character a an aggregation of different words for the same clearly defined character, or of a larger character as a cluster aggregating several more specific characters.",
-                    "For a precise prediction, Characters should be internally as homogenous as possible, and as heterogenous and clearly differentiated compared to other characters as possible",
+                    "Identify relevant characters for the topic. The basis for the selection can be the relevant literature, your own interests as a researcher, or be approached in a more data driven way. You can identify characters manually by reading and noting recurring entities. Automated tools can help, but they’re optional. ",
+                    "As said above, each **character** should be seen as a category and not be mistaken with *actors*. The necessary first step is domain reading: you need to read the text snippets that you plan to encode. The tasks of the LLM later is to encode at scale, but any choices should also be plausible for a human reader. ",
+                    "Traditional tools such as word clouds or topic models can help. You may also use entity recognition with the more advanced [RELATIO package](https://github.com/relatio-nlp/relatio). However, all these tools require a dimensions reduction at some point. From the full set of possible characters, you need to decide how to aggregate to a feasible and usable number of chosen characters. In contrast to topic models or RELATIO, this choice comes before the encoding at scale. ",
+                    "Entity recognition is very useful for thinking about the necessary aggregation, as it can tell you which entities appear how often. This provides a good basis for thinking which entities should be aggregated into one character. For example, in real text the character **US president Trump** might appear as *Trump*, *Donald J. Trump*, *POTUS*, *US president*, etc. , but conceptually clearly represents just one character.",
+                    "A different aggregation task is to cluster several narrower characters into a broader one. For instance, you could have three characters *solar technology*, *wind technology*, and *geothermic technology* if you are interested in understanding specific narratives about the specific technologies. Or you can decide to aggregate all up into one character **green technology**, if your goal is to capture the narrative roles of green technology as a combined category. Similar examples would be looking at *primary education*, *secondary education*, and *tertiary education* separately, or having one character **education**. Hence one can think of a character as an aggregation of different words for the same clearly defined character, or of a larger character as a cluster aggregating several more specific characters.",
+                    "For a precise prediction, characters should be internally as homogenous as possible, and as heterogenous and clearly differentiated compared to other characters as possible",
                     "Balance scope with feasibility: too many characters can raise computational costs and prediction complexity; a focused set improves reliability and interpretability. However, aggregating too many entities into one character will make a prediction more noisy, unless the mapping into the character is always obvious and clear. It can make sense to start with a larger set of characters which could be aggregated later for regression analysis, but be aware it comes at these monetary costs and with a potential loss in precision.",
                     "Document your choices and motivations for later. Also for each character, it helps to have both a short positive list of the key entities or more specific characters that it includes, as well as potentially a negative distinction of things that it does not comprise.",
-                    "Build the character list via literature review, exploratory tools (topic modeling, entity recognition/RELATIO), and domain reading; document your choices. You can identify characters manually by reading and noting recurring entities. Automated tools can help, but they’re optional.",
                     "Go back and read a sufficient number of text snippets manually to validate your choices.",
                     "Key is to anchor the selection to your research question and analytical focus; choose characters that speak to your hypotheses and that you want to use in your descriptives or regressions later.",
                     "The list of characters doesn't need to include the whole universe of characters relevant for the topic, it just needs to be consistent with the scope of your research."
@@ -256,6 +255,7 @@ def render_step(step: int):
                 key_prefix="s3_chars",
                 # ↓ NEW: short description appears above “How to approach”
                 blurb_md=(
+                    "With your data collected, you can now identify the characters in your data. "
                     "Characters can be human (individuals or collective actors such as corporations, parties, states, movements) but also instruments/instrumental (policies, laws, technologies). "
                     "This means that the term **character** should be seen as a category and not be mistaken with *actors*; it does not need to be human or an individual, but can also be groups of people, policy areas or individual policies, or more abstract categories like science, a technology or technology class. "
                     "Characters can be represented as **nodes in a directed acyclic graph (DAG)**, where edges capture causal or relational dependencies. "
@@ -272,7 +272,7 @@ def render_step(step: int):
                     "##### Examples of Characters: \n\n"
                     "In our application, we were not interested in individual politicians, but in the distinction in democrats and republicans. The means one of our characters was **US Democrats**. This is then a cluster of the many different humans and the organization, e.g. members of parliament, executive members, governors, etc., but also the democratic party itself. "
                     "It also includes many different ways of referring to these more specific characters. We do not need to specify all of these, a couple of examples are sufficient for modern LLMs. "
-                    "Another example is the character **Green Tecnologies**. We were not interested in specific technologies, so this contains *clean tech sector*, *bioenergy*, *solar energy*, and similar entities. We noted some examples of technologies to provide them to the LLM in the next stages.\n\n" 
+                    "Another example is the character **Green Technologies**. We were not interested in specific technologies, so this contains *clean tech sector*, *bioenergy*, *solar energy*, and similar entities. We noted some examples of technologies to provide them to the LLM in the next stages.\n\n" 
                     "##### Text Example: \n\n"
                     "“Global greenhouse emissions are still on the rise, oil production is soaring and **energy companies** "
                     "are making sky-high profits while **countless people** struggle to pay their bills. [...] A critical mass of "
@@ -300,8 +300,8 @@ def render_step(step: int):
             output_card(
                 "Output - What you should have before Step 4 ⚠️",
                 bullets=[
-                    "A contained list of relevant characters, both in human and instrument form if needed",
-                    "A brief description of each character should be included in the prompts at Stage 4. It is good practice to annotate these descriptions while selecting the characters. You can also come back to this after you saw the prompt later."
+                    "A concise table listing each character and its short description, ready to be inserted into Step 4 prompts.",
+                    "A brief description of each character should be included in the prompts at Stage 4. It is good practice to annotate these descriptions while selecting the characters. You can revisit and refine these descriptions once you see the prompt in Step 4."
                 ],
                 
                 key_prefix="s3_output"
