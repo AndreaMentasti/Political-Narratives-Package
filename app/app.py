@@ -327,6 +327,7 @@ def render_step(step: int):
                 "Is the chosen input unit appropriate for context vs. speed constraints? Remember, shorter text snippets are handled better by the OpenAI API.",
                 "Is the schema unambiguous, machine-readable, and easy to parse? Are the keys correctly specified and the roles defined properly?",
                 "Do I provide a description of the selected characters?",
+                "If you copy-paste one test snippet into the model with this prompt (Chat gpt), do I get valid JSON with all keys? (If not, fix BEFORE Step 5.).",
             ],
             key_prefix="s4_prompt",
             
@@ -339,7 +340,7 @@ def render_step(step: int):
                 "in the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and can be easily adapted by following these instructions.\n\n "
                 "To further improve data quality, we also include a **relevance classification** prompt, which helps assessing how closely each text snippet relates to the topic. "
                 "This allows each text to be labeled according to whether it is relevant to the topic of interest, "
-                "complementing **Step 1** of this guide.\n\n"
+                "complementing **Step 1** of this guide. We suggest you to proceed in order by running the relevance classification first (Stage 1), and then apply the character-role classification (Stage 2) only on those texts labeled as relevant for your topic.\n\n"
                 "##### Step-by-Step instructions:\n"
                 "1) Access the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and download the `system_message_stage1` for the relevance classification and the `system_message_stage2` for the character-role classification from the `code and prompts/` folder.\n\n "
                 "2) For the relevance classification with `system_message_stage1`, you just need to adjust the instructions in the SYSTEM MESSAGE to ensure they reflect the particular topic under analysis. Nothing else is needed in this prompt.\n\n"
@@ -349,7 +350,7 @@ def render_step(step: int):
                 "By following the next steps you will be able to modify the character keys by adding the topic-specific characters.\n\n"
                 "4) Next, for `system_message_stage2` you can modify the names of the characters and their descriptions. In the example that we provide, we specified 10 character that are stored in the keys from a to j. Moreover, we included also descriptions and examples of each character. Paste your characters and descriptions in place of the examples in the prompt.\n\n"
                 "5) After each description, you must specify in which key to store the result. The alphabetical keys are important to enter in non-capitalized form, always starting from a, then b, then c, running until X, which depends on the number of characters selected: with six characters, X=f, and the columns run from a-f. For example, if there are eight characters, the prompt will define keys from a to h. As a result, the classification output for the first character will be stored in column a (key a), for the second character in column b (key b), and so on. "
-                "Keys simply indicate how the LLM stores the results according to the prompt. The user does not need any knowledge of JSON syntax to modify these few letters in the prompt.\n\n"
+                "Keys simply indicate how the LLM stores the results according to the prompt. You do not need any knowledge of JSON syntax to modify these few letters in the prompt.\n\n"
 
             ),
         )
@@ -381,6 +382,7 @@ def render_step(step: int):
             "What you should have before Step 5 ⚠️",
             bullets=[
                 "A finalized **prompt** for your task (relevance or character/role). The prompt `system_message_stage1` for the relevance classification contains the system message with the instructions and the categories in which a text can be classified (coded from 0 to 3). The `system_message_stage2` contains the system message with the instructions, the list of characters that you selected in Step 3, and the description of each character.",
+                "You now have both prompts ready. In the next step, you’ll run the provided code to generate your annotated dataset."
             ],
             key_prefix="s4_output"
         )
@@ -471,7 +473,7 @@ Analyze it in the context of US political discourse on climate change and respon
                 "1) A dataset with observation id and text snippets.",
                 "2) The two prompts, one for each task for the model.",
                 "Before running, check the local folder structure and configuration.",
-                "Chose which script to run based on the task that is performed (relevance or character-roles classification)."
+                "Choose which script to run based on the task that is performed (relevance or character-roles classification)."
             ],
             ask_yourself=[
                 "Is your dataset ready for the annotation (id, text, missing values, etc)?",
@@ -484,14 +486,15 @@ Analyze it in the context of US political discourse on climate change and respon
             key_prefix="s5_outputs",
 
             blurb_md=(
-                "This is the last step of the pipeline. At this phase you should have all the ingredients to proceed with the GPT annotations. "
-                " This step consists in the application of the code to perform the classification.\n\n"
+                "This is the final step of the pipeline. You will now run the annotation code that applies your prompts to your dataset. "
+                "This step applies the model instructions finalized in Step 4 to your text data, producing the full narrative annotation.\n\n"
                 "##### Step-by-Step instructions:\n"
                 "1) Download the script ````annotation_openai_stage2```` (or ````annotation_openai_stage1```` for relevance classification) from the `code and prompts/`folder in the  [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main).\n\n"
-                "2) Set the environment and save the OpenAI API Key as an environmental variable. We suggest to follow the steps [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) if you are not familiar with this.\n\n"
+                "2) Set your Python environment (e.g., activate `Political_Narratives`) and store your OpenAI API Key as an environment variable. We suggest to follow the steps [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) if you are not familiar with this.\n\n"
                 "3) Set the folder structure properly.\n\n"
+                "4) Make sure your finalized prompt files (`system_message_stage1.json` and `system_message_stage2.json`) are saved in the correct folder (you can check the folder structure in the Github repository), as the scripts will load them automatically.\n\n"
                 "4) Make minimal changes in the code to match your path, the characters defined in the prompt, and the dataset. If you want to perform relevance classification, you just need to change the path.\n\n"
-                "All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). We suggest the user to check them."
+                "All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). Check the detailed GitHub instructions if you need guidance."
                 
             ),
         )
@@ -499,7 +502,7 @@ Analyze it in the context of US political discourse on climate change and respon
         example_card(
             "Annotation output and relevant texts 💡",
             (
-                "In the paper, our output includes:\n"
+                "In the paper, our output is a dataset where each column corresponds to a character (a–X) and contains numeric role codes: 1 = Villain, 2 = Hero, 3 = Victim, 4 = No role:\n"
                 "- Character presence (which characters appear)\n"
                 "- Role indicators (whether a character is assigned a role)\n\n"
                 "A text is a **political narrative** if at least one role assignment is present; otherwise it may still be relevant but neutral."
@@ -510,7 +513,7 @@ Analyze it in the context of US political discourse on climate change and respon
         output_card(
             "What you should have at the end 🎆",
             bullets=[
-                "An annotated dataset with columns matching the number of characters. X depends on the number of characters selected: with six characters, X=f, and the columns run from a-f.: 🎆",
+                "An annotated dataset with columns matching the number of characters. X depends on the number of characters selected: with six characters, X=f, and the columns run from a-f. At this point your dataset is fully annotated and ready for analysis or visualization: 🎆",
             ],
             body_md="""
                 | id   | text               | a  | b  | c  | d  | e | f |...|X
