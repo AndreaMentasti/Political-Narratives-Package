@@ -192,7 +192,7 @@ def render_step(step: int):
                 "In *Gehring & Grigoletto (2025)* our focus is on narratives about climate change policies in the United States, collected from the social media platform Twitter. "
                 "We specifically choose the U.S. due to the significant role Twitter plays in shaping and disseminating political narratives there. "
                 "The data collection process involves querying the **Twitter historical APIv2** with a set of **keywords** adapted from *Oehl, Schaffer, and Bernauer (2017)*. "
-                "In our main analysis, we define the tweet as our unit of observation, since its concise length aligns well with the requirements of the subsequent stages of the framework, including the GPT annotation process. "
+                "In our main analysis, we define the tweet as our unit of observation, since its concise length aligns well with the requirements of the subsequent stages of the framework, including the GPT prediction process. "
                 "We also extract newspaper articles and TV transcripts, which we decided to split into smaller snippets to make them compatible with the framework’s next steps.\n\n"
                 "- **Tweets:** Tweets have been extracted through a keyword based search using the historical API of Twitter\n\n"
                 "- **Newspaper Articles:** Newspaper articles are downloaded from Factiva. We use the three most widely circulated newspapers in the US; The New York Times, The Wall Street Journal, and USA Today. Each article has been split into more manageable text snippets (three sentences paragraphs) for OpenAI classification.\n\n"
@@ -252,7 +252,7 @@ def render_step(step: int):
                 key_prefix="s3_chars",
                 # ↓ NEW: short description appears above “How to approach”
                 blurb_md=(
-                    "With your data collected, you can now identify the characters in your texts. "
+                    "With your data collected, you can now continue to define the characters within the scope of your topic. "
                     "Characters can be human (individuals or collective actors such as corporations, parties, states, movements) but also instruments/instrumental (policies, laws, technologies). "
                     "This means that the term **character** should be seen as a category and not be mistaken with *actors*; it does not need to be human or an individual, but can also be groups of people, policy areas or individual policies, or more abstract categories like science, a technology or technology class.\n\n "
                     "In this step, define a **small, distinctive set of characters** that directly reflect your research question. "
@@ -264,7 +264,7 @@ def render_step(step: int):
             example_card(
                 "Relevant characters for climate change political discourse 💡",
                 (
-                    "####Political Narrative Characters for Climate Change Policy:\n\n"
+                    "#### Political Narrative Characters for Climate Change Policy:\n\n"
                     "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
                     "we pre-specify ten characters: five human characters (made of institutions and groups of individuals) "
                     "and five instrument characters (policy tools and instruments).\n\n"
@@ -275,7 +275,7 @@ def render_step(step: int):
                     "**Human Characters:** DEVELOPING ECONOMIES | US DEMOCRATS | US REPUBLICANS | CORPORATIONS | US PEOPLE\n\n"
                     "**Instrument Characters:** EMISSION PRICING | REGULATIONS | FOSSIL INDUSTRY | GREEN TECH | NUCLEAR TECH\n\n"
                     "We carefully decided to have ten character to balance the complexity of the analysis with "
-                    "good practices to avoid overloading the LLM in the annotation process. These characters are easily recognizable "
+                    "good practices to avoid overloading the LLM in the prediction process. These characters are easily recognizable "
                     "by the LLM thanks to precise descriptions that include positive examples and partly negative distinctions to related concepts. (Step 4).\n\n"
                     "##### Characters as Nodes in DAG: \n\n"
                     "Global greenhouse emissions are still on the rise, oil production is soaring and **energy companies** "
@@ -316,7 +316,7 @@ def render_step(step: int):
             "Guide: prepare the prompt(s) ✅",
             how_to=[
                 "Define a **JSON schema** (keys, allowed labels, brief explanation of the task).",
-                "Co-design prompts with the same model you will use for annotation (e.g., GPT-4o-mini via OpenAI) to align capabilities and outputs.",
+                "Co-design prompts with the same model you will use for prediction (e.g., GPT-4o-mini via OpenAI) to align capabilities and outputs.",
                 "This package supports two tasks: (a) topic relevance classification and (b) character detection + role assignment. Choose which task perform, and consider applying prompt 1 to increase the quality of your data."
             ],
             ask_yourself=[
@@ -335,15 +335,14 @@ def render_step(step: int):
                 "second, the set of characters to be identified, together with a brief description of them, and with clarifying examples; lastly, the set of possible roles they can assume, which in this case are set to Hero, Villain, and Victim.\n\n "
                 "Below, we provide key guidance for constructing the SYSTEM MESSAGE. A ready-to-use example prompt is available "
                 "in the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and can be easily adapted by following these instructions.\n\n "
-                "To further improve data quality, we also include a **relevance classification** prompt, which helps assessing how closely each text snippet relates to the topic. "
-                "This allows each text to be labeled according to whether it is relevant to the topic of interest, "
-                "complementing **Step 1** of this guide. We suggest you to proceed in order by running the relevance classification first (Stage 1), and then apply the character-role classification (Stage 2) only on those texts labeled as relevant for your topic.\n\n"
+                "To further improve data quality, we also include an optional **relevance classification** prompt. This further helps assessing how well the selected text snippets relate to the topic. Think of it this way : in Step 2, one usually searches Boolean logic with certain keywords and conditions to prefilter the text. However, this is a noisy process and might still leave many text snippets that are de facto not related to your topic of interest. "
+                "This will introduce noise in your data, making both the prediction and later analysis more difficult. Depending on the extend of the issue, the relevance classificaiton can help you reduce that noise (and it saves cost and time in the classification). If being applied, a user needs to first run the relevance classification first (Stage 1), and should then apply the character-role classification (Stage 2) on those texts labeled as relevant for your topic by step 2 and the relevance classification.\n\n"
                 "##### Step-by-Step instructions:\n"
                 "1) Access the [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) and download the `system_message_stage1` for the relevance classification and the `system_message_stage2` for the character-role classification from the `code and prompts/` folder.\n\n "
                 "2) For the relevance classification with `system_message_stage1`, you just need to adjust the instructions in the SYSTEM MESSAGE to ensure they reflect the particular topic under analysis. Nothing else is needed in this prompt.\n\n"
                 "3) For the character-role classification with `system_message_stage2`, you need to modify the instructions, the list of characters, and their descriptions.\n\n"
                 "**How to modify the two system messages?** In the prompts you will find the following text: *You are an average US citizen. The user will provide the content of a tweet posted from the US between 2010 and 2021. \nYour task is to analyze it within the context of US political discourse, particularly in relation to climate change and related policies.*\n\n "
-                "To adapt the prompts, you have to modify these few instructions with their specific task. Then, if you are working on the character-role classification you can continue following these instructions. For the relevance classification, you don't need other changes to the prompt and you are ready to proceed to Step 5.\n\n "
+                "This is an example used in our paper as we were interested in assessments by US citizens. Narratives are always context-dependent, and LLMs can at least to some extent capture this. We strongly suggest adapting this part to your target population. If it is about India, insert *You are an average Indian citizen*. Similar for other context. The more refined the better, as long as it is clearly defined. E.g. if you have five European countries, we suggest either running five separate prompts - if you feel the narratives and their assessment is very dependent on culture - or a single prompt if you specifically want an *average European perspective*. In the end, the researchers should elaborate and decide, but be aware that context matters. To adapt the prompts, you have to modify these few instructions with their specific task. Then, if you are working on the character-role classification you can continue following these instructions. For the relevance classification, you don't need other changes to the prompt and you are ready to proceed to Step 5.\n\n "
                 "By following the next steps you will be able to modify the character keys by adding the topic-specific characters.\n\n"
                 "4) Next, for `system_message_stage2` you can modify the names of the characters and their descriptions. In the example that we provide, we specified 10 character that are stored in the keys from a to j. Moreover, we included also descriptions and examples of each character. Paste your characters and descriptions in place of the examples in the prompt.\n\n"
                 "5) After each description, you must specify in which key to store the result. The alphabetical keys are important to enter in non-capitalized form, always starting from a, then b, then c, running until X, which depends on the number of characters selected: with six characters, X=f, and the columns run from a-f. For example, if there are eight characters, the prompt will define keys from a to h. As a result, the classification output for the first character will be stored in column a (key a), for the second character in column b (key b), and so on. "
@@ -357,7 +356,7 @@ def render_step(step: int):
             "Prompt design for the political narratives of climate change 💡",
             (
                 "###### (a) Relevance classifier (Stage 1)\n"
-                "Decide if a three-sentence newspaper excerpt is relevant to **US climate change discourse**.\n"
+                "Decide if a three-sentence tweet/newspaper/other text source excerpt is relevant to **US climate change discourse**.\n"
                 "- 0 = irrelevant (no meaningful climate discussion)\n"
                 "- 1 = assert (asserts existence of climate change)\n"
                 "- 2 = deny (denies or mocks climate change)\n"
@@ -378,7 +377,7 @@ def render_step(step: int):
         output_card(
             "What you should have before Step 5 ⚠️",
             bullets=[
-                "A finalized **prompt** for your task (relevance or character/role). The prompt `system_message_stage1` for the relevance classification contains the system message with the instructions and the categories in which a text can be classified (coded from 0 to 3). The `system_message_stage2` contains the system message with the instructions, the list of characters that you selected in Step 3, and the description of each character.",
+                "One or two prompts, adapted to your topic, your location/country/culture and your characters. The prompt `system_message_stage1` for the relevance classification contains the system message with the instructions and the categories in which a text can be classified (coded from 0 to 3). The `system_message_stage2` contains the system message with the instructions, the list of characters that you selected in Step 3, and the description of each character.",
                 "You now have both prompts ready. In the next step, you’ll run the provided code to generate your annotated dataset."
             ],
             key_prefix="s4_output"
@@ -461,30 +460,30 @@ Analyze it in the context of US political discourse on climate change and respon
     # --- STEP 5 ---
     if step == 5:
         st.subheader("Step 5 — Obtain predictions and assemble outputs")
-        st.caption("Run annotation, parse JSON, and build tidy outputs (stage flags, presence, role dummies).")
+        st.caption("Run prediction, parse JSON, and build tidy outputs (stage flags, presence, role dummies).")
 
         question_card(
-            "Guide - GPT Annotation with provided code ✅",
+            "Guide - GPT prediction with provided code ✅",
             how_to=[
-                "After the design of the prompts, it's time to run the annotation code against the chosen model. The following two inputs are required:",
+                "After the design of the prompts, it's time to run the prediction code against the chosen model. The following two inputs are required:",
                 "1) A dataset with observation id and text snippets.",
                 "2) The two prompts, one for each task for the model.",
                 "Before running, check the local folder structure and configuration.",
                 "Choose which script to run based on the task that is performed (relevance or character-roles classification)."
             ],
             ask_yourself=[
-                "Is your dataset ready for the annotation (id, text, missing values, etc)?",
+                "Is your dataset ready for the prediction (id, text, missing values, etc)?",
                 "Does the dataset contain a column called ''id'' and a column called ''text''?",
                 "Are your prompts correctly specified and specific enough?",
-                "Is your folder structure organised as expected?",
+                "Is your folder structure organised as expected? To check this point we suggest you to visit the github repository and the instructions listed there.",
                 "Are you in the correct environment (Political_Narratives)?",
                 "Is the OpenAI API key set in the environment?"
             ],
             key_prefix="s5_outputs",
 
             blurb_md=(
-                "This is the final step of the pipeline. You will now run the annotation code that applies your prompts to your dataset. "
-                "This step applies the model instructions finalized in Step 4 to your text data, producing the full narrative annotation.\n\n"
+                "This is the final step of the pipeline. You will now run the prediction code that applies your prompts to your dataset. "
+                "This step applies the model instructions finalized in Step 4 to your text data, producing the full narrative prediction.\n\n"
                 "##### Step-by-Step instructions:\n"
                 "1) Download the script ````annotation_openai_stage2```` (or ````annotation_openai_stage1```` for relevance classification) from the `code and prompts/`folder in the  [GitHub repository](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main).\n\n"
                 "2) Set your Python environment (e.g., activate `Political_Narratives`) and store your OpenAI API Key as an environment variable. We suggest to follow the steps [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main) if you are not familiar with this.\n\n"
@@ -497,12 +496,12 @@ Analyze it in the context of US political discourse on climate change and respon
         )
 
         example_card(
-            "Annotation output and relevant texts 💡",
+            "Prediction output and relevant texts 💡",
             (
                 "In the paper, our output is a dataset where each column corresponds to a character (a–X) and contains numeric role codes: 1 = Villain, 2 = Hero, 3 = Victim, 4 = No role:\n"
                 "- Character presence (which characters appear)\n"
                 "- Role indicators (whether a character is assigned a role)\n\n"
-                "A text is a **political narrative** if at least one role assignment is present; otherwise it may still be relevant but neutral."
+                "A text is defined as a **political narrative** if at least one characters has an assignment of a drama triangle role; if all are neutral we do not categorize it as a narrative."
             ),
             key_prefix="s5_annotation_example"
         )
@@ -510,7 +509,7 @@ Analyze it in the context of US political discourse on climate change and respon
         output_card(
             "What you should have at the end 🎆",
             bullets=[
-                "An annotated dataset with columns matching the number of characters. X depends on the number of characters selected: with six characters, X=f, and the columns run from a-f. At this point your dataset is fully annotated and ready for analysis or visualization: 🎆",
+                "A dataset with your text snippets as the rows, with the columns indicating your characters, and the cell values indicating the roles. X depends on the number of characters selected: with six characters, X=f, and the columns run from a-f. At this point your dataset is fully annotated and ready for analysis or visualization: 🎆",
             ],
             body_md="""
                 | id   | text               | a  | b  | c  | d  | e | f |...|X
