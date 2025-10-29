@@ -85,9 +85,9 @@ least one character cast in a drama triangle role: hero, villain, or victim.*
 
 The definition and measurement of political narratives,  therefore, reduce to specifying the topic and characters, and coding for each character whether
 it appears as neutral or cast as hero, villain, or victim.
-Its purpose is influencing perceptions, beliefs, and preferences about characters contained in the narrative.  Political narratives exert their influence by depicting characters in one of the three archetypal roles—**hero**, **villain**, or **victim**.  They are communicative devices that focus attention, encode roles and identities, and shape norms and behavior.
+The purpose of a political narrative is influencing perceptions, beliefs, and preferences. Political narratives exert their influence by depicting characters - human or instrument - in one of the three archetypal roles — **hero**, **villain**, or **victim**. They are communicative devices that focus attention, encode roles and identities, and shape norms and behavior.
 
-Formally, choose a topic *T* and a universe of characters *K = H ∪ I*, where H and I represent Human and Instrument characters. For any text unit (tweet, paragraph, article), let *K′ ⊆ K* be the set of characters that appear.  
+We can also depict this formally. To define and measure narratives, you need to choose a topic T and a universe of characters K = H ∪ I, where H and I represent Human and Instrument characters. For any text unit (tweet, paragraph, article), let K′ ⊆ K be the set of characters that appear.  
 A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing character to either a drama-triangle role or neutrality. We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, villain, or victim. If all characters are neutral, the text is about the topic but does not constitute a political narrative in this sense.  
 
 **How to use this guide**
@@ -96,7 +96,7 @@ A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps 
   - **Guide ✅** — brief “How to” plus reflective **Ask yourself** items.
   - **Example 💡** — a concrete mini-case clarifying the step.
   - **Output ⚠️** — what you should have before moving on.
-- Jot ideas in the **Annotations** box at the end of each step and keep notes on your progress.
+- Jot ideas in the **Notes** box at the end of each step and keep notes on your progress.
         """
     )
 
@@ -139,10 +139,8 @@ def render_step(step: int):
         example_card(
             "Focusing on policy narratives within climate change 💡",
             (
-                "In *Gehring & Grigoletto (2025)* we analyze the **political economy of climate change**. "
-                "From the literature we identify two dominant discussions—**scientific evidence** and **policy responses**—and, "
-                "given our focus on political economy, we restrict attention to the topic of **climate change policies**. We explicitly exclude "
-                "debates on the scientific reality and predictability of climate change."
+                "In *Gehring & Grigoletto (2025)* we analyze the **political economy of climate change**. From the literature and reading our potential sources, we realized there are two rather distinct political discussion – one about the scientific evidence behind the causes and consequences of climate change, one about policies to address climate change.  "
+                "Given our research interest is on the political reactions and discourse about political solutions, we define our topic more narrowly as **climate change policies**. We explicitly exclude debates on the scientific reality and predictability of climate change."
             ),
             key_prefix="s1_example"
         )
@@ -150,7 +148,7 @@ def render_step(step: int):
         output_card(
             "What you should have before Step 2 ⚠️",
             bullets=[
-                "A precise topic for the analysis of political narratives. This topic defines where to look and what kind of material to collect, hence is the basis for Step 2 Sources and Extraction."
+                "A precise topic for the analysis of political narratives. We suggest writing it up in full sentences, but also trying to define it via bullet points. Both a positive definition is useful (what should be included), as well as a negative distinction (e.g. it should NOT include certain related or overlapping topics). This topic defines where to look and what kind of material to collect, hence is the basis for Step 2 Sources and Extraction"
             ],
             key_prefix="s1_output"
         )
@@ -183,7 +181,6 @@ def render_step(step: int):
                 "Do you have legal and technical access to these data (e.g., archives, APIs, scraping permission)? Ensure compliance with copyright and platform terms when extracting data.",
                 "What extraction method is most reliable for your source—keyword queries, metadata filters, or transcript parsing?",
                 "Is the extraction method able to produce snippets that are neither too short to lose context nor too long to become too complicated for the analysis? If needed, split the texts into smaller snippets.",
-                "Can you obtain essential metadata (dates, outlets, geography, language) for contextual analysis?",
                 "Basic preprocessing (removing duplicates, non-textual artifacts) ensures better results in later steps. If texts are multilingual, is good to consider filtering or adding a ‘language’ column for clarity."
             ],
             key_prefix="s2_sources"
@@ -198,8 +195,8 @@ def render_step(step: int):
                 "In our main analysis, we define the tweet as our unit of observation, since its concise length aligns well with the requirements of the subsequent stages of the framework, including the GPT annotation process. "
                 "We also extract newspaper articles and TV transcripts, which we decided to split into smaller snippets to make them compatible with the framework’s next steps.\n\n"
                 "- **Tweets:** Tweets have been extracted through a keyword based search using the historical API of Twitter\n\n"
-                "- **Newspaper Articles:** Newspaper articles are downloaded from Factiva. We use the three most widely circulated newspapers in the US; The New York Times, The Wall Street Journal, and USA Today. Each article has been split into more manageable text snippets for OpenAI classification.\n\n"
-                "- **TV Transcripts:** TV transcripts have been downloaded from the GDELT database. These TV transcripts from MSNBC and Fox News have been also split into smaller text snippets."
+                "- **Newspaper Articles:** Newspaper articles are downloaded from Factiva. We use the three most widely circulated newspapers in the US; The New York Times, The Wall Street Journal, and USA Today. Each article has been split into more manageable text snippets (three sentences paragraphs) for OpenAI classification.\n\n"
+                "- **TV Transcripts:** TV transcripts have been downloaded from the GDELT database. These TV transcripts from MSNBC and Fox News have been also split into smaller text snippets (three sentences paragraphs)."
             ),
             key_prefix="s2_example"
         )
@@ -267,26 +264,26 @@ def render_step(step: int):
             example_card(
                 "Relevant characters for climate change political discourse 💡",
                 (
-                    "##### Examples of Characters: \n\n"
-                    "In our application, we were not interested in individual politicians, but in the distinction in democrats and republicans. The means one of our characters was **US Democrats**. This is then a cluster of the many different humans and the organization, e.g. members of parliament, executive members, governors, etc., but also the democratic party itself. "
-                    "It also includes many different ways of referring to these more specific characters. We do not need to specify all of these, a couple of examples are sufficient for modern LLMs. "
-                    "Another example is the character **Green Technologies**. We were not interested in specific technologies, so this contains *clean tech sector*, *bioenergy*, *solar energy*, and similar entities. We noted some examples of technologies to provide them to the LLM in the next stages.\n\n" 
-                    "##### Text Example: \n\n"
-                    "“Global greenhouse emissions are still on the rise, oil production is soaring and **energy companies** "
-                    "are making sky-high profits while **countless people** struggle to pay their bills. [...] A critical mass of "
-                    "people – especially **younger people** – are demanding change and will no longer tolerate the "
-                    "procrastination, denial and complacency that created this state of emergency.”\n\n"
-                    "In the text and figure above it is clear how the characters can be seen as nodes of DAGs. The different entities in the text are identified within broader characters: corporations (*energy companies*), the poor (*countless people*), and civil society (*younger people*).  However, the diagram shows that assigning causal arrows between characters may often be ambiguous in real texts. "
-                    "By contrast, assigning roles is typically clearer and can be coded directly:  in this example, corporations are cast as villain, the poor as victim, and civil society as hero.\n\n"
                     "##### Political Narrative Characters for Climate Change Policy:\n\n"
                     "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
                     "we pre-specify ten characters: five human characters (made of institutions and groups of individuals) "
                     "and five instrument characters (policy tools and instruments).\n\n"
+                    "##### Examples of Characters: \n\n"
+                    "In our application, we were not interested in individual politicians, but in the distinction in democrats and republicans. The means one of our characters was **US Democrats**. This is then a cluster of the many different humans and the organization, e.g. members of parliament, executive members, governors, etc., but also the democratic party itself. "
+                    "It also includes many different ways of referring to these more specific characters. We do not need to specify all of these, a couple of examples are sufficient for modern LLMs. "
+                    "Another example is the character **Green Technologies**. We were not interested in specific technologies, so this contains *clean tech sector*, *bioenergy*, *solar energy*, and similar entities. We noted some examples of technologies to provide them to the LLM in the next stages.\n\n" 
                     "**Human Characters:** DEVELOPING ECONOMIES | US DEMOCRATS | US REPUBLICANS | CORPORATIONS | US PEOPLE\n\n"
                     "**Instrument Characters:** EMISSION PRICING | REGULATIONS | FOSSIL INDUSTRY | GREEN TECH | NUCLEAR TECH\n\n"
                     "We carefully decided to have ten character to balance the complexity of the analysis with "
                     "good practices to avoid overloading the LLM in the annotation process. These characters are easily recognizable "
-                    "by the LLM thanks to precise descriptions that include positive examples and partly negative distinctions to related concepts. (Step 4)."
+                    "by the LLM thanks to precise descriptions that include positive examples and partly negative distinctions to related concepts. (Step 4).\n\n"
+                    "##### Characters as Nodes in DAG: \n\n"
+                    "“Global greenhouse emissions are still on the rise, oil production is soaring and **energy companies** "
+                    "are making sky-high profits while **countless people** struggle to pay their bills. [...] A critical mass of "
+                    "people – especially **younger people** – are demanding change and will no longer tolerate the "
+                    "procrastination, denial and complacency that created this state of emergency.”\n\n"
+                    "In the text and in the Figuren "Characters as Nodes" it is clear how the characters can be seen as nodes of DAGs. The different entities in the text are identified within broader characters: corporations (*energy companies*), the poor (*countless people*), and civil society (*younger people*).  However, the diagram shows that assigning causal arrows between characters may often be ambiguous in real texts. "
+                    "By contrast, assigning roles is typically clearer and can be coded directly:  in this example, corporations are cast as villain, the poor as victim, and civil society as hero."
                 ),
                 key_prefix="s3_example",
                 figure={
