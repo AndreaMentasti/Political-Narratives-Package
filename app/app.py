@@ -264,7 +264,7 @@ def render_step(step: int):
             example_card(
                 "Relevant characters for climate change political discourse 💡",
                 (
-                    "##### Political Narrative Characters for Climate Change Policy:\n\n"
+                    "Political Narrative Characters for Climate Change Policy:\n\n"
                     "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
                     "we pre-specify ten characters: five human characters (made of institutions and groups of individuals) "
                     "and five instrument characters (policy tools and instruments).\n\n"
