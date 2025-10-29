@@ -264,7 +264,7 @@ def render_step(step: int):
             example_card(
                 "Relevant characters for climate change political discourse 💡",
                 (
-                    "Political Narrative Characters for Climate Change Policy:\n\n"
+                    "####Political Narrative Characters for Climate Change Policy:\n\n"
                     "Guided by the relevant literature, exploratory tools, and intensive domain reading, "
                     "we pre-specify ten characters: five human characters (made of institutions and groups of individuals) "
                     "and five instrument characters (policy tools and instruments).\n\n"
@@ -278,11 +278,11 @@ def render_step(step: int):
                     "good practices to avoid overloading the LLM in the annotation process. These characters are easily recognizable "
                     "by the LLM thanks to precise descriptions that include positive examples and partly negative distinctions to related concepts. (Step 4).\n\n"
                     "##### Characters as Nodes in DAG: \n\n"
-                    "“Global greenhouse emissions are still on the rise, oil production is soaring and **energy companies** "
+                    "Global greenhouse emissions are still on the rise, oil production is soaring and **energy companies** "
                     "are making sky-high profits while **countless people** struggle to pay their bills. [...] A critical mass of "
                     "people – especially **younger people** – are demanding change and will no longer tolerate the "
-                    "procrastination, denial and complacency that created this state of emergency.”\n\n"
-                    "In the text and in the Figuren "Characters as Nodes" it is clear how the characters can be seen as nodes of DAGs. The different entities in the text are identified within broader characters: corporations (*energy companies*), the poor (*countless people*), and civil society (*younger people*).  However, the diagram shows that assigning causal arrows between characters may often be ambiguous in real texts. "
+                    "procrastination, denial and complacency that created this state of emergency.\n\n"
+                    "In the text and in the Figure *Characters as Nodes* it is clear how the characters can be seen as nodes of DAGs. The different entities in the text are identified within broader characters: corporations (*energy companies*), the poor (*countless people*), and civil society (*younger people*).  However, the diagram shows that assigning causal arrows between characters may often be ambiguous in real texts. "
                     "By contrast, assigning roles is typically clearer and can be coded directly:  in this example, corporations are cast as villain, the poor as victim, and civil society as hero."
                 ),
                 key_prefix="s3_example",
