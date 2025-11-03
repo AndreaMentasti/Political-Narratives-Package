@@ -505,9 +505,11 @@ Analyze it in the context of US political discourse on climate change and respon
                 │  └─ data/
                 │     ├─ openai_output/
                 │     └─ openai_final/
-                └─ logs/
+                └─ logs/    
                 └─ environment.yml                         # <-- your environment requirement
                 ```
+                According to this structure, you need to fill the `code/prompts/` folder with the system message of the stage, and the `data/output/` folder with the `.csv` dataset. Put the `environment.yml` in the main project folder.  
+                IMPORTANT: the input `.csv` must contain a column called `id` and a column called `text`.
                 4) Make sure your finalized prompt files (`system_message_stage1.json` and `system_message_stage2.json`) are saved in the correct folder, as the scripts will load them automatically.\n\n
                 4) Make minimal changes in the code to match your path, the characters defined in the prompt, and the dataset. If you want to perform relevance classification, you just need to change the path.\n\n
                 All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). Check the detailed GitHub instructions if you need guidance."""
