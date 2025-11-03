@@ -506,8 +506,8 @@ Analyze it in the context of US political discourse on climate change and respon
                 │     ├─ openai_output/
                 │     └─ openai_final/
                 └─ logs/
-                └─ environment.yml                         # <-- your environment requirement```
-                
+                └─ environment.yml                         # <-- your environment requirement
+                ```
                 4) Make sure your finalized prompt files (`system_message_stage1.json` and `system_message_stage2.json`) are saved in the correct folder, as the scripts will load them automatically.\n\n
                 4) Make minimal changes in the code to match your path, the characters defined in the prompt, and the dataset. If you want to perform relevance classification, you just need to change the path.\n\n
                 All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). Check the detailed GitHub instructions if you need guidance."""
