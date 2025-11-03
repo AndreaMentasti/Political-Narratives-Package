@@ -464,13 +464,7 @@ Analyze it in the context of US political discourse on climate change and respon
 
         question_card(
             "Guide - GPT prediction with provided code ✅",
-            how_to=[
-                "After the design of the prompts, it's time to run the prediction code against the chosen model. The following two inputs are required:",
-                "1) A dataset with observation id and text snippets.",
-                "2) The two prompts, one for each task for the model.",
-                "Before running, check the local folder structure and configuration.",
-                "Choose which script to run based on the task that is performed (relevance or character-roles classification)."
-            ],
+            how_to=[],
             ask_yourself=[
                 "Is your dataset ready for the prediction (id, text, missing values, etc)?",
                 "Does the dataset contain a column called ''id'' and a column called ''text''?",
