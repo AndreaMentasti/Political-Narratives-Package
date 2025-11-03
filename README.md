@@ -25,7 +25,7 @@ There are two ways to approach this package:
 
 Before diving to the instructions to run the code, here a detailed explanation of everything you find in this repository:
 - ````app\````: this folder contains the code for the online guideline. This folder do not provide useful insights to the user.
-- ````code and prompts\````: this is the core of the repository. Here the users can download the Python scripts and the prompts needed to perform the Political Narrative analysis.
+- ````codes and prompts\````: this is the core of the repository. Here the users can download the Python scripts and the prompts needed to perform the Political Narrative analysis.
 - ````data\````: here is contained the paper by *Gehring & Grigoletto (2025)*. Users can access it and get a deeper understanding on how to shape a research using the framework.
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
