@@ -560,6 +560,45 @@ Analyze it in the context of US political discourse on climate change and respon
                 
                 If you are running the ````annotation_openai_stage1```` code, no other changes are needed and you can directly run the script.
 
+                14) Second, change the JSON structure based on the number of characters: depending on your character selection, you might need to modify the structure of the ````.JSON```` file that is created by OpenAI. Here, you just need to adapt the number of keys to your number of characters. You can access it by changing the properties in the following part of the script:
+                ```bash
+                JSON_SCHEMA = {
+                    "name": "ArticleClassification",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {"type": ["integer", "string"]},
+                                        "a": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                                        "b": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                                        "c": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                                        "d": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                                        "e": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                                        "f": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                                        "g": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                                        "h": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                                        "i": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+                                        "j": {"type": "integer", "enum": [0, 1, 2, 3, 4]}                   
+                                        },
+                                    "required": ["id","a","b","c","d","e","f", "g", "h", "i", "j"],
+                                    "additionalProperties": False
+                                }
+                            }
+                         },
+                        "required": ["items"],
+                        "additionalProperties": False
+                    },
+                    "strict": True
+              }
+              ```
+
+
+
+                
                 4) Make minimal changes in the code to match your path, the characters defined in the prompt, and the dataset. If you want to perform relevance classification, you just need to change the path.\n\n
                 All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). Check the detailed GitHub instructions if you need guidance."""
                 
