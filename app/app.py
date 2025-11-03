@@ -528,6 +528,18 @@ Analyze it in the context of US political discourse on climate change and respon
                 ```bash
                 pip install "openai==2.4.0"
                 ```
+
+                8) Set the `OPENAI_API_KEY` as an environmental variable in your current environment:
+                ```bash
+                conda env config vars set OPENAI_API_KEY="sk-your-key-here"
+                conda deactivate
+                conda activate political_narrative
+                ```
+                This step is crucial for the success of the annotation process. This code requires an individual OpenAI API key, that the user can retrieve in his [OpenAI personal page](https://platform.openai.com/api-keys). 
+                This key is personal and directly linked to the user's wallet, so it's important to keep it personal and hidden in the machine and not in the script.
+                
+                9) 
+                
                 4) Make minimal changes in the code to match your path, the characters defined in the prompt, and the dataset. If you want to perform relevance classification, you just need to change the path.\n\n
                 All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). Check the detailed GitHub instructions if you need guidance."""
                 
