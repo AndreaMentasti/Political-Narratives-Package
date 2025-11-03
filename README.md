@@ -29,8 +29,8 @@ This package is meant to support you from start to finish: guiding you from the 
 ---
 
 ### Repository Structure
-- ````codes and prompts\````: this is the core of the repository. Here the users can download the Python scripts and the prompts needed to perform the Political Narrative analysis.
-- ````useful_resources\````: here is contained the paper by *Gehring & Grigoletto (2025)*. Users can access it and get a deeper understanding on how to shape a research using the framework. Moreover, here you find an offline version of the instructions to adapt the scripts provided in ````codes and prompts\````. This guide is exactly Step 5 Coding in the online guide.
+- ````codes and prompts\````: this is the core of the repository. Here you can download the Python scripts and the prompts needed to perform the Political Narrative analysis. Moreover, here you can find the `environment.yml` file to create the environment where to run the scripts.
+- ````useful_resources\````: here is contained the paper by *Gehring & Grigoletto (2025)*. You can access it and get a deeper understanding on how to shape a research using the framework. Moreover, here you find an offline version of the instructions to adapt the scripts provided in ````codes and prompts\````. This guide is exactly Step 5 Coding in the online guide.
 
 ---
 
