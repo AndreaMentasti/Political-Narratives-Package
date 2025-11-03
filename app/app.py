@@ -484,11 +484,11 @@ Analyze it in the context of US political discourse on climate change and respon
             blurb_md=r"""
                 This is the final step of the pipeline. You will now run the prediction code that applies your prompts to your dataset. 
                 This page of the guide will help you adapting the scripts that we provide in the Github repository to your objective. 
-                In practice, this step is where you will apply the model instructions finalized in Step 4 to your text data, producing the full narrative prediction.\n\n
+                In practice, this step is where you will apply the model instructions finalized in Step 4 to your text data, producing the full narrative prediction.\n
                 ##### Step-by-Step instructions:\n
-                1) **(For beginner Python users)** The first step is to download Python at the [link](https://www.python.org/downloads/).\n\n
-                2) **(For beginner Python users)** Then, we suggest you to download Anaconda and Anaconda Prompt at the [link](https://www.anaconda.com/docs/getting-started/anaconda/install).\n\n
-                3) Download the files in *code and prompts* and the *environment.yml*. Then, build the following folder structure locally:\n\n
+                1) **(For beginner Python users)** The first step is to download Python at the [link](https://www.python.org/downloads/).
+                2) **(For beginner Python users)** Then, we suggest you to download Anaconda and Anaconda Prompt at the [link](https://www.anaconda.com/docs/getting-started/anaconda/install).
+                3) Download the files in *code and prompts* and the *environment.yml*. Then, build the following folder structure locally:
                 ```bash
                 <main>/
                 ├─ code/
@@ -506,7 +506,7 @@ Analyze it in the context of US political discourse on climate change and respon
                 │     ├─ openai_output/
                 │     └─ openai_final/
                 └─ logs/
-                └─ environment.yml                         # <-- your environment requirement
+                └─ environment.yml                         # <-- your environment requirement```
                 
                 4) Make sure your finalized prompt files (`system_message_stage1.json` and `system_message_stage2.json`) are saved in the correct folder, as the scripts will load them automatically.\n\n
                 4) Make minimal changes in the code to match your path, the characters defined in the prompt, and the dataset. If you want to perform relevance classification, you just need to change the path.\n\n
