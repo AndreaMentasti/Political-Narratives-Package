@@ -551,7 +551,15 @@ Analyze it in the context of US political discourse on climate change and respon
                 11) Regarding the prompt, you can adapt the prompt in the folder ````code/prompts/```` with your own instructions. You can do this by accessing the "SYSTEM MESSAGE" in the prompt. If you need more details about the prompt design, please go back to Step 4 of this guide.
 
                 12) Modify the input dataset: you need to provide in the `/data/output` folder your dataset named `your_data_stage2` (or `your_data_stage1`). This dataset must contain a column called **id** with the unique identifiers and a column called **text** containing the text for the classification.
+                The `.csv` file must be UTF-8 encoded. If you see errors such `unicodeDecodeError` try saving again your file in UTF-8, or the script will automatically fall back to latin-1 encoding.
+
+                13) Once prepared the folder structure, the prompt, and the dataset, you can make minimal changes to the Python script. First, changing the directory
+                ```bash
+                main = r"D:\your directory"
+                ```
                 
+                If you are running the ````annotation_openai_stage1```` code, no other changes are needed and you can directly run the script.
+
                 4) Make minimal changes in the code to match your path, the characters defined in the prompt, and the dataset. If you want to perform relevance classification, you just need to change the path.\n\n
                 All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). Check the detailed GitHub instructions if you need guidance."""
                 
