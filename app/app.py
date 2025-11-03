@@ -485,7 +485,7 @@ Analyze it in the context of US political discourse on climate change and respon
                 This is the final step of the pipeline. You will now run the prediction code that applies your prompts to your dataset. 
                 This page of the guide will help you adapting the scripts that we provide in the Github repository to your objective. 
                 In practice, this step is where you will apply the model instructions finalized in Step 4 to your text data, producing the full narrative prediction.\n
-                ##### Step-by-Step instructions:\n
+                ##### Step-by-Step instructions:
                 1) **(For beginner Python users)** The first step is to download Python at the [link](https://www.python.org/downloads/).
                 2) **(For beginner Python users)** Then, we suggest you to download Anaconda and Anaconda Prompt at the [link](https://www.anaconda.com/docs/getting-started/anaconda/install).
                 3) Download the files in *code and prompts* and the *environment.yml*. Then, build the following folder structure locally:
@@ -538,7 +538,19 @@ Analyze it in the context of US political discourse on climate change and respon
                 This step is crucial for the success of the annotation process. This code requires an individual OpenAI API key, that the user can retrieve in his [OpenAI personal page](https://platform.openai.com/api-keys). 
                 This key is personal and directly linked to the user's wallet, so it's important to keep it personal and hidden in the machine and not in the script.
                 
-                9) 
+                9) Open Anaconda Prompt and activate Spyder or your preferred Python IDE by running the commands:
+                ```bash
+                conda install spyder python=3.13.5
+                spyder
+                ```
+
+                10) Open the script of interest directly in spyder using the top left command bar. Here you can choose one of the two Python scripts depending on the task that you need to perform:
+                A) The **stage 1 script**  `annotation_openai_stage1` allows to classify a text based on its relevance to the topic selected. This code returns an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant). This script is not strictly necessary for the character-roles annotation, but it can be useful to assess the relevance of a specific text to the topic at hand. For example, in *Gehring and Grigoletto (2025)* we use this script to filter the tweets and keep only those relevant to the topic of climate change policy.
+                B) The **stage 2 script** `annotation_openai_stage2` is the core of the Political Narrative Package, and it allows to retrieve the character-role classification. The code returns a dataset with a column for each specified character taking values from 0 to 4, where 0 is no-mention of the character, 1 is Villain role, 2 is Hero role, 3 is Victim role, and 4 for appearence of the character in none of these roles (Neutral).
+
+                11) Regarding the prompt, you can adapt the prompt in the folder ````code/prompts/```` with your own instructions. You can do this by accessing the "SYSTEM MESSAGE" in the prompt. If you need more details about the prompt design, please go back to Step 4 of this guide.
+
+                12) Modify the input dataset: you need to provide in the `/data/output` folder your dataset named `your_data_stage2` (or `your_data_stage1`). This dataset must contain a column called **id** with the unique identifiers and a column called **text** containing the text for the classification.
                 
                 4) Make minimal changes in the code to match your path, the characters defined in the prompt, and the dataset. If you want to perform relevance classification, you just need to change the path.\n\n
                 All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). Check the detailed GitHub instructions if you need guidance."""
