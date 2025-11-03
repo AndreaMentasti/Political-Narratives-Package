@@ -11,7 +11,7 @@ A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps 
 
 **How does this repository work?** We provide you with the code to query the OpenAI API, the prompts that can be used (or adapted) to retrieve Political Narratives, and guidelines to adopt the Political Narrative framework.  
 Moreover, at the link [Launch the Political Narratives Guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) you will find an interactive website that guides you through the logic behind the Political Narrative Framework.
-This guide allows you to navigate the steps to prepare your research: you can reflect on the main questions to ask yourself, check them, and annotate your progress. In addition, this interactive resource provides clarifying examples taken from the paper of reference.
+This guide allows you to navigate the steps to prepare your research: you can reflect on the main questions to ask yourself, check them, and annotate your progress. In addition, this interactive resource provides clarifying examples taken from the paper of reference. It might take a couple of minutes to syncronize the first time you open the online guide.
 
 Before diving to the instructions to run the code, here a detailed explanation of everything you find in this repository:
 - ````app\````: this folder contains the code for the online guideline that interested users can access [here](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/). This folder do not provide useful insights to the user.
@@ -81,7 +81,7 @@ This key is personal and directly linked to the user's wallet, so it's important
 
 - Open Anaconda Prompt and activate Spyder or your preferred Python IDE by running the commands:
   ````bash
-  conda install spyder
+  conda install spyder python=3.13.5
   spyder
   
 - Open the script of interest directly in spyder using the top left command bar. Here you can choose one of the two Python scripts depending on the task that you need to perform:
