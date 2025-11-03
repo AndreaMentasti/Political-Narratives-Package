@@ -630,7 +630,7 @@ Analyze it in the context of US political discourse on climate change and respon
                         "j": entry.get("j", 0)
                 ```
 
-                17) ## Settings of the Model
+                ### Settings of the Model
                 Depending on the parameters, the annotation will return different results. In this package, you are allowed to change the **temperature** of the model by accessing the temperature field in the `send_request()` function:
                 ```bash
                 def send_request(request_id, article_group, system_message):
