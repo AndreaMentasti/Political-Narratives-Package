@@ -24,7 +24,7 @@ This package is meant to support you from start to finish: guiding you from the 
 
 ⚠️ *Note*: The online guide may take a couple of minutes to load the first time you open it.  
 
-⚠️ *Working offline?* You can download a full offline version of the guide here: **[LINK TO PDF](useful resources/Full_guidelines.pdf)**
+⚠️ *Working offline?* You can download a full offline version of the guide here: **[LINK TO PDF](useful%20resources/Full_guidelines.pdf)**
 
 ---
 
