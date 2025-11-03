@@ -90,7 +90,7 @@ The purpose of a political narrative is influencing perceptions, beliefs, and pr
 We can also depict this formally. To define and measure narratives, you need to choose a topic T and a universe of characters K = H ∪ I, where H and I represent Human and Instrument characters. For any text unit (tweet, paragraph, article), let K′ ⊆ K be the set of characters that appear.  
 A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing character to either a drama-triangle role or neutrality. We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, villain, or victim. If all characters are neutral, the text is about the topic but does not constitute a political narrative in this sense.  
 
-**How to use this guide**
+### How to use this guide
 - Use the step selector above to move from **1 → 5**.
 - Each step includes three cards:
   - **Guide ✅** — brief “How to” plus reflective **Ask yourself** items.
