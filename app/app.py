@@ -511,7 +511,23 @@ Analyze it in the context of US political discourse on climate change and respon
                 According to this structure, you need to fill the `code/prompts/` folder with the system message of the stage, and the `data/output/` folder with the `.csv` dataset. Put the `environment.yml` in the main project folder.  
                 IMPORTANT: the input `.csv` must contain a column called `id` and a column called `text`.
                 
-                4) Make sure your finalized prompt files (`system_message_stage1.json` and `system_message_stage2.json`) are saved in the correct folder, as the scripts will load them automatically.
+                4) Open Anaconda Prompt and move into the main project folder:
+                ```bash
+                cd C:\Users\YourName\Documents\political_narrative_project
+                ```
+                5) Then, create the environment where the code will run:
+                ```bash
+                conda env create -f environment.yml
+                ```
+
+                6) Activate the environment
+                ```bash
+                conda activate political_narrative
+                ```
+                7) Install the correct version of `openai`
+                ```bash
+                pip install "openai==2.4.0"
+                ```
                 4) Make minimal changes in the code to match your path, the characters defined in the prompt, and the dataset. If you want to perform relevance classification, you just need to change the path.\n\n
                 All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). Check the detailed GitHub instructions if you need guidance."""
                 
