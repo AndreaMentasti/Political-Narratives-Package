@@ -20,7 +20,9 @@ There are two ways to approach this package:
    
 2) The second approach is useful for less experienced users that need to completely shape their research. We suggest this approach to users that might be familiar with the paper and the *political narrative* framework but needs complete guidance with adapting the code, or to users that need full guidance through the framework and its steps. You can start reading the [online guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) starting from **Step 1 Topic**. Thanks to this guidelines, you can organize your research from scratch thanks to a set of very useful instructions and best practices.
 
-⚠️ It might take a couple of minutes to syncronize the online guide the first time you open it. 
+⚠️ It might take a couple of minutes to syncronize the online guide the first time you open it.
+
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Before diving to the instructions to run the code, here a detailed explanation of everything you find in this repository:
 - ````app\````: this folder contains the code for the online guideline that interested users can access [here](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/). This folder do not provide useful insights to the user.
