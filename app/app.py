@@ -539,7 +539,9 @@ Analyze it in the context of US political discourse on climate change and respon
                 ```
 
                 10) Open the script of interest directly in spyder using the top left command bar. Here you can choose one of the two Python scripts depending on the task that you need to perform:  
+                
                 A) The **stage 1 script**  `annotation_openai_stage1` allows to classify a text based on its relevance to the topic selected. This code returns an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant). This script is not strictly necessary for the character-roles annotation, but it can be useful to assess the relevance of a specific text to the topic at hand. For example, in *Gehring and Grigoletto (2025)* we use this script to filter the tweets and keep only those relevant to the topic of climate change policy.  
+                
                 B) The **stage 2 script** `annotation_openai_stage2` is the core of the Political Narrative Package, and it allows to retrieve the character-role classification. The code returns a dataset with a column for each specified character taking values from 0 to 4, where 0 is no-mention of the character, 1 is Villain role, 2 is Hero role, 3 is Victim role, and 4 for appearence of the character in none of these roles (Neutral).
 
                 11) Regarding the prompt, you can adapt the prompt in the folder ````code/prompts/```` with your own instructions. You can do this by accessing the "SYSTEM MESSAGE" in the prompt. If you need more details about the prompt design, please go back to Step 4 of this guide.
