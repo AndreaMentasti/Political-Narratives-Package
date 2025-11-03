@@ -481,7 +481,7 @@ Analyze it in the context of US political discourse on climate change and respon
             ],
             key_prefix="s5_outputs",
 
-            blurb_md==r"""
+            blurb_md=r"""
                 This is the final step of the pipeline. You will now run the prediction code that applies your prompts to your dataset. 
                 This page of the guide will help you adapting the scripts that we provide in the Github repository to your objective. 
                 In practice, this step is where you will apply the model instructions finalized in Step 4 to your text data, producing the full narrative prediction.\n\n
