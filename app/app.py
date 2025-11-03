@@ -692,7 +692,7 @@ def render_guide_page():
     step = st.segmented_control(
         "Steps",
         options=["Intro", 1, 2, 3, 4, 5],
-        format_func=lambda v: "Intro" if v == "Intro" else {1:"1 • Topic", 2:"2 • Data", 3:"3 • Characters", 4:"4 • Prompts", 5:"5 • Outputs"}[v],
+        format_func=lambda v: "Intro" if v == "Intro" else {1:"1 • Topic", 2:"2 • Data", 3:"3 • Characters", 4:"4 • Prompts", 5:"5 • Coding"}[v],
         key="guide_step_selector"
     )
 
