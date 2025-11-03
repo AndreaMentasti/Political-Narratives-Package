@@ -10,9 +10,18 @@ Formally, choose a topic *T* and a universe of characters *K = H ∪ I*, where H
 A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing character to either a drama-triangle role or neutrality. We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, villain, or victim. If all characters are neutral, the text is about the topic but does not constitute a political narrative in this sense.
 
 **How does this repository work?** We provide you with the code to query the OpenAI API, the prompts that can be used (or adapted) to retrieve Political Narratives, and guidelines to adopt the Political Narrative framework.  
-Moreover, at the link [Launch the Political Narratives Guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) you will find an interactive website that guides you through the logic behind the Political Narrative Framework.
-This guide allows you to navigate the steps to prepare your research: you can reflect on the main questions to ask yourself, check them, and annotate your progress. In addition, this interactive resource provides clarifying examples taken from the paper of reference. It might take a couple of minutes to syncronize the first time you open the online guide.
+At the link [Launch the Political Narratives Guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) you will find an interactive website that guides you through the logic behind the Political Narrative Framework.
+This guide allows you to navigate the steps to prepare your research: you can reflect on the main questions to ask yourself, check them, and annotate your progress. In addition, this interactive resource provides clarifying examples taken from the paper of reference.  
 
+### How to Proceed? ✅
+There are two ways to approach this package:
+
+1) The first one is the independent approach, where users advanced in their research can simply download the Python code to perform the annotation and apply it to their data. We suggest this approach to users that are already familiar with the paper, the *political narrative* framework, and with python coding. If you feel like this is where you are right now, you can access the [online guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) and navigate directly to **Step 5 Coding** where you find all the instructions to adapt the code to your data and prompts. Alternatively, in the folder ´guide´ you can find the pdf version of the online guide.
+   
+2) The second approach is useful for less experienced users that need to completely shape their research. We suggest this approach to users that might be familiar with the paper and the *political narrative* framework but needs complete guidance with adapting the code, or to users that need full guidance through the framework and its steps. You can start reading the [online guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) starting from **Step 1 Topic**. Thanks to this guidelines, you can organize your research from scratch thanks to a set of very useful instructions and best practices.
+
+⚠️ It might take a couple of minutes to syncronize the online guide the first time you open it. 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Before diving to the instructions to run the code, here a detailed explanation of everything you find in this repository:
 - ````app\````: this folder contains the code for the online guideline that interested users can access [here](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/). This folder do not provide useful insights to the user.
 - ````code and prompts\````: this is the core of the repository. Here the users can download the Python scripts and the prompts needed to perform the Political Narrative analysis.
