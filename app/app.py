@@ -489,23 +489,24 @@ Analyze it in the context of US political discourse on climate change and respon
                 "1) **(For beginner Python users)** The first step is to download Python at the [link](https://www.python.org/downloads/).\n\n"
                 "2) **(For beginner Python users)** Then, we suggest you to download Anaconda and Anaconda Prompt at the [link](https://www.anaconda.com/docs/getting-started/anaconda/install).\n\n"
                 "3) Download the files in *code and prompts* and the *environment.yml*. Then, build the following folder structure locally:\n\n"
-                "    <main>/\n\n"
-                "    ├─ code/\n\n"
-                "    │  ├─ annotation_openai_stage1.py\n\n"
-                "    │  ├─ annotation_openai_stage2.py\n\n"
-                "    │  └─ prompts/\n\n"
-                "    │     ├─ system_message_stage1.json        # <-- your input message\n\n"
-                "    │     └─ system_message_stage2.json        # <-- your input message\n\n"
-                "    ├─ data/\n\n"
-                "    │  └─ output/\n\n"
-                "    │     ├─ your_data_stage1.csv              # <-- your input CSV\n\n"
-                "    │     └─ your_data_stage2.csv              # <-- your input CSV\n\n"
-                "    ├─ output/\n\n"
-                "    │  └─ data/\n\n"
-                "    │     ├─ openai_output/\n\n"
-                "    │     └─ openai_final/\n\n"
-                "    └─ logs/\n\n"
-                "    └─ environment.yml                         # <-- your environment requirements\n\n"
+                ```bash
+                <main>/
+                ├─ code/
+                │  ├─ annotation_openai_stage1.py
+                │  ├─ annotation_openai_stage2.py
+                │  └─ prompts/
+                │     ├─ system_message_stage1.json        # <-- your input message
+                │     └─ system_message_stage2.json        # <-- your input message
+                ├─ data/
+                │  └─ output/
+                │     ├─ your_data_stage1.csv              # <-- your input CSV
+                │     └─ your_data_stage2.csv              # <-- your input CSV
+                ├─ output/
+                │  └─ data/
+                │     ├─ openai_output/
+                │     └─ openai_final/
+                └─ logs/
+                └─ environment.yml                         # <-- your environment requirement
                 "4) Make sure your finalized prompt files (`system_message_stage1.json` and `system_message_stage2.json`) are saved in the correct folder, as the scripts will load them automatically.\n\n"
                 "4) Make minimal changes in the code to match your path, the characters defined in the prompt, and the dataset. If you want to perform relevance classification, you just need to change the path.\n\n"
                 "All the steps are explained in detail [here](https://github.com/AndreaMentasti/Political-Narratives-Package/tree/main). Check the detailed GitHub instructions if you need guidance."
