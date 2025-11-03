@@ -2,18 +2,17 @@
 
 The **Political Narratives** Package allows users to adapt the Political Narratives framework presented in [Gehring & Grigoletto (2025)](https://www.econstor.eu/handle/10419/327674) to their own research. By following the steps described in this repository, you will be able to systematically identify political narratives in your own text data. 
 
-**What is a Political Narrative?** According to [Gehring & Grigoletto (2025)](https://www.econstor.eu/handle/10419/327674), a *political narrative* is defined by three elements: *(i) a topic, (ii) a set of characters, and (iii) at least one character cast in a drama triangle role: hero, villain, or victim*. 
+### What is a Political Narrative? 
+According to [Gehring & Grigoletto (2025)](https://www.econstor.eu/handle/10419/327674), a *political narrative* is defined by three elements: *(i) a topic, (ii) a set of characters, and (iii) at least one character cast in a drama triangle role: hero, villain, or victim*. 
 These roles, rooted in classic storytelling traditions, provide a simple and powerful structure that has shaped narratives since the earliest written accounts. Political narratives act as interpretive tools: they simplify complexity, assign meaning, and guide perception. By casting characters into familiar archetypes, they help audiences make sense of political issues and events, shaping beliefs, attitudes, and preferences in the process.
 
 More formally, let *T* be a topic and *K = H ∪ I* a universe of characters, where H and I represent Human and Instrument characters. For any text unit (tweet, paragraph, article), let *K′ ⊆ K* be the set of characters that appear.  
 A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing character to either a drama-triangle role or neutrality. We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, villain, or victim. If all characters are neutral, the text is about the topic but does not constitute a political narrative in this sense.
 
-### How does this repository work?
-We provide you with the code to query the OpenAI API, the prompts that can be used (or adapted) to retrieve Political Narratives, and guidelines to adopt the Political Narrative framework.  
-At the link [Launch the Political Narratives Guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) you will find an interactive website that guides you through the logic behind the Political Narrative Framework.
-This guide allows you to navigate the steps to prepare your research: you can reflect on the main questions to ask yourself, check them, and annotate your progress. In addition, this interactive resource provides clarifying examples taken from the paper of reference.  
+### What Can You Expect from This Repository?
+This package is meant to support you from start to finish—guiding you from the very first step of selecting a topic, all the way to generating your final dataset. It provides everything you need: the code to query the OpenAI API, prompts you can use or adapt, and clear guidelines to help you apply the Political Narrative framework to your own data.
 
-### How to Proceed? ✅
+### How Should You Proceed?
 There are two ways to approach this package:
 
 1) The first one is the independent approach, where users advanced in their research can simply download the Python code to perform the annotation and apply it to their data. We suggest this approach to users that are already familiar with the paper, the *political narrative* framework, and with python coding. If you feel like this is where you are right now, you can access the [online guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/) and navigate directly to **Step 5 Coding** where you find all the instructions to adapt the code to your data and prompts. However, we suggest you to quickly read through all the steps of the online guide to understand the logic behind the framework and check possible drawbacks and improvements in your already advanced research.
