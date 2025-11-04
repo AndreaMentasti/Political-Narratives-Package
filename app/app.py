@@ -252,12 +252,12 @@ def render_step(step: int):
                 key_prefix="s3_chars",
                 # ↓ NEW: short description appears above “How to approach”
                 blurb_md=(
-                    "Once your data is collected, the next step is to define the characters relevant to your topic." 
-                    "Characters can be human (e.g., individuals, corporations, parties, movements, states) or instrumental (e.g., policies, laws, technologies)."
+                    "Once your data is collected, the next step is to define the characters relevant to your topic. " 
+                    "Characters can be human (e.g., individuals, corporations, parties, movements, states) or instrumental (e.g., policies, laws, technologies). "
                     "Importantly, the term **character** refers to any entity playing a role in the narrative, it does not have to be a human or an individual. It can also include abstract or collective entities like “science,” a policy area, or a class of technology. Think of *character* as a functional category, not a synonym for *actor*.\n\n "
-                    "At this stage, define a **small, distinctive set of characters** that directly reflects your research question."
-                    "Favor **clear, non-overlapping definitions** that an LLM can reliably recognize in text. A good rule of thumb: could an outsider distinguish your characters based solely on their descriptions?"
-                    "Finally, **record a short description for each character now**—you’ll use these later when drafting prompts in Step 4."
+                    "At this stage, define a **small, distinctive set of characters** that directly reflects your research question. "
+                    "Favor **clear, non-overlapping definitions** that an LLM can reliably recognize in text. A good rule of thumb: could an outsider distinguish your characters based solely on their descriptions? "
+                    "Finally, **record a short description for each character now**—you’ll use these later when drafting prompts in Step 4. "
                 ),
             )
 
