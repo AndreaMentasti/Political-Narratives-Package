@@ -35,10 +35,6 @@ This package is meant to support you from start to finish: guiding you from the 
 ---
 
 ## How to Cite Us?
-When using this package, please cite both the package and the reference paper:
-
-- **Package**: Mentasti, A., Gehring, K., and Grigoletto, M. (2025). *Political Narratives Package* (v1.0.0) [Computer software]. https://github.com/your-username/political-narratives-package
-
-- **Paper**: Gehring, K., and Grigoletto, M. *Virality: What Makes Narratives Go Viral, and Does it Matter*. No. 12064. CESifo Working Paper, 2025.
+When using this package, please cite the reference paper: Gehring, K., and Grigoletto, M. *Virality: What Makes Narratives Go Viral, and Does it Matter*. No. 12064. CESifo Working Paper, 2025.
 
 
