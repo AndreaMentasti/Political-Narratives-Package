@@ -217,7 +217,7 @@ def render_step(step: int):
             key_prefix="s2_output"
         )
 
-        st.text_area("Annotations for Step 2 (optional)", key="notes_s2",
+        st.text_area("Personal notes for Step 2 (optional)", key="notes_s2",
                      value=st.session_state["guide"]["notes"][2], height=120)
         st.session_state["guide"]["notes"][2] = st.session_state["notes_s2"]
 
@@ -302,7 +302,7 @@ def render_step(step: int):
                 key_prefix="s3_output"
             )
 
-            st.text_area("Annotations for Step 3 (optional)", key="notes_s3",
+            st.text_area("Personal notes for Step 3 (optional)", key="notes_s3",
                          value=st.session_state["guide"]["notes"][3], height=120)
             st.session_state["guide"]["notes"][3] = st.session_state["notes_s3"]
 
@@ -450,7 +450,7 @@ Analyze it in the context of US political discourse on climate change and respon
 
         # Optional free notes area (consistent with other steps)
         st.text_area(
-            "Annotations for Step 4 (optional)",
+            "Personal notes for Step 4 (optional)",
             key="notes_s4",
             value=st.session_state["guide"]["notes"][4],
             height=120
@@ -680,7 +680,7 @@ Analyze it in the context of US political discourse on climate change and respon
             key_prefix="s5_output"
         )
 
-        st.text_area("Annotations for Step 5 (optional)", key="notes_s5",
+        st.text_area("Personal notes for Step 5 (optional)", key="notes_s5",
                      value=st.session_state["guide"]["notes"][5], height=120)
         st.session_state["guide"]["notes"][5] = st.session_state["notes_s5"]
 
