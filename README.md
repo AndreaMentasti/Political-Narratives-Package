@@ -14,7 +14,7 @@ This package is meant to support you from start to finish: guiding you from the 
 
 ### How Should You Proceed?
 1. **Read the reference paper**, [Gehring & Grigoletto (2025)](https://www.econstor.eu/handle/10419/327674):
-   Focus especially on Sections 1 and 2: the introduction, which contextualizes the Political Narrative framework, and the section that defines and illustrates political narratives with examples. Here you find a version of the paper: **[PAPER](useful%20resources/virality_wp_oct25.pdf)**
+   Focus especially on Sections 1 and 2: respectively, the introduction, which contextualizes the Political Narrative framework, and the section that defines and illustrates political narratives with examples. Here you find a version of the **[PAPER](useful%20resources/virality_wp_oct25.pdf)**
 
 2. **Open the [interactive online guide](https://political-narratives-package-jagwm2r46rtwhevafwwga5.streamlit.app/)**:
    Let us walk you through each step of the pipeline, from selecting a topic to generating your final dataset.
