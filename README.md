@@ -29,27 +29,14 @@ This package is meant to support you from start to finish: guiding you from the 
 ---
 
 ### Repository Structure
-- ````codes and prompts\````: this is the core of the repository. Here you can download the Python scripts and the prompts needed to perform the Political Narrative analysis. Moreover, here you can find the `environment.yml` file to create the environment where to run the scripts.
-- ````useful_resources\````: here is contained the paper by *Gehring & Grigoletto (2025)*. You can access it and get a deeper understanding on how to shape a research using the framework. Moreover, here you find an offline version of the instructions to adapt the scripts provided in ````codes and prompts\````. This guide is exactly Step 5 Coding in the online guide.
+- ````codes and prompts\````: this is the core of the repository. Here you can download the Python scripts and the prompts needed to apply the Political Narrative framework. Additionally, here you can find the `environment.yml` file to create the environment where to run the scripts.
+- ````useful_resources\````: this repository provides additional resources. Here you can access a pdf version of the reference paper *Gehring & Grigoletto (2025)* and a pdf version of the instructions provided through our interactive online guide.
 
 ---
 
-## Inputs - Output Map
-Inputs:
-- dataset with text snippets and observation id (in the code ```your_code_stage1.csv``` and ```your_code_stage2.csv```)
-- prompt for stage 1 (in the code ```system_message_stage1.json```)
-- prompt for stage 2 (in the code ```system_message_stage2.json```)
-- API key as Environmental variable
-  
-Outputs:
-- Once run the code, you will find the output dataset in the folder ````output/data/openai_final/```` in a folder called as the date and time when the code has been run. The dataset is saved as ````.csv```` named ````flattened_results_all.csv````.
-
-- Dataset with characther-role flags (if you run the second script):
-  
-  | id   | text               | dev | dem | rep | corp | ppl | pric | ban | fos | green | nuc |
-  |------|--------------------|-----|-----|-----|------|-----|------|-----|-----|-------|-----|
-  | 1_1  | If you listen…     |  0  |  0  |  2  |  0   |  0  |  0   |  0  |  1  |   0   |  0  |
-  | 1_2  | But is it po…      |  0  |  0  |  0  |  0   |  0  |  0   |  0  |  0  |   0   |  0  |
-  | 1_3  | In fact, on…       |  0  |  1  |  0  |  0   |  0  |  2   |  0  |  0  |   0   |  0  |
+## How to Cite Us?
+When using this package, please cite both the package and the reference paper:
+APA citation for the package: Grigoletto, M., Gehring, K., and Mentasti, A. (2025). *Political Narratives Package* (v1.0.0) [Computer software]. https://github.com/your-username/political-narratives-package
+APA citation for the reference paper: Gehring, K., and Grigoletto, M. *Virality: What Makes Narratives Go Viral, and Does it Matter*. No. 12064. CESifo Working Paper, 2025.
 
 
