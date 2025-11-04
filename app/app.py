@@ -698,7 +698,7 @@ def render_guide_page():
     # Default landing tab: Intro
     st.session_state.setdefault("guide_step_selector", "Intro")
 
-    st.markdown("Use this guide to understand what the concept of **Political Narrative** is and to organize the pipeline for your research. Nothing is mandatory—mark items you’ve considered and jot notes.")
+    st.markdown("Use this guide to understand what the concept of **Political Narrative** is and to organize the pipeline for your research. Step by step, it helps you to define your topic, choose sources, identify characters, design prompts, and generate results, while highlighting the key questions you should answer at each stage.")
 
     step = st.segmented_control(
         "Steps",
