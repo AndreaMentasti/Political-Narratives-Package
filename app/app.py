@@ -485,9 +485,8 @@ Analyze it in the context of US political discourse on climate change and respon
                 This page of the guide will help you adapting the scripts that we provide in the Github repository to your objective. 
                 In practice, this step is where you will apply the model instructions finalized in Step 4 to your text data, producing the full narrative prediction.\n
                 ##### Step-by-Step instructions:
-                1) **(For beginner Python users)** The first step is to download Python at the [link](https://www.python.org/downloads/).
-                2) **(For beginner Python users)** Then, we suggest you to download Anaconda and Anaconda Prompt at the [link](https://www.anaconda.com/docs/getting-started/anaconda/install).
-                3) Download the files in `code and prompts/` and the `environment.yml` from the Github repository. Then, build the following folder structure locally:
+                1) **(For beginner Python users)** First, we suggest you to download Anaconda and Anaconda Prompt at the [link](https://www.anaconda.com/docs/getting-started/anaconda/install). Anaconda already includes Python, so you don’t need to install Python separately.
+                2) Download the files in `code and prompts/` and the `environment.yml` from the same folder in Github. Then, build the following folder structure locally:
                 ```bash
                 <main>/
                 ├─ code/
@@ -510,25 +509,25 @@ Analyze it in the context of US political discourse on climate change and respon
                 According to this structure, you need to fill the `code/prompts/` folder with the system message of the stage, and the `data/output/` folder with the `.csv` dataset. Put the `environment.yml` in the main project folder.  
                 IMPORTANT: the input `.csv` must contain a column called `id` and a column called `text`.
                 
-                4) Open Anaconda Prompt and move into the main project folder:
+                3) Open the app **Anaconda Prompt** and move into the main project folder. To open Anaconda Prompt, you need to search the app in your machine and click on it. Once opened, write in the black command window the following:
                 ```bash
                 cd C:\Users\YourName\Documents\political_narrative_project
                 ```
-                5) Then, create the environment where the code will run:
+                4) Then, create the environment where the code will run by using the following command:
                 ```bash
                 conda env create -f environment.yml
                 ```
 
-                6) Activate the environment
+                5) Activate the environment. Notice, in this environment we also specify the version of Python that is needed for the script to run.
                 ```bash
                 conda activate political_narrative
                 ```
-                7) Install the correct version of `openai`
+                6) Install the correct version of `openai`
                 ```bash
                 pip install "openai==2.4.0"
                 ```
 
-                8) Set the `OPENAI_API_KEY` as an environmental variable in your current environment:
+                7) Set the `OPENAI_API_KEY` as an environmental variable in your current environment. Run the following commands once at a time:
                 ```bash
                 conda env config vars set OPENAI_API_KEY="sk-your-key-here"
                 conda deactivate
@@ -537,31 +536,31 @@ Analyze it in the context of US political discourse on climate change and respon
                 This step is crucial for the success of the annotation process. This code requires an individual OpenAI API key, that the user can retrieve in his [OpenAI personal page](https://platform.openai.com/api-keys). 
                 This key is personal and directly linked to the user's wallet, so it's important to keep it personal and hidden in the machine and not in the script.
                 
-                9) Open Anaconda Prompt and activate Spyder or your preferred Python IDE by running the commands:
+                8) Open Anaconda Prompt and activate Spyder or your preferred Python IDE (here an example using Spyder) by running the commands:
                 ```bash
                 conda install spyder python=3.13.5
                 spyder
                 ```
 
-                10) Open the script of interest directly in spyder using the top left command bar. Here you can choose one of the two Python scripts depending on the task that you need to perform:  
+                9) Open the script of interest directly in spyder using the top left command bar. Here you can choose one of the two Python scripts depending on the task that you need to perform:  
                 
                 A) The **stage 1 script**  `annotation_openai_stage1` allows to classify a text based on its relevance to the topic selected. This code returns an additional column to the input dataset that takes values from 0 to 3 (0 - irrelevant, 1 - assert, 2 - deny, 3 - relevant). This script is not strictly necessary for the character-roles annotation, but it can be useful to assess the relevance of a specific text to the topic at hand. For example, in *Gehring and Grigoletto (2025)* we use this script to filter the tweets and keep only those relevant to the topic of climate change policy.  
                 
                 B) The **stage 2 script** `annotation_openai_stage2` is the core of the Political Narrative Package, and it allows to retrieve the character-role classification. The code returns a dataset with a column for each specified character taking values from 0 to 4, where 0 is no-mention of the character, 1 is Villain role, 2 is Hero role, 3 is Victim role, and 4 for appearence of the character in none of these roles (Neutral).
 
-                11) Regarding the prompt, you can adapt the prompt in the folder ````code/prompts/```` with your own instructions. You can do this by accessing the "SYSTEM MESSAGE" in the prompt. If you need more details about the prompt design, please go back to Step 4 of this guide.
+                10) Regarding the prompt, you can adapt the prompt in the folder ````code/prompts/```` with your own instructions. You can do this by accessing the "SYSTEM MESSAGE" in the prompt. If you need more details about the prompt design, please go back to Step 4 of this guide.
 
-                12) Modify the input dataset: you need to provide in the `/data/output` folder your dataset named `your_data_stage2` (or `your_data_stage1`). This dataset must contain a column called **id** with the unique identifiers and a column called **text** containing the text for the classification.
+                11) Modify the input dataset: you need to provide in the `/data/output` folder your dataset named `your_data_stage2` (or `your_data_stage1`). This dataset must contain a column called **id** with the unique identifiers and a column called **text** containing the text for the classification.
                 The `.csv` file must be UTF-8 encoded. If you see errors such `unicodeDecodeError` try saving again your file in UTF-8, or the script will automatically fall back to latin-1 encoding.
 
-                13) Once prepared the folder structure, the prompt, and the dataset, you can make minimal changes to the Python script. First, changing the directory
+                12) Once prepared the folder structure, the prompt, and the dataset, you can make minimal changes to the Python script. First, changing the directory
                 ```bash
                 main = r"D:\your directory"
                 ```
                 
                 If you are running the ````annotation_openai_stage1```` code, no other changes are needed and you can directly run the script.
 
-                14) Second, change the JSON structure based on the number of characters: depending on your character selection, you might need to modify the structure of the ````.JSON```` file that is created by OpenAI. Here, you just need to adapt the number of keys to your number of characters. You can access it by changing the properties in the following part of the script:
+                13) Second, change the JSON structure based on the number of characters: depending on your character selection, you might need to modify the structure of the ````.JSON```` file that is created by OpenAI. Here, you just need to adapt the number of keys to your number of characters. You can access it by changing the properties in the following part of the script:
                 ```bash
                 JSON_SCHEMA = {
                     "name": "ArticleClassification",
@@ -597,7 +596,7 @@ Analyze it in the context of US political discourse on climate change and respon
               }
               ```
 
-              15) Then, you need to change the user content to adapt it to your number of characters, as done before: 
+              14) Then, you need to change the user content to adapt it to your number of characters, as done before: 
               ```bash
               def build_user_content(article_group):
     
@@ -614,8 +613,8 @@ Analyze it in the context of US political discourse on climate change and respon
                 return user_content
                 ```
 
-                16) Lastly, you need to adapt the `flatten_results()` function by changing this few lines of code: 
-                ```bash
+               15) Lastly, you need to adapt the `flatten_results()` function by changing this few lines of code: 
+               ```bash
                         "request_id": result["request_id"],
                         "id": entry_id,
                         "text": result.get("article_text", None),
@@ -630,6 +629,11 @@ Analyze it in the context of US political discourse on climate change and respon
                         "i": entry.get("i", 0),
                         "j": entry.get("j", 0)
                 ```
+
+                16) It's finally time to run the code. You can do this either by highlighting the whole script and clickin `F9` on the keybord, or by clicking on the green triangle at the top of the Spyder interface. 
+                Your results are saved in `.csv` format as `flattened_results_all.csv`. These are stored in the local folder `main/output/data/openai_final/run20251027_133424/`, where the last part (`run20251027_133424`) takes his name from the date and time when the script has been compiled (date_time).
+                This `.csv` file contains the results of the Openai classification.
+                
 
                 ### Settings of the Model
                 Depending on the parameters, the annotation will return different results. In this package, you are allowed to change the **temperature** of the model by accessing the temperature field in the `send_request()` function:
