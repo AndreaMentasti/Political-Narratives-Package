@@ -96,7 +96,7 @@ A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps 
   - **Guide ✅** — brief “How to” plus reflective **Ask yourself** items.
   - **Example 💡** — a concrete mini-case clarifying the step.
   - **Output ⚠️** — what you should have before moving on.
-- Jot ideas in the **Notes** box at the end of each step and keep notes on your progress.
+-  Write your ideas in the **Notes** box at the end of each step and keep notes on your progress.
         """
     )
 
