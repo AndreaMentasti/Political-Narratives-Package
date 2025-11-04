@@ -287,7 +287,7 @@ def render_step(step: int):
                 ),
                 key_prefix="s3_example",
                 figure={
-                    "src": "assets/dag_git.png",  # path or URL to your image
+                    "src": "app/dag_git.png",  # path or URL to your image
                     "caption": "Characters as Nodes."
                 }
             )
