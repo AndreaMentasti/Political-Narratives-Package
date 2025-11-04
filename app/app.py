@@ -252,12 +252,12 @@ def render_step(step: int):
                 key_prefix="s3_chars",
                 # ↓ NEW: short description appears above “How to approach”
                 blurb_md=(
-                    "With your data collected, you can now continue to define the characters within the scope of your topic. "
-                    "Characters can be human (individuals or collective actors such as corporations, parties, states, movements) but also instruments/instrumental (policies, laws, technologies). "
-                    "This means that the term **character** should be seen as a category and not be mistaken with *actors*; it does not need to be human or an individual, but can also be groups of people, policy areas or individual policies, or more abstract categories like science, a technology or technology class.\n\n "
-                    "In this step, define a **small, distinctive set of characters** that directly reflect your research question. "
-                    "Prefer **clear, non-overlapping definitions** that an LLM can reliably identify across texts. To manage this, ask whether an outsider could tell these characters apart from their descriptions alone. "
-                    "Record a **brief description for each character now**—you will reuse it in Step 4 Prompts."
+                    "Once your data is collected, the next step is to define the characters relevant to your topic." 
+                    "Characters can be human (e.g., individuals, corporations, parties, movements, states) or instrumental (e.g., policies, laws, technologies)."
+                    "Importantly, the term **character** refers to any entity playing a role in the narrative, it does not have to be a human or an individual. It can also include abstract or collective entities like “science,” a policy area, or a class of technology. Think of *character* as a functional category, not a synonym for *actor*.\n\n "
+                    "At this stage, define a **small, distinctive set of characters** that directly reflects your research question."
+                    "Favor **clear, non-overlapping definitions** that an LLM can reliably recognize in text. A good rule of thumb: could an outsider distinguish your characters based solely on their descriptions?"
+                    "Finally, **record a short description for each character now**—you’ll use these later when drafting prompts in Step 4."
                 ),
             )
 
