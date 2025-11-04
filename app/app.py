@@ -88,7 +88,7 @@ it appears as neutral or cast as hero, villain, or victim.
 The purpose of a political narrative is influencing perceptions, beliefs, and preferences. Political narratives exert their influence by depicting characters - human or instrument - in one of the three archetypal roles — **hero**, **villain**, or **victim**. They are communicative devices that focus attention, encode roles and identities, and shape norms and behavior.
 
 We can also depict this formally. To define and measure narratives, you need to choose a topic T and a universe of characters K = H ∪ I, where H and I represent Human and Instrument characters. For any text unit (tweet, paragraph, article), let K′ ⊆ K be the set of characters that appear.  
-A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing character to either a drama-triangle role or neutrality. We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, villain, or victim. If all characters are neutral, the text is about the topic but does not constitute a political narrative in this sense.  
+A role-assignment function *r : K′ → {hero, villain, victim, neutral}* maps each appearing character to either a drama-triangle role or neutrality. We call *(T, K′, r)* a **political narrative** if and only if at least one character is cast as hero, villain, or victim. If all characters are neutral, the text is about the topic but does not constitute a political narrative.  
 
 ### How to use this guide
 - Use the step selector above to move from **1 → 5**.
@@ -153,7 +153,7 @@ def render_step(step: int):
             key_prefix="s1_output"
         )
 
-        st.text_area("Personal comments for Step 1", key="notes_s1",
+        st.text_area("Personal notes for Step 1", key="notes_s1",
                      value=st.session_state["guide"]["notes"][1], height=120)
         st.session_state["guide"]["notes"][1] = st.session_state["notes_s1"]
 
@@ -168,20 +168,20 @@ def render_step(step: int):
                 "After selecting the topic, the next step is gathering data. Common sources include digitized newspapers, social media, transcribed TV/radio/YouTube content, and open-ended survey responses.",
                 "When selecting the data source, prioritize the media channels where narratives about your chosen topic are most prominent.",
                 "Evaluate trade-offs between coverage, accessibility, and quality (e.g., digitization errors, platform bias, sampling limits).",
-                "For data extraction, the chosen source will determine which methodologies can be applied—such as keyword-based queries, scraping, API pulls, or manual collection.",
+                "For data extraction, the source you choose will determine which methodologies can be applied: e.g. keyword-based queries, scraping, API pulls, or manual collection.",
                 "Consider the level of metadata you can preserve (dates, outlets, authors, geography, language) since these details will later be the basis of your analysis.",
-                "What is the unit of analysis (for instance, a tweet, paragraph, or newspaper snippet)? Should I split the texts into smaller snippets, or can I work with the extracted texts as they are? For example, long texts (e.g., articles) can be segmented into paragraphs or 3-sentence chunks to fit LLM input limits and maintain focus.",
-                "If text snippets are too short, you will not capture more complex narratives with multiple character-roles, but mostly narrative fragments. If it is too long, the LLM will struggle to assign a role to a character with our current prompts, for instance if the character is portrayed in different ways in a long article. For example, long texts (e.g., long newspaper articles or TV segments) should be segmented into smaller text snippets. From experience, something along the length of a single tweet, a paragraph or 3-sentence chunks are a useful compromises. If the text is too short, you will not capture more complex narratives with multiple character-roles, but mostly narrative fragments. If it is too long, the LLM will struggle to assign a role to a character with our current prompts. Generally we advise users to pick units that have a natural meaning in an article, .e.g. a sentence or a paragraph usually follow a structure, whereas taking a certain number of words before and after a keyword breaks sentence and characters that might have had a meaning.",
-                "If very long texts cannot be avoided, one should consider specifying in the prompts that in Step 4 how to cope with contradictory or changing roles over the course of the text"
+                "What should be the unit of your analysis? A tweet, paragraph, newspaper snippet, or other? Ask yourself: Should I split the texts into smaller snippets, or can I work with the extracted texts as they are? For example, long texts (e.g., articles) can be segmented into paragraphs or 3-sentence chunks to fit LLM input limits and maintain focus.",
+                "If text snippets are too short, you will capture mostly narrative fragments rather than full narratives with multiple character roles; if they are too long, the LLM may struggle to assign consistent roles—especially when a character is portrayed in different ways within a long text. From experience, units roughly the length of a tweet, paragraph, or short 2–3‑sentence chunk work best, as they preserve the natural meaning of sentences and paragraphs while avoiding arbitrary cuts that break narrative structure.",
+                "If very long texts cannot be avoided, one should consider specifying in the prompts at Step 4 how to cope with contradictory or changing roles over the course of the text."
             ],
             ask_yourself=[
-                "Do the chosen sources capture the main media where the political debate unfolds?",
+                "Do the selected sources reflect the key (media) platforms where the political debate takes place?",
                 "Is the time window covered by the source appropriate for the research question?",
-                "Are they sufficiently diverse to avoid bias toward one outlet, ideology, or demographic?",
+                "Are the selected sources sufficiently diverse to avoid bias toward one outlet, ideology, or demographic?",
                 "Do you have legal and technical access to these data (e.g., archives, APIs, scraping permission)? Ensure compliance with copyright and platform terms when extracting data.",
-                "What extraction method is most reliable for your source—keyword queries, metadata filters, or transcript parsing?",
+                "What extraction method is most reliable for your source? E.g., keyword queries, metadata filters, transcript parsing, etc.",
                 "Is the extraction method able to produce snippets that are neither too short to lose context nor too long to become too complicated for the analysis? If needed, split the texts into smaller snippets.",
-                "Basic preprocessing (removing duplicates, non-textual artifacts) ensures better results in later steps. If texts are multilingual, is good to consider filtering or adding a ‘language’ column for clarity."
+                "Have you applied basic preprocessing (e.g., removing duplicates, non-textual artifacts), and considered filtering or tagging by language if the texts are multilingual?"
             ],
             key_prefix="s2_sources"
         )
