@@ -692,12 +692,14 @@ Analyze it in the context of US political discourse on climate change and respon
         st.text_area("Personal notes for Step 5 (optional)", key="notes_s5",
                      value=st.session_state["guide"]["notes"][5], height=120)
         st.session_state["guide"]["notes"][5] = st.session_state["notes_s5"]
-
 def render_guide_page():
     _init_guide_state()
+
+    # Default landing tab: Intro
+    st.session_state.setdefault("guide_step_selector", "Intro")
+
     st.markdown("Use this guide to understand what the concept of **Political Narrative** is and to organize the pipeline for your research. Nothing is mandatory—mark items you’ve considered and jot notes.")
 
-    # Step selector now includes an Intro page (default selected)
     step = st.segmented_control(
         "Steps",
         options=["Intro", 1, 2, 3, 4, 5],
